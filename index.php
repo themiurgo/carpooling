@@ -26,9 +26,6 @@ switch ($_GET['action']) {
    case "registerTrip":
       registraTragitto();
       break;
-
-   default:
-      break;
 }
 
 $output = implode ("",file("template/index.htm"));

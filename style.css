@@ -142,7 +142,6 @@ div#body {
    height: auto;
    margin-left: auto;
    margin-right: auto;
-   border: 1px solid black;
 }
 
 
@@ -255,7 +254,7 @@ div.right {
  * Elementi del template tragitti.htm
  * ----------------------------------
  */
-div.listapercorsi {
+div.listatragitti {
    position: relative;
    border: 1px solid #000000;
    width: 750px;
@@ -265,7 +264,7 @@ div.listapercorsi {
    margin-bottom: 1em;
 }
 
-p.listapercorsi {
+p.listatragitti {
    position: relative;
    margin-top: 0.5em;
    margin-bottom: 0.5em;

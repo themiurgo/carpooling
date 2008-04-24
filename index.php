@@ -5,7 +5,6 @@ setlocale(LC_TIME,'ita','it_IT','it_IT.utf8');
 include("./pages/db_interface.php");
 include("./pages/functions.php");
 
-
 // Gestione login
 switch ($_GET['action']) {
    case "login":

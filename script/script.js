@@ -78,10 +78,11 @@ function creaMappa(centroDefault) {
 	
 /*  Crea e visualizza sulla mappa un percorso relativo a due città*/
 function creaPercorso() {
+   mapForm = document.getElementById("mapForm"); 
     
     /* Ottieni le città di partenza ed arrivo dalle caselle di testo della pagina */
-    partenza = document.mapForm.partenzaText.value;
-    arrivo = document.mapForm.arrivoText.value;
+    partenza = mapForm.partenzaText.value;
+    arrivo = mapForm.arrivoText.value;
     
     /* Rimuove eventuali indicazioni presenti nella pagina */
     var direzioni = document.getElementById("directions");

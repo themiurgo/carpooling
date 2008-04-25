@@ -16,9 +16,7 @@ function checkUser ($username, $password) {
 
     if ( $password == $psw ) { 
       $_SESSION['user'] = $username;
-      
-      # Attenzione al case-sensitive
-      $_SESSION['userID'] = $a['ID'];
+      $_SESSION['userId'] = $a['ID'];
     }
     
     else {
@@ -34,12 +32,22 @@ function checkUser ($username, $password) {
  * null (se non loggato).
  */
 function getUser () {
-   if (isset($_SESSION['user'])) 
+   if (isset($_SESSION['user']))
         return $_SESSION['user'];
    else
         return null;
 }
 
+/*
+ * Ritorna l'id dell'utente (se loggato) oppure
+ * null (se non loggato).
+ */
+function getUserId () {
+   if (isset($_SESSION['userId'])) 
+        return $_SESSION['userId'];
+   else
+        return null;
+}
 
 /*
  * Restituisce i percorsi per cui si puo' scrivere un
@@ -60,54 +68,55 @@ function feedback ($targetUserId) {
 }
 
 
-
-
 /* ---------------------
  * FUNZIONI DI TEMPLATE
  * --------------------- */
  
- 
 # Questa Funzione consente di modificare gli attributi di <head> qualora fossero necessarie
 # operazioni particolari, ad es. il caricamento iniziale della GMap.
 function headType() {
-	
-   if ( isMapPage() ) {
-        # Queste istruzioni consentono di inviare la API KEY al server di Google.
-        return "<script src='http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAApM5Cuio981ky_h5rXnr3uhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRczD8EFDGHM7KVLNJB1qP52_6uEg' type='text/javascript'>
-            </script>";
-    } else {
-        
-        # Nella pagina non è presente la GMap
-        return "";
-    }
-	
+   switch ($_GET['p']) {
+      case "nuovo":
+      case "cerca":
+   	
+   # Queste istruzioni consentono di inviare la API KEY al server di Google.
+      return "<script src='http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAApM5Cuio981ky_h5rXnr3uhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRczD8EFDGHM7KVLNJB1qP52_6uEg' type='text/javascript'></script>";
+      break;
+
+      default:
+      # Nella pagina non è presente la GMap
+      return null;
+   }
 }
 
 
 # Questa Funzione consente di modificare gli attributi di <body> qualora fossero necessarie
 # operazioni particolari, ad es. il caricamento iniziale della GMap.
 function bodyType() {
-	
-    if ( isMapPage() ) {
-                
+   switch ($_GET['p']) {
+      case "nuovo":
+      case "cerca":
+
         # Queste istruzioni consentono di centrare la mappa nella localita' preferita,
         # specificata in fase di registrazione
-        if ( isset($_SESSION['user']) ) {
-            
+         if ( isset($_SESSION['user']) ) {
             $location_query = "select localita from Utenti where ID='".$_SESSION['userID']."' "; 
             $res = execQuery($location_query);
             $row = mysql_fetch_array($res);
-            #print mysql_num_rows($res);
             return "<body onload=\"creaMappa('".$row['localita']."')\" onunload='GUnload()'> ";
-        } else {
+         }
+        
+         else {
             # Centro di default della Mappa
             $default = 'Catania';
-            return "<body onload=\"creaMappa('$default')\" onunload='GUnload()'> ";
-        }
-	} else {
-        #Se non vi sono particolari funzioni, viene restituito semplicemente il tag
-        return "<body>";
-	}
+            return "<body onload=\"creaMappa('$default')\" onunload=\"GUnload()\"> ";
+         }
+         break;
+
+      default:
+         #Se non vi sono particolari funzioni, viene restituito semplicemente il tag
+         return "<body>";
+   }
 }
  
 
@@ -366,21 +375,6 @@ function age ($birthday) {
  */
 function trust ($username) {
    return "molto affidabile";
-}
-
-
-/*
- * Determina se una pagina deve creare un GMap
- */
-function isMapPage() { 
-   # Il caricamento della GMap e' richiesto per le pagine 'nuovo
-   # tragitto' e 'cerca tragitto'
-
-   if ( ($_GET['p'] == 'nuovo') || ($_GET['p'] == 'cerca') ) {
-      return true;
-   }
-    
-   return false;
 }
 
 ?>

@@ -5,7 +5,7 @@ setlocale(LC_TIME,'ita','it_IT','it_IT.utf8');
 include("./pages/db_interface.php");
 include("./pages/functions.php");
 
-// Gestione login
+// Gestione login, logout e registrazioni
 switch ($_GET['action']) {
    case "login":
       checkUser($_POST['username'],$_POST['password']);
@@ -44,7 +44,7 @@ $output = eregi_replace ("<!-- CONTENT -->", $c ,$output);
 $output = eregi_replace ("<!-- HEADMAP -->", $h ,$output);
 
 # Verifica se si deve inizializzare la GMap
-$output = eregi_replace ("<!-- BODYMAP -->", $b ,$output);
+$output = eregi_replace ("<body>", $b ,$output);
 
 // infine stampo
 echo $output;

@@ -174,10 +174,11 @@ function fitZoom(bounds,point){
     
 /** Crea le indicazioni complete per raggiungere una località */
 function creaIndicazioni() {
+   mapForm = document.getElementById("mapForm"); 
 
     /* Ottieni le città di partenza ed arrivo dalle caselle di testo della pagina */
-    partenza = document.mapForm.partenzaText.value;
-    arrivo = document.mapForm.arrivoText.value;
+    partenza = mapForm.partenzaText.value;
+    arrivo = mapForm.arrivoText.value;
 
     if (GBrowserIsCompatible()) {
   

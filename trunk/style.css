@@ -1,0 +1,478 @@
+body {
+   margin: 0;
+   font-family: "Verdana, Arial, Sans Serif";
+   font-size:0.8em;
+}
+
+em {
+   font-weight: bold;
+   font-style: normal;
+}
+
+.center {
+   text-align: center;
+   vertical-align: middle;
+}
+
+.green {
+   color: green;
+}
+
+.red {
+   color: red;
+}
+
+.trust {
+   position: absolute;
+   right: 0px;
+   bottom: 0em;
+   font-size:0.8em;
+   font-weight: bold;
+}
+
+/* BORDI ARROTONDATI */
+.rounded{display:block}
+.rounded *{
+  display:block;
+  height:1px;
+  overflow:hidden;
+  font-size:.01em;
+  background:#e8eef7}
+.rounded1{
+  margin-left:3px;
+  margin-right:3px;
+  padding-left:1px;
+  padding-right:1px;
+  border-left:1px solid #f5f7fb;
+  border-right:1px solid #f5f7fb;
+  background:#edf2f9}
+.rounded2{
+  margin-left:1px;
+  margin-right:1px;
+  padding-right:1px;
+  padding-left:1px;
+  border-left:1px solid #fcfdfe;
+  border-right:1px solid #fcfdfe;
+  background:#ecf1f8}
+.rounded3{
+  margin-left:1px;
+  margin-right:1px;
+  border-left:1px solid #ecf1f8;
+  border-right:1px solid #ecf1f8;}
+.rounded4{
+  border-left:1px solid #f5f7fb;
+  border-right:1px solid #f5f7fb}
+.rounded5{
+  border-left:1px solid #edf2f9;
+  border-right:1px solid #edf2f9}
+.roundedfg{
+  background:#e8eef7}
+
+/* --------------------------------
+ * Elementi del template index.html
+ * --------------------------------
+ */
+img#logo { border: 0px; }
+
+div#header {
+   margin-left: auto;
+   margin-right: auto;
+   text-align: center;
+   vertical-align: top;
+   width: 100%;
+   height: auto;
+   padding: 0;
+   border: 0px solid #000000;
+   position:relative;
+}
+
+/* Menu */
+div#menu {
+   font-family: "Verdana, Arial, Sans Serif";
+   width: 100%;
+   height: 4em;
+   margin-right: auto;
+   margin-left: auto;
+   margin-top:20px;
+   padding: 0px 0px 0px 0px;
+   text-align: center;
+}
+
+div#menu p { vertical-align: middle; }
+
+div#menu a:link, a:active, a:visited {
+   color: #5caed7;
+   font-weight: bold;
+}
+
+div#menu a:hover {
+   color: #ef2929;
+   text-decoration:none; 
+}
+
+/* Pannello di login */
+form#login {
+   position: fixed;
+   top:10px;
+   right:10px;
+   width:110px;
+   height:auto;
+   border: 1px dashed #000000;
+   padding: 5px;
+   font-size: 0.9em;
+   font-family: "Verdana, Arial, Sans Serif";
+   font-weight: bold;
+   text-align: center;
+   line-height: 150%;
+   vertical-align: middle;
+   visibility:hidden;
+   display:none;
+}
+
+input.login {
+   position: relative;
+   border: 1px solid #000000;
+   width: 98px;
+}
+
+/* Corpo della pagina */
+div#body {
+   position: relative;
+   width: 750px;
+   height: auto;
+   margin-left: auto;
+   margin-right: auto;
+}
+
+
+div#menu3 {
+   font-size:80%;
+   background: #eee;
+   width: 100%;
+   height: 40px;
+   margin-right: auto;
+   margin-left: auto;
+   padding: 0px 0px 0px 0px;
+}
+
+div#menu3 a:hover {
+   background-color: #ffffff;
+}
+
+div#menu3 ul {
+   display: inline;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+   border: none;
+   width: 620px;
+}
+
+div#menu3 li {
+   display: inline;
+   list-style:none;
+   width: 100px;
+   float: left;
+   margin: -3px;
+   padding: 0;
+   border: 1px solid black;
+   text-align: center;
+}
+
+/* -----------------
+ * Elementi generici
+ * -----------------
+ */
+
+/* Divisore orizzontale generico */
+div.horRule {
+   height: 1px;
+   border-top: 1px solid #000000;
+   margin-top: 3px;
+   margin-bottom: 3px;
+   margin-left: 10px;
+   margin-right: 10px;
+}
+
+div.horRule hr { display: none; }
+
+.bgAzure {
+   background-color: #e8eef7;
+   border: 1px solid #c3d9ff;
+   margin-bottom: 20px;
+   padding-bottom: 1em;
+   padding-top: 1em;
+}
+
+.bgGreen {
+   padding-bottom: 1em;
+   padding-top: 1em;
+   margin-bottom: 20px;
+   background-color: #b5edbc;
+   border: 1px solid #69ed79;
+}
+
+.pulsanti {
+   height: auto;
+   padding: 0;
+   margin: 0;
+   text-align: center;
+}
+
+form input {
+   border: 1px solid #000000;
+   height: 1.2em;
+}
+
+form input:focus {
+   background-color: #ffffcc;
+}
+
+div.left {
+   position: relative;
+   margin: 0;
+   left: 0px;
+   top: 0px;
+}
+
+div.little {
+   width: 300px;
+}
+
+div.medium {
+   width: 430px;
+}
+
+div.right {
+   position: absolute;
+   top: 0px;
+   right: 0px;
+   border: 1px solid #000000;
+}
+
+/* ----------------------------------
+ * Elementi del template tragitti.htm
+ * ----------------------------------
+ */
+div.listatragitti {
+   position: relative;
+   border: 1px solid #000000;
+   width: 750px;
+   font-family: sans-serif;
+   font-size: 1em;
+   margin-top: 1em;
+   margin-bottom: 1em;
+}
+
+p.listatragitti {
+   position: relative;
+   margin-top: 0.5em;
+   margin-bottom: 0.5em;
+   padding-top: 0px;
+}
+
+span.utenti {
+   text-align: left;
+   position: relative;
+   left: 5px;
+}
+
+span.posti {
+   text-align: right;
+   position: absolute;
+   right: 5px;
+}
+
+span.tragitto {
+   position: relative;
+   text-align: center;
+   left: 5px;
+}
+
+span.orario {
+   position: absolute;
+   right: 150px;
+}
+
+span.altro {
+   position: absolute;
+   right: 5px;
+}
+
+img#verso {
+   position: relative;
+   left: 170px;
+}
+
+img.punto {
+   float:left;
+   border: 1px;
+}
+
+/* ---------------------------------
+ * Elementi del template profilo.htm
+ * ---------------------------------
+ */
+ul.profilo {
+   list-style-type: none;
+   margin: 0;
+   padding-left: 30px;
+   padding-right: 30px;
+}
+
+ul.profilo li {
+   position: relative;
+   height: 3em;
+   left: 0px;
+   margin-top: 1em;
+   margin-bottom: 1em;
+   border: 0px solid #000000;
+}
+
+ul.profilo li:hover {
+   background-color: #ffffcc;
+}
+
+ul.profilo li.center:hover {
+   background-color: #e8eef7;
+}
+
+span.commento {
+   text-align: right;
+   font-weight: bold;
+   position: absolute;
+   right: 0;
+   bottom: 0.2em;
+   font-size: 0.9em;
+}
+
+span.valori, div.valori {
+   position: absolute;
+   left: 0;
+   top:0.2em;
+   width:240px;
+   border-bottom: 1px solid #c3d9ff;
+   vertical-align: baseline;
+   font-size: 1.2em;
+}
+
+/* ------------------------------------
+ * Elementi del template iscrizione.htm
+ * ------------------------------------
+ */
+#container{
+   margin:0 auto;
+   width:710px;
+   height:auto;
+   padding:20px 20px;
+}
+
+#directions{
+   font-family: "Verdana, Arial, Sans Serif";
+   font-size: 11px;
+   margin: 1px;
+   padding: 1px;
+   background-color:#EEEEEE;
+	
+}
+
+table.directions th {
+   font-family: "Verdana, Arial, Sans Serif";
+   background-color:#EEEEEE;
+}
+
+.titoli{
+   text-align:center;
+   font-family: "Calisto MT,Verdana";
+   color:#CC0000;
+   margin:0;
+   padding:0;
+   min-height:0;
+}
+
+#bottomTitle{
+   color:#33CC00;
+}
+
+form ul{
+   margin:0;
+   padding:0;
+   list-style-type:none;
+   width:100%;
+   font-size:100%;
+}
+
+/* SEZIONE CASELLE DI TESTO E LABEL*/
+/* Insieme di casella di testo e label di commento */
+form.registrazione ul {
+}
+
+form.registrazione label {
+   font-weight: bold;
+}
+
+form.registrazione input {
+/*   margin-bottom: 2em; */
+}
+
+form.registrazione li {
+   position: relative;
+/*   float: left;
+   clear: right; */
+   margin-bottom:1.5em;
+}
+
+form.registrazione caption {
+   font-size: 0.5em;
+}
+
+form.registrazione label.commento {
+   float:right;
+   width: 50px;
+   text-align: center;
+   font-size:10px;
+   color:#444;
+   border: 1px solid #000000;
+   padding: 0;
+}
+
+
+h3 {
+   font-size: 1em;
+   text-align: center;
+}
+
+/*
+ * VALIDAZIONE
+ */
+.LV_validation_message{
+    display:inline;
+    font-weight:bold;
+    position: relative;
+    left:20px;
+}
+
+.LV_valid {
+    color:#00CC00; 
+}
+	
+.LV_invalid {
+    color:#CC0000;
+}
+    
+.LV_valid_field,
+input.LV_valid_field:hover, 
+input.LV_valid_field:active,
+textarea.LV_valid_field:hover, 
+textarea.LV_valid_field:active {
+    border: 1px solid #00CC00; 
+
+}
+    
+.LV_invalid_field, 
+input.LV_invalid_field:hover, 
+input.LV_invalid_field:active,
+textarea.LV_invalid_field:hover, 
+textarea.LV_invalid_field:active {
+    border: 1px solid #CC0000;
+}

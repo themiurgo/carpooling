@@ -232,6 +232,14 @@ div.horRule hr { display: none; }
    padding-top: 1em;
 }
 
+.bgGold {
+   background-color: #FFF380;
+   border: 1px solid #FDD017;
+   margin-bottom: 20px;
+   padding-bottom: 1em;
+   padding-top: 1em;
+}
+
 .bgGreen {
    padding-bottom: 1em;
    padding-top: 1em;
@@ -388,10 +396,7 @@ span.valori, div.valori {
    font-size: 1.2em;
 }
 
-/* ------------------------------------
- * Elementi del template iscrizione.htm
- * ------------------------------------
- */
+
 #directions{
    font-family: "Verdana, Arial, Sans Serif";
    width: auto;
@@ -413,6 +418,11 @@ table.directions {
    left: 0;
 }
 
+/* ------------------------------------
+ * Elementi del template iscrizione.htm
+ * ------------------------------------
+ */
+
 .titoli{
    font-family: "Calisto MT,Verdana";
    margin:0;
@@ -432,14 +442,35 @@ form ul{
    font-size:100%;
 }
 
+/* ------------------------------------
+ * Elementi del template nuovo.htm
+ * ------------------------------------
+ */
+ 
+ label.commento{
+	
+	
+	/*margin-top:1px;*/
+	/*clear:both;*/
+	font-size:11px;
+	line-height:9px;
+	color:#444;
+	/*display:block;*/
+}
+
+.destra {
+float:right;	
+}
+
+#fumatoreSi,#fumatoreNo,#musicaSi,#musicaNo{
+	margin-top:1em;	
+}
+
+
 /* SEZIONE CASELLE DI TESTO E LABEL*/
 /* Insieme di casella di testo e label di commento */
 form label {
    font-weight: bold;
-}
-
-form.registrazione input {
-/*   margin-bottom: 2em; */
 }
 
 form li {
@@ -447,6 +478,10 @@ form li {
 /*   float: left;
    clear: right; */
    margin-bottom:1.5em;
+}
+
+form.registrazione input {
+/*   margin-bottom: 2em; */
 }
 
 form.registrazione li {

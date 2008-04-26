@@ -11,7 +11,8 @@ create table Auto (
    cilindrata  int not null,
    annoImmatr  date not null,
    condizioni  int(1) not null,
-   note        varchar(200));
+   note        varchar(200)
+);
 
 create table Utenti (
    ID          int primary key auto_increment,
@@ -46,7 +47,8 @@ create table Tragitto (
    fumo        boolean not null,
    musica      boolean not null,
    spese       decimal(6,2) unsigned default 0,
-   postiDisp   int(1) not null
+   postiDisp   int(1) not null,
+   note        varchar(200)
    #foreign key (idPropr, idAuto) references AutoUtenti(idUtente,idAuto)
 );
 

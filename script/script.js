@@ -3,7 +3,7 @@
  * --------------------- */
 
 /* 
- *  Funzione per far apparire e scomparire il menù di login
+ * Mostra / Nasconde il menù di login
  */
 function loginScript() {
     var e = document.getElementById("login");
@@ -16,6 +16,22 @@ function loginScript() {
     }
  }
  
+/*
+ * Da' il focus al primo input attivo del form.
+ */
+function setFormFocus(formId){
+   var form = document.getElementById(formId);
+    var len = form.elements.length;
+
+    for(var i = 0;i < len;i++){
+      var curElement = form.elements[i];
+
+      if(curElement.constructor  == HTMLInputElement){
+        curElement.focus();
+        return;
+      }
+    }
+}
  
 /* 
  *  Funzione per rendere non editabili le caselle di testo 

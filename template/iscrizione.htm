@@ -1,12 +1,12 @@
 <script type="text/javascript" src="script/dateSelector.js"></script>
 <script type="text/javascript" src="script/livevalidation_standalone.compressed.js"></script>
-
+<script type="text/javascript" src="script/focusFirst.js"></script>
 <div class="bgAzure" style="width: 350px; margin: auto;">
-<form class="registrazione" method="post" id="regisrazione"
+<form class="registrazione" method="post" id="iscrizione"
    action="index.php">
 <div class="intestazione">
-   <h2 class="titoli">Iscriviti a CarPooling!</h2>
-   <p class="titoli" id="bottomTitle">Semplice, veloce, gratuito!</p>
+   <h1 class="titoli red">Iscriviti!</h1>
+   <h2 class="titoli green">Semplice, veloce, gratuito</h2>
 </div>
 <p>Tutti i campi sono obbligatori.</p>
 <ul>
@@ -18,7 +18,6 @@
       <label for="cognome">Cognome</label><br />
       <input id="cognome"  name="cognome" class="textField" size="20" />
    </li>
-   <br />
    <li>
       <label for="gNascita">Data di Nascita</label><br />
       <input id="gNascita" name="gNascita" size="2" />
@@ -34,9 +33,7 @@
    <li>
       <label id="titolo3" for="email">Indirizzo e-mail</label><br />
       <input id="email" name="email" class="textField" size="30"/><br />
-      <caption for="mail">
       A questo indirizzo ti verra' spedita la mail di conferma
-      </caption>
    </li>
    <li>
       <label id="titolo4" for="fumatoreNo">Sei un fumatore?</label>
@@ -53,15 +50,13 @@
       <label for="psw">Password</label><br />
       <input id="psw" name="psw" class="textField" size="10"/><br />
 
-      <label for="psw">Reinserisci la password</label><br />
-      <input id="psw" name="psw" class="textField" size="10"/><br />
+      <label for="psw2">Reinserisci la password</label><br />
+      <input id="psw2" name="psw" class="textField" size="10"/><br />
    </li>
    <li>
       <label id="titolo6" for="citta">Citt&agrave; preferenziale per la partenza</label><br />
       <input id="citta" name="citta" class="textField" size="30" /><br />
-      <caption>
       Potrai eventualmente modificarla in seguito
-      </caption>
    </li>
    <li class="center">
       <button id="signUpButton" type="button" value="Registrati!">
@@ -72,62 +67,7 @@
       </button>
    </li>
 </ul>
-<script type="text/javascript">
-onload=function() {document.getElementById("cerca").focus()}
-</script>
-<script type="text/javascript">
-   var options = {validMessage : " ",onlyOnBlur:true};
-
-   var day = {minimum:1,maximum:31,
-      notANumberMessage: "Errore", notAnIntegerMessage: "Errore",
-      tooLowMessage:"Errore",tooHighMessage:"Errore"};
-   var month = {minimum:1,maximum:12,
-      notANumberMessage: "Errore", notAnIntegerMessage: "Errore",
-      tooLowMessage:"Errore",tooHighMessage:"Errore"};
-   var year = {minimum:1900,maximum:2050,
-      notANumberMessage: "Errore", notAnIntegerMessage: "Errore",
-      tooLowMessage:"Errore",tooHighMessage:"Errore"};
-
-   var nome=new LiveValidation('nome',options);
-   var cognome=new LiveValidation('cognome',options);
-   var gNascita=new LiveValidation('gNascita',options);
-   var mNascita=new LiveValidation('mNascita',options);
-   var aNascita=new LiveValidation('aNascita',options);
-   var gPatente=new LiveValidation('gPatente',options);
-   var mPatente=new LiveValidation('mPatente',options);
-   var aPatente=new LiveValidation('aPatente',options);
-   var email=new LiveValidation('email',options);
-   var user=new LiveValidation('user',options);
-   var psw=new LiveValidation('psw',options);
-   var citta=new LiveValidation('citta',options);
-
-   nome.add(Validate.Presence, {failureMessage:"Campo vuoto"});
-
-   cognome.add(Validate.Presence, {failureMessage:"Campo vuoto"});
-
-   gNascita.add(Validate.Presence, {failureMessage:"Vuoto"});
-   gNascita.add( Validate.Numericality, day);
-   mNascita.add(Validate.Presence, {failureMessage:"Vuoto"});
-   mNascita.add( Validate.Numericality, month);
-   aNascita.add(Validate.Presence, {failureMessage:"Vuoto"});
-   aNascita.add( Validate.Numericality, year);
-
-   gPatente.add(Validate.Presence, {failureMessage:"Vuoto"});
-   mPatente.add(Validate.Presence, {failureMessage:"Vuoto"});
-   aPatente.add(Validate.Presence, {failureMessage:"Vuoto"});
-
-   email.add(Validate.Presence, {failureMessage:"Campo vuoto"});
-   email.add(Validate.Email, {failureMessage: "Indirizzo non valido"});
-
-   user.add(Validate.Presence, {failureMessage:"Campo vuoto"});
-
-   psw.add(Validate.Presence, {failureMessage:"Campo vuoto"});
-
-   citta.add(Validate.Presence, {failureMessage:"Campo vuoto"});
-</script>
-
+<!-- Validazione contenuti del form -->
+<script type="text/javascript" src="script/iscrizioneValidate.js"></script>
 </form>
 </div>
-<script type="text/javascript">
-   window.onload = document.getElementById('nome').focus;
-</script>

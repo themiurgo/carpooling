@@ -46,9 +46,9 @@ create table Tragitto (
    fumo        boolean not null,
    musica      boolean not null,
    spese       decimal(6,2) unsigned default 0,
-   postiDisp   int(1) not null,
-   foreign key (idPropr, idAuto)
-      references AutoUtenti(idUtente,idAuto));
+   postiDisp   int(1) not null
+   #foreign key (idPropr, idAuto) references AutoUtenti(idUtente,idAuto)
+);
 
 create table UtentiTragitto (
    idUtente    int not null references Utenti(ID),

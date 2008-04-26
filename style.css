@@ -462,9 +462,16 @@ form ul{
 float:right;	
 }
 
-#fumatoreSi,#fumatoreNo,#musicaSi,#musicaNo{
-	margin-top:1em;	
+.radiolabel {
+   margin-right: 1em;
 }
+
+
+#fumatoreSi,#fumatoreNo,#musicaSi,#musicaNo{
+	margin-top:1em;
+    
+}
+
 
 
 /* SEZIONE CASELLE DI TESTO E LABEL*/

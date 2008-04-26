@@ -32,7 +32,10 @@ aPartenza.add(Validate.Presence, {failureMessage:"Vuoto"});
 aPartenza.add( Validate.Numericality, anno);
 
 oraPartenza.add(Validate.Presence, {failureMessage:"Vuoto"});
+oraPartenza.add(Validate.Format, { pattern: /^[0-2][0-9]:[0-5][0-9]$/, failureMessage:"Valore Errato"});
 durata.add(Validate.Presence, {failureMessage:"Vuoto"});
+durata.add(Validate.Format, { pattern: /^[0-2][0-9]:[0-5][0-9]$/, failureMessage:"Valore Errato"});
+
 passeggeri.add(Validate.Presence, {failureMessage:"Vuoto"});
 passeggeri.add(Validate.Numericality, numPass);
 spese.add(Validate.Presence, {failureMessage:"Vuoto"});

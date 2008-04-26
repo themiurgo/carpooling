@@ -1,76 +1,54 @@
-<!-- Contenitore globale di tutti gli elementi -->
-<div id="container">
-    
-	<div class="intestazione">   
-		<h2 class="titoli">Form per la registrazione di un auto</h2>
-		<p class="titoli" id="bottomTitle">Condividi la macchina, condividi le esperienze (e le spese)!<p>
-	</div>
+<div class="intestazione">   
+	<h2 class="titoli">Form per la registrazione di un auto</h2>
+	<p id="bottomTitle">Condividi la macchina, condividi le esperienze (e le spese)!<p>
+</div>
+<!-- Contenitore colorato -->
+<div class="bgGreen"> 
 	<div>
 		<!-- REGISTEREDAUTOS -->
 	</div>
 	<!-- Form per la registrazione di un Auto -->
 	<form id="autoForm" name="autoForm" class="registrazione" action="index.php?p=auto&action=registerAuto" method="post">
-	<div>Ti ricordiamo che &egrave; necessario inserire tutti i campi.</div>
-	<ul>
-	    <li class="sinistra">
-		<span>
-		<label class="upLabel" id="titolo0" for="marca">Marca</label>
-		<input id="marca" name="marca" class="textField" size="20"/>
-		<!--<label class="commento" for="nome">Nome</label> -->
-		</span>
-		<span>
-		<label class="upLabel" id="titolo1" for="modello">Modello</label>
-		<input id="modello" name="modello" class="textField" size="20"/>
-		</span>
-		<span>
-		<label class="upLabel" id="titolo2" for="targa">Targa</label>
-		<input id="targa" name="targa" class="textField" size="20"/>
-		</span>
-	    </li>
-		
-	 <li class="sinistra">
-		<span>
-		<label class="upLabel" id="titolo3" for="cilindrata">Cilindrata</label>
-		<input id="cilindrata" name="cilindrata" class="textField" size="20"/>
-		</span>
-		<label class="upLabel" id="titolo4" for="gAuto">Data immatricolazione auto</label>
-		<span>
-		<input id="gAuto" name="gAuto" class="textField" size="2" /> / 
-		<label class="commento data" for="gPatente">GG</label>
-		</span>
-		<span>
-		<input id="mAuto" name="mAuto" class="textField" size="2" /> / 
-		<label class="commento data" for="mAuto">MM</label>
-		</span>
-		<span>
-		<input id="aAuto" name="aAuto" class="textField" size="4" />  
-		<label class="commento data" for="aAuto">AAAA</label>
-		</span>
-	</li>
-	    <li>
-	    <span>
-		<label class="upLabel" id="titolo5" for="fumatoreNo">Che voto daresti alle condizioni <br />della tua macchina?</label>
-		<input id="voto1" name="voto" class="radioField" type="radio" value="1"/>
-		<label for="voto1">1</label>
-		<input id="voto2" checked="checked" name="voto" class="radioField" type="radio" value="2"  />
-		<label for="voto2">2</label>
-		<input id="voto3" checked="checked" name="voto" class="radioField" type="radio" value="3"  />
-		<label for="voto3">3</label>
-		<input id="voto4" checked="checked" name="voto" class="radioField" type="radio" value="4"  />
-		<label for="voto4">4</label>
-		<input id="voto5" checked="checked" name="voto" class="radioField" type="radio" value="5"  />
-		<label for="voto5">5</label>
-		</span>
-		<span>
-				<label class="upLabel" id="titolo6" for="partenza">Note</label>
-				<input id="noteAuto" name="noteAuto" class="textField" rows="5" cols="100"/>
-				<label class="commento data" for="noteAuto">Puoi scrivere delle precisazioni <br />sulla condizione della tua macchina</label>
-				</span>
-	     </li>   
-	    <li class="bottoni">
-		<button id="registerAutoButton" type="submit">Registrati</button>
-       	       <button id="clearButton" type="reset">Cancella i campi</button>
-	    </li>
-	</ul>	    
-    </form> <!-- Fine del Form -->
-</div> <!-- Fine del contenitore generale -->
+		<div>Ti ricordiamo che &egrave; necessario inserire tutti i campi.</div>
+		<ul>
+			<li>
+				<label for="marca">Marca : </label>
+				<input id="marca" name="marca" class="textField" size="20"/> <br/>
+				<label for="modello">Modello : </label>
+				<input id="modello" name="modello" class="textField" size="20"/> <br/>
+				<label for="targa">Targa : </label>
+				<input id="targa" name="targa" class="textField" size="20"/> <br/>
+				<label for="cilindrata">Cilindrata : </label>
+				<input id="cilindrata" name="cilindrata" class="textField" size="20"/>
+			</li>
+			<li>
+				<label for="gAuto">Data immatricolazione auto</label><br/>
+				<input id="gAuto" name="gAuto" class="textField" size="2" /> / 
+				<input id="mAuto" name="mAuto" class="textField" size="2" /> / 
+				<input id="aAuto" name="aAuto" class="textField" size="4" />  
+			</li>
+			<li>
+				<label for="fumatoreNo">Che voto daresti alle condizioni della tua macchina?</label>  <br/>
+				<input id="voto1" name="voto" class="radioField" type="radio" value="1"/>
+				<label for="voto1">1</label>
+				<input id="voto2" checked="checked" name="voto"  type="radio" value="2"  />
+				<label for="voto2">2</label>
+				<input id="voto3" checked="checked" name="voto"  type="radio" value="3"  />
+				<label for="voto3">3</label>
+				<input id="voto4" checked="checked" name="voto"  type="radio" value="4"  />
+				<label for="voto4">4</label>
+				<input id="voto5" checked="checked" name="voto"  type="radio" value="5"  />
+				<label for="voto5">5</label>
+				<br/>
+				<label for="noteAuto">Note</label><br/>
+				<textarea name="noteAuto" cols=40 rows=5></textarea> <br>
+				<label for="noteAuto">Puoi scrivere delle precisazioni sulla condizione della tua macchina</label>
+			</li>   
+			<li>
+				<button id="registerAutoButton" type="submit">Registra l' Auto</button>
+				<button id="clearButton" type="reset">Cancella i campi</button>
+			</li>
+		</ul>	    
+	</form> <!-- Fine del Form -->
+</div> <!-- Fine del contenitore colorato -->
+

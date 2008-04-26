@@ -448,14 +448,10 @@ form ul{
  */
  
  label.commento{
-	
-	
-	/*margin-top:1px;*/
-	/*clear:both;*/
-	font-size:11px;
+   font-size:11px;
 	line-height:9px;
 	color:#444;
-	/*display:block;*/
+	
 }
 
 .destra {
@@ -472,6 +468,26 @@ float:right;
     
 }
 
+/* ------------------------------------
+ * Elementi del template auto.htm
+ * ------------------------------------
+ */
+
+.textField {
+   margin-top:2em;
+margin-left:1.2em;   
+}
+
+#noteAutoLabel{
+       font-size:11px;
+       line-height:9px;
+       color:#444;
+
+}
+
+.alertText {
+   color:#C11B17;
+}
 
 
 /* SEZIONE CASELLE DI TESTO E LABEL*/

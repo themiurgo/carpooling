@@ -306,7 +306,7 @@ function prepare_content ($template) {
                
             elseif ( $_GET['p'] == "auto" )
                $output = eregi_replace("<!-- REGISTEREDAUTOS -->",
-                  "Attualmente, non hai nessuna auto registrata",$template);
+                  "<label class='alertText'>Attualmente, non hai nessuna auto registrata</alert>",$template);
                 
             $final_content = $final_content.$output;
          }

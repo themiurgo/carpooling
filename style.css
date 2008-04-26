@@ -142,7 +142,8 @@ div#body {
    height: auto;
    margin-left: auto;
    margin-right: auto;
-/*   border: 1px solid #000000; */
+   overflow: auto;
+   margin-bottom: 2.5em;
 }
 
 
@@ -230,10 +231,11 @@ form input:focus {
 }
 
 div.left {
-   position: relative;
+/*   position: relative;
    margin: 0;
-   left: 0px;
    top: 0px;
+   left: 0px; */
+   float: left;
 }
 
 div.little {
@@ -245,10 +247,11 @@ div.medium {
 }
 
 div.right {
-   position: absolute;
+/*   position: absolute;
    top: 0px;
-   right: 0px;
    border: 1px solid #000000;
+   right: 0px; */
+   float: right;
 }
 
 /* ----------------------------------
@@ -258,7 +261,7 @@ div.right {
 div.listatragitti {
    position: relative;
    border: 1px solid #000000;
-   width: 750px;
+   width: 740px;
    font-family: sans-serif;
    font-size: 1em;
    margin-top: 1em;
@@ -420,6 +423,10 @@ form li {
    margin-bottom:1.5em;
 }
 
+form.registrazione li {
+   margin-left: 1em;
+}
+
 form.registrazione caption {
    font-size: 0.5em;
 }
@@ -432,6 +439,10 @@ form.registrazione label.commento {
    color:#444;
    border: 1px solid #000000;
    padding: 0;
+}
+
+form.registrazione {
+   text-align: left;
 }
 
 

@@ -71,17 +71,21 @@ function feedback ($targetUserId) {
 /* ---------------------
  * FUNZIONI DI TEMPLATE
  * --------------------- */
- 
-# Questa Funzione consente di modificare gli attributi di <head> qualora fossero necessarie
-# operazioni particolari, ad es. il caricamento iniziale della GMap.
+
+/* 
+ * Ritorna eventuali tag da aggiungere dentro <head></head>,
+ * ad esempio nelle pagine dove sono presenti mappe.
+ */
 function headType() {
    switch ($_GET['p']) {
       case "nuovo":
       case "cerca":
-   	
-   # Queste istruzioni consentono di inviare la API KEY al server di Google.
-      return "<script src='http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAApM5Cuio981ky_h5rXnr3uhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRczD8EFDGHM7KVLNJB1qP52_6uEg' type='text/javascript'></script>";
-      break;
+        
+      # Script per la gestione delle GMaps
+      return <<<DH
+<script type "text/javascript" src="script/gmaps.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAApM5Cuio981ky_h5rXnr3uhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRczD8EFDGHM7KVLNJB1qP52_6uEg"></script>
+DH;
 
       default:
       # Nella pagina non è presente la GMap
@@ -89,9 +93,10 @@ function headType() {
    }
 }
 
-
-# Questa Funzione consente di modificare gli attributi di <body> qualora fossero necessarie
-# operazioni particolari, ad es. il caricamento iniziale della GMap.
+/*
+ * Ritorna <body> in versione "semplice" oppure arricchito di
+ * operazioni da effettuare al caricamento della pagina.
+ */
 function bodyType() {
    switch ($_GET['p']) {
       case "nuovo":
@@ -120,26 +125,26 @@ function bodyType() {
 }
  
 
- /*
+/*
  * Restituisce il menu.
  */
 function menu () {
    # Utente NON LOGGATO
    if (!getUser()) {
-      return <<<END
-	 <a href="#" onclick="loginScript()">Login</a>&nbsp;&middot;
-	 <a href="index.php?p=iscrizione">Iscriviti</a>&nbsp;&middot;
-	 <a href="index.php?p=tragitti">Tragitti</a>&nbsp;&middot;
-	 <a href="index.php?p=cerca">Cerca Tragitto</a>&nbsp;&middot;
-	 <a href="index.php?p=utenti">Utenti</a>&nbsp;&middot;
-	 <a href="index.php?p=about">About Us</a>&nbsp;&middot;
-END;
+      return <<<MNNL
+      <a href="#" onclick="loginScript()">Login</a>&nbsp;&middot;
+      <a href="index.php?p=iscrizione">Iscriviti</a>&nbsp;&middot;
+      <a href="index.php?p=tragitti">Tragitti</a>&nbsp;&middot;
+      <a href="index.php?p=cerca">Cerca Tragitto</a>&nbsp;&middot;
+      <a href="index.php?p=utenti">Utenti</a>&nbsp;&middot;
+      <a href="index.php?p=about">About Us</a>&nbsp;&middot;
+MNNL;
    }
     
    # Utente LOGGATO
    else {
       $Utente = getUser();
-      return <<<END
+      return <<<MNL
       <b>$Utente</b> - 
       <a href="index.php?p=profilo">Profilo</a>&nbsp;&middot;
       <a href="index.php?p=tragitti">Tragitti</a>&nbsp;&middot;
@@ -149,7 +154,7 @@ END;
       <a href="index.php?p=utenti">Utenti</a>&nbsp;&middot;
       <a href="index.php?p=about">About Us</a>&nbsp;&middot;
       <a href="index.php?action=logout">Logout</a>
-END;
+MNL;
    }
 }
 
@@ -183,7 +188,7 @@ function content () {
       // ... la recupero ...
       $pagina = "template/".$_GET[p].".htm";
       $file = file($pagina)
-	 or die("Pagina non trovata");
+         or die("Pagina non trovata");
       $file_content = implode ("",$file);
    }
 
@@ -206,27 +211,35 @@ function prepare_content ($a) {
       # Pagina con la tabella dei Tragitti    
       case 'tragitti':
             
- 	 # Estrazione dei tragitti
-	 $trips_query = "select Tragitto.*, userName from `Tragitto`
-   	    join Utenti on idPropr=Utenti.ID
-	    order by `dataPart` desc,`oraPart` desc limit 5";
-	 $res = execQuery($trips_query);
+         # Estrazione dei tragitti
+         $trips_query = "select Tragitto.*, userName from `Tragitto`
+            join Utenti on idPropr=Utenti.ID
+            order by `dataPart` desc,`oraPart` desc limit 5";
+         $res = execQuery($trips_query);
             
-            while ($row = mysql_fetch_array($res)) {	       
+            while ($row = mysql_fetch_array($res)) {           
+               $search = array ("{ PROPRIETARIO }",
+                  "{ NPDISP }",
+                  "{ PARTENZA }",
+                  "{ DESTINAZ }",
+                  "{ ORA }",
+                  "{ DURATA }",
+                  "{ FUMO }",
+                  "{ MUSICA }");
+               
+               $replace = array ($row['userName'],
+                  $row['postiDisp'],
+                  $row['partenza'],
+                  $row['destinaz'],
+                  $row['dataPart']." ".$row['oraPart'],
+                  $row['durata'],
+                  $row['fumo'],
+                  $row['musica']);
                 
-		# La prima chiamata ha come parametro '$a'
-	       $o = eregi_replace("<!-- PROPRIETARIO -->", $row['userName'],$a);
-	       $o = eregi_replace("<!-- NPDISP -->", $row['numPostiDisp'],$o);
-	       $o = eregi_replace("<!-- PARTENZA -->", $row['partenza'],$o);
-	       $o = eregi_replace("<!-- DESTINAZ -->", $row['destinaz'],$o);
-	       $o = eregi_replace("<!-- ORA -->",$row['dataPart']." ".$row['oraPart'],$o);
-	       $o = eregi_replace("<!-- DURATA -->", $row['durata'],$o);
-	       $o = eregi_replace("<!-- FUMO -->", $row['fumo'],$o);
-	       $o = eregi_replace("<!-- MUSICA -->", $row['musica'],$o);
-                
-       	       $final_content = $final_content.$o;
-	    }
-	    break;
+               $o = str_replace($search,$replace,$a);
+               $final_content = $final_content.$o;
+            }
+            break;
 
       case 'profilo':
          if (!isset($_GET['u']))
@@ -268,40 +281,40 @@ function prepare_content ($a) {
          $final_content = preg_replace($search, $replace, $a);
 
          break;
-	    
+            
         
         # Nuovo Tragitto e inserimento Auto
       case 'nuovo':
       case 'auto':   
             
       # Estrai le informazioni sulle eventuali auto registrate dall' utente corrente
-   	 $auto_query = "select targa,marca,modello from Auto join AutoUtenti on Auto.id=AutoUtenti.idAuto where AutoUtenti.idUtente='".$_SESSION['userID']."'"; 
-	 $res = execQuery($auto_query);
-	 
+         $auto_query = "select targa,marca,modello from Auto join AutoUtenti on Auto.id=AutoUtenti.idAuto where AutoUtenti.idUtente='".$_SESSION['userID']."'"; 
+         $res = execQuery($auto_query);
+         
             # L' utente corrente non ha alcuna auto registrata
-	 if ( ( mysql_num_rows($res) == 0) ) {
-	    if ( $_GET['p'] == "nuovo" ) {
+         if ( ( mysql_num_rows($res) == 0) ) {
+            if ( $_GET['p'] == "nuovo" ) {
                 
                     # La prima chiamata ha come parametro '$a'
-	       $o = eregi_replace("<!-- AUTOS -->","Non hai auto! Provvedi subito a 
+               $o = eregi_replace("<!-- AUTOS -->","Non hai auto! Provvedi subito a 
                         <a href='index.php?p=auto'>registrarne</a> una.",$a); 
-	    }
-	       
-	    elseif ( $_GET['p'] == "auto" ) {
-	       
-	    # La prima chiamata ha come parametro '$a'
-      	    $o = eregi_replace("<!-- REGISTEREDAUTOS -->","Attualmente, non hai nessuna auto registrata",$a); 
-	    }
+            }
+               
+            elseif ( $_GET['p'] == "auto" ) {
+               
+            # La prima chiamata ha come parametro '$a'
+            $o = eregi_replace("<!-- REGISTEREDAUTOS -->","Attualmente, non hai nessuna auto registrata",$a); 
+            }
                 
-	 $final_content = $final_content.$o;
+         $final_content = $final_content.$o;
             
-	 # L' utente ha almeno un'auto
-	 } 
-	       
-	       else {
-		  $row = mysql_fetch_array($res);
+         # L' utente ha almeno un'auto
+         } 
+               
+               else {
+                  $row = mysql_fetch_array($res);
                 
-		  # Bisogna ancora prevedere il caso in cui il proprietario abbia più di una macchina.
+                  # Bisogna ancora prevedere il caso in cui il proprietario abbia più di una macchina.
                 $auto1= $row['marca']." - ".$row['modello']." - ".$row['targa'];
                 
                 #Andrà a finire in un campo hidden, per facilitare query successive.
@@ -328,7 +341,7 @@ function prepare_content ($a) {
                             <option value='auto1' selected='selected'>$auto1</option></select>
                             <input type="hidden" name="targa" value="$targa">
                             <input id="modifyAutoButton" type="button" value="Modifica" onclick="disableText()"/>
-                        </form>		
+                        </form>         
 END
 
                         ,$a); 

@@ -67,10 +67,10 @@ function creaMappa(centroDefault) {
         /* Questa variabile identifica l'angolo in basso a sinistra della mappa.
             * Il secondo parametro a'¨ un offset.
             */
-        var bottomLeft = new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(30,10));
+        var topRight = new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(5,5));
         
         /* Aggiunta del modificatore mappa-satellite-ibrida nell'angolo bottomLeft */
-        map.addControl(new GMapTypeControl(),bottomLeft);
+        map.addControl(new GMapTypeControl(),topRight);
     }
 }
     

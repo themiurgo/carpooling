@@ -170,9 +170,14 @@ function content () {
       $_GET['p']="tragitti";
    }
 
-   // Lista delle pagine consentite
-   $allowed = array("login","iscrizione","cerca","nuovo","utenti",
-      "tragitti","profilo","about","auto","signUp");
+   if (getUser()) {
+      #Lista delle pagine consentite per un utente loggato
+      $allowed = array("profilo","tragitti","cerca","nuovo","auto",
+         "utenti","about");
+   } else {
+      #Lista delle pagine consentite per un utente NON loggato
+      $allowed = array("tragitti","cerca","utenti","about","iscrizione");
+   }
 
    $content = "";
    
@@ -189,10 +194,14 @@ function content () {
       $file = file($pagina)
          or die("Pagina non trovata");
       $file_content = implode ("",$file);
+       # Ottieni il corretto contenuto da 'sostituire' all'interno della pagina
+      $content = $content.prepare_content($file_content);
+   } else {
+      $error = accessDenied();
+      $content = $content.$error;
    }
 
-    # Ottieni il corretto contenuto da 'sostituire' all'interno della pagina
-   $content = $content.prepare_content($file_content);
+   
    return $content;
 }
 
@@ -391,6 +400,17 @@ function age ($birthday) {
  */
 function trust ($username) {
    return "molto affidabile";
+}
+
+/* Messaggio di errore: non puoi accedere alla pagina*/
+function accessDenied() {
+return <<<ERR
+<div style="padding:0" class="bgAzure">
+   <p>Non hai i permessi per visitare questa pagina!</p>
+         <a href="./index.php">home</a>
+</div>
+ERR;
+
 }
 
 

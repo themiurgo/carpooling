@@ -99,8 +99,8 @@ DH;
  */
 function bodyType() {
    switch ($_GET['p']) {
-      case "nuovo":
-      case "cerca":
+      case 'nuovo':
+      case 'cerca':
 
          // Centro la mappa nella localita' preferita dell'utente
          if ( isset($_SESSION['user']) ) {

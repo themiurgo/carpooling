@@ -21,6 +21,7 @@ var aPatente=new LiveValidation('aPatente',options);
 var email=new LiveValidation('email',options);
 var user=new LiveValidation('user',options);
 var psw=new LiveValidation('psw',options);
+var psw2=new LiveValidation('psw2',options);
 var citta=new LiveValidation('citta',options);
 
 nome.add(Validate.Presence, {failureMessage:"Campo vuoto"});
@@ -43,7 +44,11 @@ email.add(Validate.Email, {failureMessage: "Indirizzo non valido"});
 
 user.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 
+
 psw.add(Validate.Presence, {failureMessage:"Campo vuoto"});
+
+psw2.add( Validate.Confirmation, { match: 'psw', failureMessage: "Le password sono diverse" } );
+
 
 citta.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 

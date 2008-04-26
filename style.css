@@ -506,6 +506,9 @@ form.registrazione {
    text-align: left;
 }
 
+td {
+   text-align: center;
+}
 
 h3 {
    font-size: 1em;

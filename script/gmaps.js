@@ -3,13 +3,13 @@
  * --------------------- */
 
 /** Questo oggetto rappresenta la Mappa vera e propria */
-mappa = null;
+var mappa = null;
 
 /** 
  * Questo oggetto consente di ottenere le coordinate geografiche 
- * di una localit√† (anche se in modo contorto :)
+ * di una localita'† (anche se in modo contorto :)
  */
-geocoder = null;
+var geocoder = null;
 
 /** 
  *  Questo oggetto incapsula tutti i concetti inerenti alle
@@ -21,11 +21,11 @@ var addressMarker;
 
 /**
   * Creazione della GMap centrata a Catania.
- * centroDefault √® una stringa passata come argomento dal documento HTML
+ * centroDefault a'® una stringa passata come argomento dal documento HTML
  */
 function creaMappa(centroDefault) {
     
-    /* Verifica la compatibilit√† del Browser    */
+    /* Verifica la compatibilita'† del Browser    */
     if ( GBrowserIsCompatible() ) {
         
         /*  Aggancio della Mappa ad un elemento HTML  
@@ -37,19 +37,19 @@ function creaMappa(centroDefault) {
         geocoder = new GClientGeocoder();
         
         /* Inizializza la mappa. 
-            * Il  principio √® questo: ho bisogno delle coordinate geografiche
+            * Il  principio a'® questo: ho bisogno delle coordinate geografiche
             * di un punto, ma ho solo il nome (es. Catania). Sfrutto allora
             * il metodo getLatLng che passa automaticamente alla funzione chiusura ( 2¬∞ argomento )
-            * il punto che mi interessa, che si √® calcolato sempre automaticamente.
+            * il punto che mi interessa, che si a'® calcolato sempre automaticamente.
             */
         geocoder.getLatLng( centroDefault, function( puntoGeografico ) {
-            /* La localit√† non esiste*/
+            /* La localita'† non esiste*/
             if (!puntoGeografico) { 
             alert(partenza + " non e' una localita' valida."); 
         
             /* Caricamento delle coordinate del punto */
             }else {  
-            /* Setta il centro. 13 √® il livello di zoom*/
+            /* Setta il centro. 13 e' il livello di zoom*/
             map.setCenter(puntoGeografico, 13);
             
             /* Creazione del "fumetto" di benvenuto della GMap */
@@ -65,7 +65,7 @@ function creaMappa(centroDefault) {
         map.enableScrollWheelZoom();
         
         /* Questa variabile identifica l'angolo in basso a sinistra della mappa.
-            * Il secondo parametro √® un offset.
+            * Il secondo parametro a'® un offset.
             */
         var bottomLeft = new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(30,10));
         
@@ -73,13 +73,13 @@ function creaMappa(centroDefault) {
         map.addControl(new GMapTypeControl(),bottomLeft);
     }
 }
-	
-	
-/*  Crea e visualizza sulla mappa un percorso relativo a due citt√†*/
+    
+    
+/*  Crea e visualizza sulla mappa un percorso relativo a due citta'†*/
 function creaPercorso() {
    mapForm = document.getElementById("mapForm"); 
     
-    /* Ottieni le citt√† di partenza ed arrivo dalle caselle di testo della pagina */
+    /* Ottieni le citta'† di partenza ed arrivo dalle caselle di testo della pagina */
     partenza = mapForm.partenzaText.value;
     arrivo = mapForm.arrivoText.value;
     
@@ -87,15 +87,34 @@ function creaPercorso() {
     var direzioni = document.getElementById("directions");
     direzioni.innerHTML = "";
     
+    /* Rappresenta un 'rettangolo di coordinate' */
+    var bounds = new GLatLngBounds();
+    
     /* Rappresentano i punti geografici sulla mappa */
-    var puntoPartenza; var puntoArrivo;
+    var puntoPartenza; 
+    var puntoArrivo;
+    
+    /* Crea una icona base */
+        var baseIcon = new GIcon();
+        baseIcon.iconAnchor = new GPoint(9, 34);
+        baseIcon.infoWindowAnchor = new GPoint(9, 2);
+        
+        /* Crea ed aggiunge il marker personalizzato alla mappa */
+        var partenzaIcona = new GIcon(baseIcon);
+        partenzaIcona.image = "./images/markerP.png";
+        markerPOptions = { icon:partenzaIcona };
+        /* Crea ed aggiunge il marker personalizzato alla mappa */
+        var arrivoIcona = new GIcon(baseIcon);
+        arrivoIcona.image = "./images/markerA.png";
+        markerAOptions = { icon:arrivoIcona };
+    
     
     /* Questa funzione ha il solo scopo di 'caricare' le coordinate del punto di arrivo,
         * secondo la logica della funzione precedente
         */
     geocoder.getLatLng(partenza, function(puntoGeografico) {
         
-        /* La localit√† non esiste*/
+        /* La localita'† non esiste*/
         if (!puntoGeografico) { alert(partenza + " non e' una localita' valida."); } 
         
         /* Caricamento delle coordinate del punto */
@@ -104,7 +123,7 @@ function creaPercorso() {
     
     geocoder.getLatLng(arrivo, function(puntoGeografico) {
     
-         /* La localit√† non esiste*/
+         /* La localita'† non esiste*/
         if (!puntoGeografico) {alert(arrivo + " non e' una localita' valida.");} 
         
         /* Caricamento delle coordinate del punto */
@@ -113,52 +132,32 @@ function creaPercorso() {
             /* Rimuove eventuali altri elementi presenti sulla mappa */
             map.clearOverlays();
             
-            /* Rappresenta un 'rettangolo di coordinate' */
-            var bounds = new GLatLngBounds();
-            
-            /* Crea una icona base */
-            var baseIcon = new GIcon();
-            baseIcon.iconAnchor = new GPoint(9, 34);
-            baseIcon.infoWindowAnchor = new GPoint(9, 2);
-            
-            /* Crea ed aggiunge il marker personalizzato alla mappa */
-            var partenzaIcona = new GIcon(baseIcon);
-            partenzaIcona.image = "./images/markerP.png";
-            markerOptions = { icon:partenzaIcona };
-            var markerP = new GMarker(puntoPartenza, markerOptions);
+           var markerP = new GMarker(puntoPartenza, markerPOptions);
             map.addOverlay(markerP);
-            
-            /* Crea l'ascoltatore per il click del mouse, che far√† aprire una infoWindow */
+            /* Crea l'ascoltatore per il click del mouse, che fara'† aprire una infoWindow */
             GEvent.addListener(markerP, "click", function() { markerP.openInfoWindowHtml("<div class='gmapPopup'>Citta' di partenza : <br/><b>" + partenza+"</b></div>");});
-            
             /* Regola lo zoom */
             fitZoom(bounds,puntoPartenza);
             
-           /* Crea ed aggiunge il marker personalizzato alla mappa */
-            var arrivoIcona = new GIcon(baseIcon);
-            arrivoIcona.image = "./images/markerA.png";
-            markerOptions = { icon:arrivoIcona };
-            var markerA = new GMarker(puntoArrivo, markerOptions);
+            var markerA = new GMarker(puntoArrivo, markerAOptions);
             map.addOverlay(markerA);
-            
-            /* Crea l'ascoltatore per il click del mouse, che far√† aprire una infoWindow */
+            /* Crea l'ascoltatore per il click del mouse, che fara'† aprire una infoWindow */
             GEvent.addListener(markerA, "click", function() { markerA.openInfoWindowHtml("<div class='gmapPopup'>Citta' di arrivo : <br/><b>" + arrivo+"</b></div>");});
-             
              /* Regola lo zoom */
-            fitZoom(bounds,puntoArrivo);
+            fitZoom(bounds,puntoArrivo); 
             
-            /* Aggiungi la linea del percorso */
+           /* Aggiungi la linea del percorso */
             var percorso = new GPolyline([puntoPartenza,puntoArrivo], "#330099", 10);
             map.addOverlay(percorso);
         }
     } );
 }
-	
+    
 
 /** Regola lo zoom della mappa */
 function fitZoom(bounds,point){
     
-    /* Estende il rettangolo delle coordinate affinch√® contenga il punto passato come parametro */
+    /* Estende il rettangolo delle coordinate affincha'® contenga il punto passato come parametro */
     bounds.extend(point);
     
     /* Ottieni informationi sul corretto zoom */
@@ -168,24 +167,24 @@ function fitZoom(bounds,point){
     /*Regola lo zoom della mappa */
     map.setCenter(newCenter,newZoom);
 }
-	
-	
     
-/** Crea le indicazioni complete per raggiungere una localit√† */
+    
+    
+/** Crea le indicazioni complete per raggiungere una localita'† */
 function creaIndicazioni() {
    mapForm = document.getElementById("mapForm"); 
 
-    /* Ottieni le citt√† di partenza ed arrivo dalle caselle di testo della pagina */
+    /* Ottieni le citta'† di partenza ed arrivo dalle caselle di testo della pagina */
     partenza = mapForm.partenzaText.value;
     arrivo = mapForm.arrivoText.value;
 
     if (GBrowserIsCompatible()) {
   
-        /* Rimuove eventuali indicazioni gi√† presenti nella pagina */
+        /* Rimuove eventuali indicazioni gia'† presenti nella pagina */
         var direzioni = document.getElementById("directions");
         direzioni.innerHTML = "";
             
-        /* Ottieni l'oggetto GDirections che costruir√† tutte le indicazioni necessarie */
+        /* Ottieni l'oggetto GDirections che costruira'† tutte le indicazioni necessarie */
         gdir = new GDirections(map, direzioni);
         
         /*Azzera lo stato della mappa */
@@ -194,7 +193,7 @@ function creaIndicazioni() {
 
         /*  Aggiunge il caricatore delle direzioni ed il gestore degli errori.
           *     Il primo fa riferimento alla funzione senza implementazione latestLoad.
-          *     Il secondo fa riferimento alla funzione gestioneErrori poco pi√π in basso.
+          *     Il secondo fa riferimento alla funzione gestioneErrori poco pi˘ in basso.
           */
         GEvent.addListener(gdir, "load", latestLoad);
         GEvent.addListener(gdir, "error", gestioneErrori);

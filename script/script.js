@@ -6,15 +6,17 @@
  * Mostra / Nasconde il menù di login
  */
 function loginScript() {
-    var e = document.getElementById("login");
-    if (e.style.visibility == 'visible') {
-        e.style.visibility = 'hidden';
-        e.style.display = 'none';
-    } else {
-        e.style.visibility = 'visible';
-        e.style.display = 'block';
-    }
- }
+   var e = document.getElementById("login");
+   if (e.style.visibility == 'visible') {
+      e.style.visibility = 'hidden';
+      e.style.display = 'none';
+   }
+   else {
+      e.style.visibility = 'visible';
+      e.style.display = 'block';
+   }
+   setFormFocus("login");
+}
  
 /*
  * Da' il focus al primo input attivo del form.
@@ -31,6 +33,27 @@ function setFormFocus(formId){
         return;
       }
     }
+}
+
+/*
+ * Ritorna un oggetto xmlHttp compatibile con il browser
+ */
+function GetXmlHttpObject() {
+   var xmlHttp=null;
+   try {
+      // Firefox, Opera 8.0+, Safari
+      xmlHttp=new XMLHttpRequest();
+   }
+   catch (e) {
+      // Internet Explorer
+      try {
+         xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+      }
+      catch (e) {
+         xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+  }
+   return xmlHttp;
 }
  
 /* 

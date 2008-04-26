@@ -135,11 +135,48 @@ function registraTragitto() {
     $res = execQuery($tripID_query);
     $row = mysql_fetch_array($res); 
    
-    $registerTrip_query2 = "insert into UtentiTragitto(idPercorso,idUtente) values('".$row['max']."','".$_SESSION['userID']."')";
+    $registerTrip_query2 = "insert into UtentiTragitto(idPercorso,idUtente) 
+      values('".$row['max']."','".$_SESSION['userID']."')";
     
     execQuery($registerTrip_query2);
 } 
 	
-	
+function users_recentSignup () {
+   $query = "select userName from Utenti order by dataIscriz desc limit 5"; 
+   $res = execQuery($query);
+   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
+      $line='<a href="">'.$row['userName'].'</a><br />';
+      $output=$output.$line;
+   }
+   return $output;
+}
 
+function users_mostActive() {
+   $query = "select userName,count(*) as nTragitti
+      from Utenti join Tragitto on Utenti.ID = Tragitto.idPropr
+      group by Tragitto.idPropr
+      order by nTragitti desc limit 5"; 
+   $res = execQuery($query);
+   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
+      $line='<a href="">'.$row['userName'].'</a>
+         ('.$row['nTragitti'].'tragitti)<br />';
+      $output=$output.$line;
+   }
+   return $output;
+}
+
+function search_username() {
+   $query = "select userName,count(*) as nTragitti
+      from Utenti join Tragitto on Utenti.ID = Tragitto.idPropr
+      group by Tragitto.idPropr
+      order by nTragitti desc limit 5"; 
+   $res = execQuery($query);
+   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
+      $line='<a href="">'.$row['userName'].'</a>
+         ('.$row['nTragitti'].'tragitti)<br />';
+      $output=$output.$line;
+   }
+   echo "ciao";
+   return $output;
+}
 ?>

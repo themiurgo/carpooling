@@ -2,14 +2,30 @@
 <p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!</p>
 <p>Leggi <a href="index.php?p=about">come funziona</a> e <a href="index.php?p=iscrizione">registrati subito!</a></p>
 
+<script>
+function risultati() {
+   var xmlHttp=GetXmlHttpObject();
+   res=document.getElementById("risultati");
+   userName=document.getElementById("search_username");
+   
+   xmlHttp.onreadystatechange=function() {
+      if(xmlHttp.readyState==4) {
+         res.innerHTML=xmlHttp.responseText;
+      }
+   }
+   if (xmlHttp==null) {
+      alert ("Il browser non supporta AJAX");
+      return;
+   }
+   var url="pages/ajax.php";
+   url=url+"?q="+userName.value;
+   alert (url);
+   xmlHttp.open("GET",url,true);
+   xmlHttp.send(null);
+}
+</script>
 <!--  Tabella con intestazione, 1 riga e 2 celle -->
 <table class="directions">
-   <!-- Intestazione Tabella -->
-<!--   <tr> 
-      <th>Map</th>
-      <th id="cellaDestra">Effettua la ricerca!</th>
-   </tr> -->
-   
    <tr>
       <!-- Prima cella: GMap -->
       <td valign="top">
@@ -18,27 +34,27 @@
       <!-- Seconda cella: form ed indicazioni  -->
       <td valign="top" rowspan="2"> 
          <form id="mapForm" action="">
-            <ul>
-            <li class="center">
+            <ul class="center bgAzure" style="margin: auto; width: 200px;">
+            <li>
                <label for="partenzaText" class="red">Citt&agrave; di partenza</label><br />
                <input id="partenzaText" name="partenzaText" class="textField" size="16"/>
             </li>
-            <li class="center">
+            <li>
                <label for="arrivoText" class="green">Citt&agrave; di arrivo</label><br />
                <input id="arrivoText" name="arrivoText" class="textField" size="16"/>
             </li>
             <!-- Bottoni Funzione  -->
-            <li class="center">
+            <li>
                <button id="searchButton" type="button" onclick="creaPercorso()">Ricerca</button>
                <button id="directionsButton"  type="button" onclick="creaIndicazioni()">Mostra indicazioni</button>
             </li>
             <!-- Contenitore delle direzioni  -->
-            <li class="center">
-               Qui andranno i risultati della ricerca (cioe' i tragitti che corrispondono).
-            </li>
 
             </ul>
-                  </form>
+         </form>
+         <div>
+               Qui andranno i risultati della ricerca (cioe' i tragitti che corrispondono).
+         </div>
       </td>
    </tr>
    <tr>

@@ -83,7 +83,7 @@ function headType() {
         
       # Script per la gestione delle GMaps
       return <<<DH
-<script type "text/javascript" src="script/gmaps.js"></script>
+<script type="text/javascript" src="script/gmaps.js"></script>
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAApM5Cuio981ky_h5rXnr3uhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRczD8EFDGHM7KVLNJB1qP52_6uEg"></script>
 DH;
 
@@ -102,19 +102,18 @@ function bodyType() {
       case "nuovo":
       case "cerca":
 
-        # Queste istruzioni consentono di centrare la mappa nella localita' preferita,
-        # specificata in fase di registrazione
+         // Centro la mappa nella localita' preferita dell'utente
          if ( isset($_SESSION['user']) ) {
-            $location_query = "select localita from Utenti where ID='".$_SESSION['userID']."' "; 
+            $location_query = "select localita from Utenti where ID='".getUserId()."' "; 
             $res = execQuery($location_query);
             $row = mysql_fetch_array($res);
-            return "<body onload=\"creaMappa('".$row['localita']."')\" onunload='GUnload()'> ";
+            return '<body onload="creaMappa(\''.$row['localita'].'\')" onunload="GUnload()">';
          }
         
          else {
             # Centro di default della Mappa
             $default = 'Catania';
-            return "<body onload=\"creaMappa('$default')\" onunload=\"GUnload()\"> ";
+            return '<body onload="creaMappa(\''.$default.'\')" onunload="GUnload()">';
          }
          break;
 
@@ -137,7 +136,7 @@ function menu () {
       <a href="index.php?p=tragitti">Tragitti</a>&nbsp;&middot;
       <a href="index.php?p=cerca">Cerca Tragitto</a>&nbsp;&middot;
       <a href="index.php?p=utenti">Utenti</a>&nbsp;&middot;
-      <a href="index.php?p=about">About Us</a>&nbsp;&middot;
+      <a href="index.php?p=about">About Us</a>
 MNNL;
    }
     
@@ -199,19 +198,16 @@ function content () {
 
 
 /* 
- * Effettua le opportuni sostituzioni di commenti html
- * con variabili PHP, a seconda della pagina richiesta.
- * '$a' rappresenta il contenuto del template della pagina corrente
+ * Effettua le opportuni sostituzioni di stringhe con variabili
+ * PHP, a seconda della pagina richiesta.
  */
-function prepare_content ($a) {
+function prepare_content ($template) {
 
    # Il contenuto è diverso a seconda della pagina selezionata.
    switch ($_GET['p']) {
         
-      # Pagina con la tabella dei Tragitti    
       case 'tragitti':
             
-         # Estrazione dei tragitti
          $trips_query = "select Tragitto.*, userName from `Tragitto`
             join Utenti on idPropr=Utenti.ID
             order by `dataPart` desc,`oraPart` desc limit 5";
@@ -236,10 +232,21 @@ function prepare_content ($a) {
                   $row['fumo'],
                   $row['musica']);
                 
-               $o = str_replace($search,$replace,$a);
+               $o = str_replace($search,$replace,$template);
                $final_content = $final_content.$o;
             }
             break;
+
+      case 'utenti':
+         echo 'blabla';
+         $search = array(
+            "{ LASTINSCRIPTIONS }",
+            "{ users_mostActive }");
+         $replace = array (
+            users_recentSignup(),
+            users_mostActive());
+         $final_content = str_replace ($search,$replace,$template);
+         break;
 
       case 'profilo':
          if (!isset($_GET['u']))
@@ -278,7 +285,7 @@ function prepare_content ($a) {
          ksort($search);
          ksort($replace);
          
-         $final_content = preg_replace($search, $replace, $a);
+         $final_content = preg_replace($search, $replace, $template);
 
          break;
             
@@ -287,72 +294,68 @@ function prepare_content ($a) {
       case 'nuovo':
       case 'auto':   
             
-      # Estrai le informazioni sulle eventuali auto registrate dall' utente corrente
+         # Estrago le informazioni sulle eventuali auto registrate dall' utente corrente
          $auto_query = "select targa,marca,modello from Auto join AutoUtenti on Auto.id=AutoUtenti.idAuto where AutoUtenti.idUtente='".$_SESSION['userID']."'"; 
          $res = execQuery($auto_query);
          
-            # L' utente corrente non ha alcuna auto registrata
+         # Nessun auto registrata
          if ( ( mysql_num_rows($res) == 0) ) {
-            if ( $_GET['p'] == "nuovo" ) {
+            if ( $_GET['p'] == "nuovo" ) 
+               $output = eregi_replace("<!-- AUTOS -->","Non hai auto! Provvedi subito a 
+                        <a href='index.php?p=auto'>registrarne</a> una.",$template);
+               
+            elseif ( $_GET['p'] == "auto" )
+               $output = eregi_replace("<!-- REGISTEREDAUTOS -->",
+                  "Attualmente, non hai nessuna auto registrata",$template);
                 
-                    # La prima chiamata ha come parametro '$a'
-               $o = eregi_replace("<!-- AUTOS -->","Non hai auto! Provvedi subito a 
-                        <a href='index.php?p=auto'>registrarne</a> una.",$a); 
-            }
+            $final_content = $final_content.$output;
+         }
                
-            elseif ( $_GET['p'] == "auto" ) {
-               
+         # Almeno un'auto registrata
+         else {
+            $row = mysql_fetch_array($res);
+                
+            # Bisogna ancora prevedere il caso in cui il proprietario abbia più di una macchina.
+            $auto1= $row['marca']." - ".$row['modello']." - ".$row['targa'];
+                
+            #Andrà a finire in un campo hidden, per facilitare query successive.
+            $targa=$row['targa'];
+            
+            # Pagina nuovo tragitto --> viene visualizzato l' oggetto selection
+            if ($_GET['p']=="nuovo") {
+                
             # La prima chiamata ha come parametro '$a'
-            $o = eregi_replace("<!-- REGISTEREDAUTOS -->","Attualmente, non hai nessuna auto registrata",$a); 
-            }
-                
-         $final_content = $final_content.$o;
-            
-         # L' utente ha almeno un'auto
-         } 
-               
-               else {
-                  $row = mysql_fetch_array($res);
-                
-                  # Bisogna ancora prevedere il caso in cui il proprietario abbia più di una macchina.
-                $auto1= $row['marca']." - ".$row['modello']." - ".$row['targa'];
-                
-                #Andrà a finire in un campo hidden, per facilitare query successive.
-                $targa=$row['targa'];
-            
-                # Pagina nuovo tragitto --> viene visualizzato l' oggetto selection
-                if ($_GET['p']=="nuovo") {
-                
-                    # La prima chiamata ha come parametro '$a'
-                    $o = eregi_replace("<!-- AUTOS -->","<select id='selectAuto' name='selectAuto' > 
-                    <option value='auto1' selected='selected'>'$auto1'</option></select>
-                    <input type='hidden' name='targa' value='$targa'>",$a);
+            $output = eregi_replace("<!-- AUTOS -->","<select id='selectAuto' name='selectAuto' > 
+               <option value='auto1' selected='selected'>'$auto1'</option></select>
+               <input type='hidden' name='targa' value='$targa'>",$template);
              
              
                 # Pagina auto --> viene visualizzata la Selection insieme ad un form per 
                 # dare la possibilità di modificare i dati dell' auto
-                } elseif ($_GET['p']=="auto") {
-                
-                    # La prima chiamata ha come parametro '$a'
-                    $o = eregi_replace("<!-- REGISTEREDAUTOS -->",<<<END
-                        Elenco delle auto gi&agrave; registrate : 
-                        <form class="registrazione" onsubmit="" method="post">
-                            <select id='selectAuto' name='selectAuto' > 
-                            <option value='auto1' selected='selected'>$auto1</option></select>
-                            <input type="hidden" name="targa" value="$targa">
-                            <input id="modifyAutoButton" type="button" value="Modifica" onclick="disableText()"/>
-                        </form>         
-END
-
-                        ,$a); 
-                }
-                $final_content = $final_content.$o;
             }
-            break;
-        default:
+            
+            elseif ($_GET['p']=="auto") {
+                
+               # La prima chiamata ha come parametro '$a'
+               $output = eregi_replace("<!-- REGISTEREDAUTOS -->",<<<RA
+                     Elenco delle auto gi&agrave; registrate : 
+                     <form class="registrazione" onsubmit="" method="post">
+                        <select id='selectAuto' name='selectAuto' > 
+                        <option value='auto1' selected='selected'>$auto1</option></select>
+                        <input type="hidden" name="targa" value="$targa">
+                        <input id="modifyAutoButton" type="button" value="Modifica" onclick="disableText()"/>
+                     </form>         
+RA
+,$template); 
+                }
+                $final_content = $final_content.$output;
+         }
+         
+         break;
+         default:
         
             # Nulla da sostituire
-            $final_content = $final_content.$a;
+            $final_content = $final_content.$template;
             break;
     }
    
@@ -389,5 +392,6 @@ function age ($birthday) {
 function trust ($username) {
    return "molto affidabile";
 }
+
 
 ?>

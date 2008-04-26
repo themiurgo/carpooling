@@ -1,13 +1,41 @@
+<script type="text/javascript">
+function risultati() {
+   var xmlHttp=GetXmlHttpObject();
+   res=document.getElementById("risultati");
+   userName=document.getElementById("search_username");
+   
+   xmlHttp.onreadystatechange=function() {
+      if(xmlHttp.readyState==4) {
+         res.innerHTML=xmlHttp.responseText;
+      }
+   }
+   if (xmlHttp==null) {
+      alert ("Il browser non supporta AJAX");
+      return;
+   }
+   var url="pages/ajax.php";
+   url=url+"?q=search_username"
+   url=url+"&username="+userName.value;
+   alert (url);
+   xmlHttp.open("GET",url,true);
+   xmlHttp.send(null);
+}
+</script>
+
+
 <div class="medium left">
    In questa pagina puoi cercare gli utenti o navigare tra le classifiche.
    <form action="">
-      <input type="text" id="userName" />
-      <button type="submit">Cerca</button>
+      <input type="text" id="search_username" />
+      <button type="button" onclick="risultati()">Cerca</button>
    </form>
+   <div id="risultati">
+   </div>
 </div>
 <div class="right">
 <div class="bgAzure little ">
-   Classifica 1
+   <h4>Utenti con più tragitti</h4>
+   { users_mostActive }
 </div>
 <div class="bgGreen little ">
    <h4>Ultimi iscritti</h4>

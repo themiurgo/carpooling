@@ -214,15 +214,15 @@ function setDirezione(partenza, arrivo, lingua) {
 /** Vari messaggi di errori che si potrebbero verificare (non tutti i casi sono contemplati) */	
 function gestioneErrori(){
    if (gdir.getStatus().code == G_GEO_UNKNOWN_ADDRESS)
-     alert("No corresponding geographic location could be found for one of the specified addresses. This may be due to the fact that the address is relatively new, or it may be incorrect.\nError code: " + gdir.getStatus().code);
+     alert("Non e' stato possibile trovare una localita' geografica corrispondente ad almeno una delle citta' inserite. Questo puo' essere dovuto al fatto che l'indirizzo e' relativamente nuovo, oppure  scorretto.\nCodice Errore: " + gdir.getStatus().code);
    else if (gdir.getStatus().code == G_GEO_SERVER_ERROR)
-     alert("A geocoding or directions request could not be successfully processed, yet the exact reason for the failure is not known.\n Error code: " + gdir.getStatus().code);
+     alert("Per un errore del servere, la richiesta non e' stata processata. Non e' nota l'effettiva causa del fallimento.\n Codice errore: " + gdir.getStatus().code);
    else if (gdir.getStatus().code == G_GEO_MISSING_QUERY)
-     alert("The HTTP q parameter was either missing or had no value. For geocoder requests, this means that an empty address was specified as input. For directions requests, this means that no query was specified in the input.\n Error code: " + gdir.getStatus().code);
+     alert("Il parametro HTTP 'q' non e' stato settato. Questo può verificarsi se e' stato specificato un indirizzo vuoto. \n Codice Errore: " + gdir.getStatus().code);
    else if (gdir.getStatus().code == G_GEO_BAD_KEY)
-     alert("The given key is either invalid or does not match the domain for which it was given. \n Error code: " + gdir.getStatus().code);
+     alert("La GKey fornita non e' valida. \n Codice Errore: " + gdir.getStatus().code);
    else if (gdir.getStatus().code == G_GEO_BAD_REQUEST)
-     alert("A directions request could not be successfully parsed.\n Error code: " + gdir.getStatus().code);
+     alert("La richiesta di direzioni non e' stata sottoposta correttamente a Parsing. Controlla gli indirizzi.\n Codice Errore: " + gdir.getStatus().code);
    else alert(gdir.getStatus().code);
 }
 

@@ -489,6 +489,19 @@ margin-left:1.2em;
    color:#C11B17;
 }
 
+/* --------------------------------
+ * Elementi del template about.html
+ * --------------------------------
+ */
+ #aboutCont li {
+      margin-top:1.2em;
+   }
+
+#aboutCont h2 {
+      margin-top:1.2em;
+      margin-bottom:0.8em;
+   }
+ 
 
 /* SEZIONE CASELLE DI TESTO E LABEL*/
 /* Insieme di casella di testo e label di commento */

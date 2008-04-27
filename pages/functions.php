@@ -231,7 +231,8 @@ function prepare_content ($template) {
                   "{ ORA }",
                   "{ DURATA }",
                   "{ FUMO }",
-                  "{ MUSICA }");
+                  "{ MUSICA }",
+		  "{ USERID }");
                
                $replace = array ($row['ID'],
 		  $row['userName'],
@@ -241,7 +242,8 @@ function prepare_content ($template) {
                   $row['dataPart']." ".$row['oraPart'],
                   $row['durata'],
                   $row['fumo'],
-                  $row['musica']);
+                  $row['musica'],
+		  3);
                 
                $o = str_replace($search,$replace,$template);
                $final_content = $final_content.$o;
@@ -305,7 +307,7 @@ TRIP;
             break;
 
       case 'utenti':
-         echo 'blabla';
+         // echo 'blabla';
          $search = array(
             "{ LASTINSCRIPTIONS }",
             "{ users_mostActive }");

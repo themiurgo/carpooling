@@ -250,12 +250,12 @@ function prepare_content ($template) {
             
             #Eventuali dettagli sul tragitto tragitto selezionato
             if ( isset($_GET['idTrip'] ) ){
-               $trip_query="select * from tragitto where ID='".$_GET['idTrip']."'";
+               $trip_query="select * from Tragitto where ID='".$_GET['idTrip']."'";
                $res = execQuery($trip_query);
                $row=mysql_fetch_array($res);
                $idT= $row['ID'];
                $pro = $row['idPropr'];
-               $name_query="select userName from utenti where ID=$pro";
+               $name_query="select userName from Utenti where ID=$pro";
               $res_name = execQuery($name_query);
               $row_name = mysql_fetch_array($res_name);
               $nome = $row_name['userName'];

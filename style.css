@@ -13,6 +13,20 @@ body {
    font-size:0.8em;
 }
 
+ol li {
+   list-style:decimal inside;
+}
+
+a:link, a:active, a:visited {
+   color: #5caed7;
+   font-weight: bold;
+} 
+
+a:hover {
+   color: #ef2929;
+   text-decoration:none; 
+}
+
 h1 {
    font-weight:bold;
    font-size:2em;
@@ -126,8 +140,7 @@ div#menu {
 
 div#menu p { vertical-align: middle; }
 
-div#menu a:link, a:active, a:visited {
-   color: #5caed7;
+div#menu a:link, div#menu a:visited, div#menu a:active {
    font-weight: bold;
 }
 
@@ -135,6 +148,7 @@ div#menu a:hover {
    color: #ef2929;
    text-decoration:none; 
 }
+
 
 /* Pannello di login */
 form#login {

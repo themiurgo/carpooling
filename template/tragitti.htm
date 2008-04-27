@@ -1,22 +1,21 @@
 
 <div class="listatragitti"> 
    <p class="listatragitti">
-   <span class="utenti">
-   Organizzatore: { PROPRIETARIO }
-   </span>
    <span class="posti">
-   { NPDISP } posti disponibili
    </span>
    </p>
    <p class="listatragitti">
    <span class="tragitto">
-   Da { PARTENZA } a { DESTINAZ }
+   { ORA } ({ DURATA })
+   <a href="index.php?p=tragitti&idTrip={ IDTRIP }">
+   { PARTENZA } a { DESTINAZ } ({ PROPRIETARIO }) 
+   </a>
    </span>
    <span class="altro">
+   { NPDISP } posti
    FUMO { FUMO } - MUSICA { MUSICA }
    </span>
    <span class="orario">
-   { ORA } ({ DURATA })
    </span>
    </p>
 </div>

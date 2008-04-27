@@ -80,8 +80,8 @@ function creaPercorso() {
    mapForm = document.getElementById("mapForm"); 
     
     /* Ottieni le citta'  di partenza ed arrivo dalle caselle di testo della pagina */
-    partenza = mapForm.partenzaText.value;
-    arrivo = mapForm.arrivoText.value;
+    partenza = mapForm.partenza.value;
+    arrivo = mapForm.destinaz.value;
     
     /* Rimuove eventuali indicazioni presenti nella pagina */
     var direzioni = document.getElementById("directions");
@@ -175,8 +175,8 @@ function creaIndicazioni() {
    mapForm = document.getElementById("mapForm"); 
 
     /* Ottieni le citta'  di partenza ed arrivo dalle caselle di testo della pagina */
-    partenza = mapForm.partenzaText.value;
-    arrivo = mapForm.arrivoText.value;
+    partenza = mapForm.partenza.value;
+    arrivo = mapForm.destinaz.value;
 
     if (GBrowserIsCompatible()) {
   

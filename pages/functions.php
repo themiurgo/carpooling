@@ -99,11 +99,11 @@ DH;
  */
 function bodyType() {
    switch ($_GET['p']) {
-      case 'nuovo':
-      case 'cerca':
+      case "nuovo":
+      case "cerca":
 
          // Centro la mappa nella localita' preferita dell'utente
-         if ( isset($_SESSION['user']) ) {
+         if (isset($_SESSION['user'])) {
             $location_query = "select localita from Utenti where ID='".getUserId()."' "; 
             $res = execQuery($location_query);
             $row = mysql_fetch_array($res);
@@ -223,7 +223,8 @@ function prepare_content ($template) {
          $res = execQuery($trips_query);
   
             while ($row = mysql_fetch_array($res)) {           
-               $search = array ("{ PROPRIETARIO }",
+               $search = array ("{ IDTRIP }",
+		  "{ PROPRIETARIO }",
                   "{ NPDISP }",
                   "{ PARTENZA }",
                   "{ DESTINAZ }",
@@ -232,7 +233,8 @@ function prepare_content ($template) {
                   "{ FUMO }",
                   "{ MUSICA }");
                
-               $replace = array ($row['userName'],
+               $replace = array ($row['ID'],
+		  $row['userName'],
                   $row['postiDisp'],
                   $row['partenza'],
                   $row['destinaz'],
@@ -363,7 +365,6 @@ TRIP;
          $auto_query = "select targa,marca,modello
             from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
             where AutoUtenti.idUtente='".getUserId()."'";
-            echo $auto_query;
             
          // BUG DA CORREGGERE: perche' se abilito l'echo qua sotto
          // mi stampa due volte? E' comunque un bug che risiede altrove.

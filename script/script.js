@@ -89,8 +89,36 @@ function risultatiAjax() {
       return;
    }
    var url="./pages/ajax.php";
-   var partenza = mapForm.partenzaText.value;
-   var arrivo = mapForm.arrivoText.value;
+   var partenza = mapForm.partenza.value;
+   var arrivo = mapForm.destinaz.value;
+   url=url+"?pa=" + partenza+"&ar="+arrivo;
+   //alert (url);
+   xmlHttp.open("GET",url,true);
+   xmlHttp.send(null);
+}
+
+/*
+ * Riempie il form di modifica auto.
+ */
+function populateCarForm() {
+   var xmlHttp=GetXmlHttpObject();
+   res = document.getElementById("risultati");
+   mapForm = document.getElementById("mapForm"); 
+   //userName=document.getElementById("search_username");
+   
+   xmlHttp.onreadystatechange=function() {
+      if(xmlHttp.readyState==4) {
+         res.innerHTML=xmlHttp.responseText;
+         creaPercorso();
+      }
+   }
+   if (xmlHttp==null) {
+      alert ("Il browser non supporta AJAX");
+      return;
+   }
+   var url="./pages/ajax.php";
+   var partenza = mapForm.partenza.value;
+   var arrivo = mapForm.arrivo.value;
    url=url+"?pa=" + partenza+"&ar="+arrivo;
    //alert (url);
    xmlHttp.open("GET",url,true);

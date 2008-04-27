@@ -29,7 +29,13 @@ switch ($_GET['action']) {
       break;
 
    case "registerTrip":
-      registerTrip();
+   echo $_POST['oraPart'];
+      registerTrip($_POST['idAuto'],$_POST['partenza'],
+	 $_POST['destinaz'],
+	 $_POST['y'].'-'.$_POST['m'].'-'.$_POST['d'],
+	 $_POST['oraPart'],$_POST['durata'],$_POST['fumo'],
+	 $_POST['musica'],$_POST['postiDisp'],$_POST['spese'],
+	 $_POST['note']);
       break;
    
    case "joinTrip":

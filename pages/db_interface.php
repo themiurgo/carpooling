@@ -22,7 +22,6 @@ function connectDb (&$dbconn) {
       or die ("DB Selection Error");
 }
 
-
 /*
  * Esegue una query e ritorna una variabile risorsa.
  * Invocata per l'esecuzione di tutte le query.
@@ -36,13 +35,10 @@ function execQuery ($query) {
    return mysql_query($query, $db_conn);
 }
 
-
-	
 /*
  * Registrazione di un utente al sito
  */
-function registraUtente(){
-    
+function registraUtente() { 
     $dataNascita=$_POST['aNascita']."-".$_POST['mNascita']."-".$_POST['gNascita'];
     $dataPatente=$_POST['aPatente']."-".$_POST['mPatente']."-".$_POST['gPatente'];
     
@@ -54,11 +50,6 @@ function registraUtente(){
         Utenti(userName,psw,nome,cognome,dataNascita,email,dataPatente,fumatore,dataIscriz,localita) 
         values('".$_POST['user']."','".$_POST['psw']."','".$_POST['nome']."','".$_POST['cognome']."',
         '$dataNascita','".$_POST['mail']."','$dataPatente',".$_POST['fumatore'].",'$dataIscriz','".$_POST['citta']."')";
-    
-    #if ( execQuery($registerUser_query) )
-    #echo "La query è stata eseguita correttamente";
-    #else
-    #echo "Errore durante l'inserimento".mysql_error();
     
     execQuery($registerUser_query);
 }
@@ -106,33 +97,29 @@ function registerCar() {
 
 /*
  * Registrazione di un Tragitto ( Trip ) al sito
+ * Data deve essere nel formato YYYY-MM-GG.
  */
-function registerTrip() {
-   $data = $_POST['aPartenza']."-".$_POST['mPartenza']."-".$_POST['gPartenza'];
-   $targa = $datiTragitto['targa'];
+function registerTrip($idAuto,$partenza,$destinaz,$data,$oraPart,
+   $durata,$fumo,$musica,$postiDisp,$spese,$note) {
 
    $q1 = "insert into  
       Tragitto(idPropr,idAuto,partenza,destinaz,dataPart,
 	 oraPart,durata,fumo,musica,postiDisp,spese,note)
-      values('".getUserId()."','".$_POST['idAuto']."',
-	 '".$_POST['partenza']."','".$_POST['destinaz']."','$data',
-	 '".$_POST['oraPart']."','".$_POST['durata']."',
-	 ".$_POST['fumatore'].",".$_POST['musica'].",
-	 ".$_POST['postiDisp'].",".$_POST['spese'].",
-	 '".$_POST['note']."')";
+      values('".getUserId()."','".$idAuto."',
+	 '".$partenza."','".$destinaz."','$data',
+	 '".$oraPart."','".$durata."',
+	 ".$fumo.",".$musica.",
+	 ".$postiDisp.",".$spese.",
+	 '".$note."')";
     
     echo $q1;
     execQuery($q1);
     
-    # Ottiene l'id del percorso :Si potrebbe ottimizzare
-    $tripID_query = "select max(ID) as max from Tragitto";
-    $res = execQuery($tripID_query);
-    $row = mysql_fetch_array($res); 
-   
-    $registerTrip_query2 = "insert into UtentiTragitto(idPercorso,idUtente) 
-      values('".$row['max']."','".$_SESSION['userID']."')";
+    $registerTrip_query = "insert 
+      into UtentiTragitto(idPercorso,idUtente) 
+      values('".mysql_insert_id()."','".getUserId()."')";
     
-    execQuery($registerTrip_query2);
+    execQuery($registerTrip_query);
 } 
 
 
@@ -174,18 +161,17 @@ function users_mostActive() {
    return $output;
 }
 
-function search_username() {
-   $query = "select userName,count(*) as nTragitti
-      from Utenti join Tragitto on Utenti.ID = Tragitto.idPropr
-      group by Tragitto.idPropr
-      order by nTragitti desc limit 5"; 
+function search_userName($userName) {
+   $query = "select userName
+      from Utenti
+      where userName=$userName";
    $res = execQuery($query);
+
    while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
-      $line='<a href="">'.$row['userName'].'</a>
-         ('.$row['nTragitti'].'tragitti)<br />';
+      $line='<a href="">'.$row['userName'].'</a><br />';
       $output=$output.$line;
    }
-   echo "ciao";
+
    return $output;
 }
 

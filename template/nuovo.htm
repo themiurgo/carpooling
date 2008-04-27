@@ -45,69 +45,66 @@
 <!-- Altre informazioni , contenute in un unico blocco -->
 <div class="center">
  <li >
-         <label for="gNascita">Data della Partenza</label> <br/>
-         <input id="gPartenza" name="gPartenza"  size="2" /> /
-         <input id="mPartenza" name="mPartenza" size="2" /> / 
-         <input id="aPartenza" name="aPartenza"  value="2008" size="4" />  
- <i>
- <li>
-         <label for="oraPart">Orario di partenza</label> <br/>
-         <input id="oraPart" name="oraPart"  size="20"/> <br/>
-         <label class="commento" for="oraPart">es. 08:00</label>
+   <label for="d">Data della Partenza</label> <br/>
+   <input id="d" name="d" size="2" /> /
+   <input id="m" name="m" size="2" /> / 
+   <input id="y" name="y" value="2008" size="4" />  
  </li>
  <li>
-         <label for="durata">Durata del viaggio</label> <br/>
-         <input id="durata" name="durata"  size="20"/> <br/>
-         <label class="commento" for="durata">es. 1:30 per 1h e 30 m</label>
+   <label for="oraPart">Orario di partenza</label> <br/>
+   <input id="oraPart" name="oraPart" size="20"/> <br/>
+   <label class="commento" for="oraPart">es. 08:00</label>
  </li>
  <li>
-         <label for="postiDisp">Numero di passeggeri</label>  <br/>
-         <input id="postiDisp" name="postiDisp" size="20"/>
+   <label for="durata">Durata del viaggio</label> <br/>
+   <input id="durata" name="durata"  size="20"/> <br/>
+   <label class="commento" for="durata">es. 1:30 per 1h e 30 m</label>
  </li>
  <li>
-         <label for="fumatoreSi">E' un viaggio per fumatori?</label>  <br/>
-         <input id="fumatoreSi" name="fumatore" type="radio" value="true"/>
-         <label class="radiolabel" for="fumatoreSi">Si</label>
-         <input id="fumatoreNo" checked="checked" name="fumatore" type="radio" value="false"  />
-         <label class="radiolabel" for="fumatoreNo">No</label>
+   <label for="postiDisp">Numero di passeggeri</label>  <br/>
+   <input id="postiDisp" name="postiDisp" size="20"/>
  </li>
  <li>
-         <label for="musicaSi">Hai musica a bordo?</label>  <br/>
-         <input id="musicaSi" name="musica"  type="radio" value="true"/>
-         <label class="radiolabel" for="musicaSi">Si</label>
-         <input id="musicaNo" checked="checked" name="musica" class="radioField" type="radio" value="false"  />
-         <label class="radiolabel" for="musicaNo">No</label>
+   <label for="fumoSi">E' un viaggio per fumatori?</label>  <br/>
+   <input id="fumoSi" name="fumo" type="radio" value="true"/>
+   <label class="radiolabel" for="fumoSi">Si</label>
+   <input id="fumoNo" checked="checked" name="fumo" type="radio" value="false"  />
+   <label class="radiolabel" for="fumatoreNo">No</label>
  </li>
  <li>
-         <label for="spese">Spese previste ( in &#8364; )</label> <br/>
-         <input id="spese" name="spese"  size="20"/>  <br/>
-         <label class="commento" for="spese">Saranno divise tra i partecipanti</label>
-         
- </li> 
- <li>
-         <label class="upLabel" id="titolo9" for="note">Note</label> <br/>
-         <textarea name="note" cols=40 rows=5></textarea>
+   <label for="musicaSi">Hai musica a bordo?</label>  <br/>
+   <input id="musicaSi" name="musica"  type="radio" value="true"/>
+   <label class="radiolabel" for="musicaSi">Si</label>
+   <input id="musicaNo" checked="checked" name="musica" class="radioField" type="radio" value="false"  />
+   <label class="radiolabel" for="musicaNo">No</label>
  </li>
  <li>
-         <button id="confirmButton"  type="submit" value="Conferma!">
-         Registra il tragitto
-         </button>
-         <button id="clearButton" type="reset" value="Cancella i campi">
-         Cancella i campi
-         </button>
- </li>
-              </div> <!-- Fine del contenitore con allineamento al centro-->
-				</ul>
-				<!-- Validazione contenuti del form -->
-				<script type="text/javascript" src="script/tragittoValidate.js"></script>
-			</form>
-		</div> <!-- Fine del contenitore colorato-->
-	    </td>
-	    <!-- Tabella delle indicazioni -->
-	    <td valign="top"><div id="directions" style="width: 200px"></div></td>
-	</tr>
-    </table> 	   <!-- Fine della tabella-->
-</div>	<!-- Fine del contenitore generale -->
- 
- 
-    
+   <label for="spese">Spese previste ( in &#8364; )</label> <br/>
+   <input id="spese" name="spese"  size="20"/>  <br/>
+   <label class="commento" for="spese">Saranno divise tra i partecipanti</label>
+</li> 
+<li>
+   <label class="upLabel" id="titolo9" for="note">Note</label> <br/>
+   <textarea name="note" cols=40 rows=5></textarea>
+</li>
+<li>
+   <button id="confirmButton"  type="submit" value="Conferma!">
+      Registra il tragitto
+   </button>
+   <button id="clearButton" type="reset" value="Cancella i campi">
+      Cancella i campi
+   </button>
+</li>
+</div> <!-- Fine del contenitore con allineamento al centro-->
+</ul>
+
+<!-- Validazione contenuti del form -->
+<script type="text/javascript" src="script/tragittoValidate.js"></script>
+</form>
+</div> <!-- Fine del contenitore colorato-->
+</td>
+<!-- Tabella delle indicazioni -->
+<td valign="top"><div id="directions" style="width: 200px"></div></td>
+</tr>
+</table> 	   <!-- Fine della tabella-->
+</div>	<!-- Fine del contenitore generale -->    

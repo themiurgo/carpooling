@@ -3,23 +3,27 @@
 <p>Leggi <a href="index.php?p=about">come funziona</a> e <a href="index.php?p=iscrizione">registrati subito!</a></p>
 
 <script>
-function risultati() {
+function risultatiAjax() {
    var xmlHttp=GetXmlHttpObject();
-   res=document.getElementById("risultati");
-   userName=document.getElementById("search_username");
+   res = document.getElementById("risultati");
+   mapForm = document.getElementById("mapForm"); 
+   //userName=document.getElementById("search_username");
    
    xmlHttp.onreadystatechange=function() {
       if(xmlHttp.readyState==4) {
          res.innerHTML=xmlHttp.responseText;
+         creaPercorso();
       }
    }
    if (xmlHttp==null) {
       alert ("Il browser non supporta AJAX");
       return;
    }
-   var url="pages/ajax.php";
-   url=url+"?q="+userName.value;
-   alert (url);
+   var url="./pages/ajax.php";
+   var partenza = mapForm.partenzaText.value;
+   var arrivo = mapForm.arrivoText.value;
+   url=url+"?pa=" + partenza+"&ar="+arrivo;
+   //alert (url);
    xmlHttp.open("GET",url,true);
    xmlHttp.send(null);
 }
@@ -45,14 +49,14 @@ function risultati() {
             </li>
             <!-- Bottoni Funzione  -->
             <li>
-               <button id="searchButton" type="button" onclick="creaPercorso()">Ricerca</button>
+               <button id="searchButton" type="button" onclick="risultatiAjax()">Ricerca</button>
                <button id="directionsButton"  type="button" onclick="creaIndicazioni()">Mostra indicazioni</button>
             </li>
             <!-- Contenitore delle direzioni  -->
 
             </ul>
          </form>
-         <div>
+         <div id="risultati">
                Qui andranno i risultati della ricerca (cioe' i tragitti che corrispondono).
          </div>
       </td>

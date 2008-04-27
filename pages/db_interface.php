@@ -36,6 +36,7 @@ function execQuery ($query) {
    return mysql_query($query, $db_conn);
 }
 
+
 	
 /*
  * Registrazione di un utente al sito

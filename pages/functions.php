@@ -251,55 +251,48 @@ function prepare_content ($template) {
             #Eventuali dettagli sul tragitto tragitto selezionato
             if ( isset($_GET['idTrip'] ) ){
                $trip_query="select * from Tragitto where ID='".$_GET['idTrip']."'";
-               $res = execQuery($trip_query);
+	       $res = execQuery($trip_query);
                $row=mysql_fetch_array($res);
                $idT= $row['ID'];
                $pro = $row['idPropr'];
                $name_query="select userName from Utenti where ID=$pro";
-              $res_name = execQuery($name_query);
-              $row_name = mysql_fetch_array($res_name);
-              $nome = $row_name['userName'];
-              $posti = $row['postiDisp'];
-              $pa = $row['partenza'];
-              $ar = $row['destinaz'];
-              $ora = $row['oraPart'];
-              $durata=$row['durata'];
-              $data = $row['dataPart'];
+	       $res_name = execQuery($name_query);
+	       $row_name = mysql_fetch_array($res_name);
+	       $ora = $row['oraPart'];
+	       $durata=$row['durata'];
+	       $data = $row['dataPart'];
               
-              if ( $row['fumo'] ) {
-                  $fumo = "Per Fumatori";
-              } else {
-                  $fumo = "NO Fumatori";
-              }
+	       $row['fumo'] ? 
+		  $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
               
-               if ( $row['musica'] ) {
-                  $mus = "Con Musica";
-              } else {
-                  $mus = "NO Musica";
-              }
+               $row['musica'] ?
+                  $mus = "Con Musica" : $mus = "NO Musica"; 
                
                # Non capisco perchè non mi accetta $row['postiDisp'] dentro la heredoc :/
+	       // (Anto: non lo accettava perché lo devi scrivere senza virgolette)
                # CLAMOROSO BUG: anche se il metodo è 'post', si comporta come get ( che è quello che voglio).
+	       // Anto: in che senso?
                $dettagli = <<<TRIP
                <div style='padding:0' class='bgRed'><h2>Dettagli Tragitto</h2>
                <span class="utenti">
-                  Organizzatore:  <b>$nome</b>
+                  Organizzatore:  <b>$row_name[userName]</b>
                </span>
                <span class="posti">
-                  <b>$posti</b> posti disponibili
+                  <b>$row[postiDisp]</b> posti disponibili
                </span>
                <p class="listatragitti">
                <span class="tragitto">
-               Da <b>$pa</b> a <b>$ar</b>
+               Da <b>$row[partenza]</b> a <b>$row[destinaz]</b>
                </span>
                <span class="altro">
                <b>$fumo</b> - <b>$mus</b>
                </span>
                <span class="orario">
-               <b>$data </b><b>$ora</b> ( <b>$durata</b> )
+		  <b>$row[dataPart]</b>
+		  <b>$row[oraPart]</b> (<b>$row[durata]</b>)
                </span>
                <br/> <br/>
-               <form id="joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$idT&posti=$posti" method="post">
+               <form id="joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$$row[postiDisp]" method="post">
                <span class="join">
                <label for="joinButton">Vuoi Partecipare?</label><br/>
                <button id="registerAutoButton" type="submit">Conferma</button>
@@ -307,8 +300,8 @@ function prepare_content ($template) {
                </form>
                </div>
 TRIP;
-              $final_content = $dettagli.$final_content;
-              }
+	       $final_content = $dettagli.$final_content;
+	    }
             
             break;
 

@@ -17,6 +17,14 @@ ol li {
    list-style:decimal inside;
 }
 
+ul.disco li {
+   list-style:disc inside;
+}
+
+ul.cerchio li {
+   list-style:circle inside;
+}
+
 a:link, a:active, a:visited {
    color: #5caed7;
    font-weight: bold;
@@ -244,18 +252,19 @@ div.horRule hr { display: none; }
    margin-bottom: 20px;
    padding-bottom: 1em;
    padding-top: 1em;
+   padding-left: 20px;
+   padding-right: 20px;
 }
 
 .bgGold {
-   background-color: #FFF380;
-   border: 1px solid #FDD017;
+   background-color: #fffecc;
+   border: 1px solid #f5f1a6;
    margin-bottom: 20px;
    padding-bottom: 1em;
    padding-top: 1em;
 }
-
 .bgRed {
-   background-color: #F87431;
+   background-color: #ffcccc;
    border: 1px solid #800517;
    margin-bottom: 20px;
    padding-bottom: 1em;
@@ -266,8 +275,8 @@ div.horRule hr { display: none; }
    padding-bottom: 1em;
    padding-top: 1em;
    margin-bottom: 20px;
-   background-color: #b5edbc;
-   border: 1px solid #69ed79;
+   background-color: #ccffde;
+   border: 1px solid #b3eabc;
 }
 
 .pulsanti {

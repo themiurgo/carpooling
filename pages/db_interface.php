@@ -79,18 +79,17 @@ function modificaAuto() {
 /*
  * Registrazione di un auto al sito
  */
-function registraAuto() {
-    
+function registerCar() {
     $annoImm = $_POST['aAuto']."-".$_POST['mAuto']."-".$_POST['gAuto'];
    
     # Registrazione nella tabella Auto
-    $registerAuto_query1 = "insert into Auto(targa,marca,modello,cilindrata,annoImmatr,condizioni,note) 
+    $q1 = "insert into Auto(targa,marca,modello,cilindrata,annoImmatr,condizioni,note) 
     values ('".$_POST['targa']."','".$_POST['marca']."','".$_POST['modello']."',
             ".$_POST['cilindrata'].",'$annoImm',".$_POST['voto'].",'".$_POST['noteAuto']."')";
 
-    execQuery($registerAuto_query1);
+    execQuery($q1);
     
-    # Ottiene l'id dell'auto :Si potrebbe ottimizzare
+    # Ottiene l'id dell'auto:Si potrebbe ottimizzare
     $query="select ID from Auto where targa='".$_POST['targa']."'";
     $res=execQuery($query);
     $row=mysql_fetch_array($res); 
@@ -102,35 +101,28 @@ function registraAuto() {
     $registerAuto_query2 = "insert into AutoUtenti(idAuto,idUtente,valido) values('".$row['ID']."','".getUserId()."',$prop)";
     
     execQuery($registerAuto_query2);
-    
 }
 
 
 /*
  * Registrazione di un Tragitto ( Trip ) al sito
  */
-function registraTragitto() {
-
-    # ATTENZIONE : $_POST['targa'] è il campo di un HIDDEN all'interno del form
-    
+function registerTrip() {
    $data = $_POST['aPartenza']."-".$_POST['mPartenza']."-".$_POST['gPartenza'];
-   
-   # ATTENZIONE : $_POST['targa'] è il campo di un HIDDEN all'interno del form
    $targa = $datiTragitto['targa'];
 
-    # Ottiene l'id dell'auto :Si potrebbe ottimizzare
-    $query="select ID from Auto where targa='".$_POST['targa']."'";
-    $res=execQuery($query);
-    $row=mysql_fetch_array($res); 
-
-    $registerTrip_query1 = "insert into  
-    Percorso(idProprietario,idAuto,partenza,destinazione,dataPart,oraPart,durata,
-                fumo,musica,numPostiDisp,spese,note) 
-    values('".$_SESSION['userID']."',".$row['ID'].",'".$_POST['partenzaText']."',
-            '".$_POST['arrivoText']."','$data','".$_POST['oraPartenza']."','".$_POST['durata']."',
-            ".$_POST['fumatore'].",".$_POST['musica'].",".$_POST['passeggeri'].",".$_POST['spese'].",'".$_POST['note']."')";
+   $q1 = "insert into  
+      Tragitto(idPropr,idAuto,partenza,destinaz,dataPart,
+	 oraPart,durata,fumo,musica,postiDisp,spese,note)
+      values('".getUserId()."','".$_POST['idAuto']."',
+	 '".$_POST['partenza']."','".$_POST['destinaz']."','$data',
+	 '".$_POST['oraPart']."','".$_POST['durata']."',
+	 ".$_POST['fumatore'].",".$_POST['musica'].",
+	 ".$_POST['postiDisp'].",".$_POST['spese'].",
+	 '".$_POST['note']."')";
     
-    execQuery($registerTrip_query1);
+    echo $q1;
+    execQuery($q1);
     
     # Ottiene l'id del percorso :Si potrebbe ottimizzare
     $tripID_query = "select max(ID) as max from Tragitto";
@@ -157,8 +149,6 @@ function partecipaTragitto(){
    execQuery($join_query2);
 
 }
-
-
 	
 function users_recentSignup () {
    $query = "select userName from Utenti order by dataIscriz desc limit 5"; 
@@ -197,5 +187,23 @@ function search_username() {
    }
    echo "ciao";
    return $output;
+}
+
+function cars_ofUser($userId) {
+   $output='<select id="idAuto" name="idAuto">';
+   $query = "select Auto.*
+      from Auto join AutoUtenti on Auto.ID = AutoUtenti.idAuto
+      where AutoUtenti.idUtente = '".getUserId()."'";
+   $res = execQuery($query);
+   
+   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
+      $auto= $row['marca']." ".$row['modello']." (".$row['targa'].")";
+
+      $output=$output.'<option value="'.$row['ID'].'"
+	 selected="selected">'.$auto.'</option>';
+   }
+   $output=$output.'</select>';
+
+   return $output; 
 }
 ?>

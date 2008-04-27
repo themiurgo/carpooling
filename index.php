@@ -21,7 +21,7 @@ switch ($_GET['action']) {
       break;
 
    case "registerAuto":
-      registraAuto();
+      registerCar();
       break;
    /* Funzione ancora incompleta*/
    case "modifyAuto":
@@ -29,7 +29,7 @@ switch ($_GET['action']) {
       break;
 
    case "registerTrip":
-      registraTragitto();
+      registerTrip();
       break;
    
    case "joinTrip":

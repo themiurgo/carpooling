@@ -221,10 +221,7 @@ function prepare_content ($template) {
             join Utenti on idPropr=Utenti.ID
             order by `dataPart` desc,`oraPart` desc limit 5";
          $res = execQuery($trips_query);
-
-               
-            
-            
+  
             while ($row = mysql_fetch_array($res)) {           
                $search = array ("{ PROPRIETARIO }",
                   "{ NPDISP }",
@@ -251,27 +248,27 @@ function prepare_content ($template) {
             #Eventuali dettagli sul tragitto tragitto selezionato
             if ( isset($_GET['idTrip'] ) ){
                $trip_query="select * from Tragitto where ID='".$_GET['idTrip']."'";
-	       $res = execQuery($trip_query);
+               $res = execQuery($trip_query);
                $row=mysql_fetch_array($res);
                $idT= $row['ID'];
                $pro = $row['idPropr'];
                $name_query="select userName from Utenti where ID=$pro";
-	       $res_name = execQuery($name_query);
-	       $row_name = mysql_fetch_array($res_name);
-	       $ora = $row['oraPart'];
-	       $durata=$row['durata'];
-	       $data = $row['dataPart'];
+               $res_name = execQuery($name_query);
+               $row_name = mysql_fetch_array($res_name);
+               $ora = $row['oraPart'];
+               $durata=$row['durata'];
+               $data = $row['dataPart'];
               
-	       $row['fumo'] ? 
-		  $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
+               $row['fumo'] ? 
+                  $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
               
                $row['musica'] ?
                   $mus = "Con Musica" : $mus = "NO Musica"; 
                
                # Non capisco perchè non mi accetta $row['postiDisp'] dentro la heredoc :/
-	       // (Anto: non lo accettava perché lo devi scrivere senza virgolette)
+               // (Anto: non lo accettava perché lo devi scrivere senza virgolette)
                # CLAMOROSO BUG: anche se il metodo è 'post', si comporta come get ( che è quello che voglio).
-	       // Anto: in che senso?
+               // Anto: in che senso?
                $dettagli = <<<TRIP
                <div style='padding:0' class='bgRed'><h2>Dettagli Tragitto</h2>
                <span class="utenti">
@@ -288,8 +285,8 @@ function prepare_content ($template) {
                <b>$fumo</b> - <b>$mus</b>
                </span>
                <span class="orario">
-		  <b>$row[dataPart]</b>
-		  <b>$row[oraPart]</b> (<b>$row[durata]</b>)
+                  <b>$row[dataPart]</b>
+                  <b>$row[oraPart]</b> (<b>$row[durata]</b>)
                </span>
                <br/> <br/>
                <form id="joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$$row[postiDisp]" method="post">
@@ -300,8 +297,8 @@ function prepare_content ($template) {
                </form>
                </div>
 TRIP;
-	       $final_content = $dettagli.$final_content;
-	    }
+               $final_content = $dettagli.$final_content;
+            }
             
             break;
 
@@ -358,72 +355,56 @@ TRIP;
          break;
             
         
-        # Nuovo Tragitto e inserimento Auto
+      # Nuovo Tragitto e inserimento Auto
       case 'nuovo':
       case 'auto':   
             
          # Estrago le informazioni sulle eventuali auto registrate dall' utente corrente
-         $auto_query = "select targa,marca,modello from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto where AutoUtenti.idUtente='".getUserId()."'"; 
-	 // BUG DA CORREGGERE: perche' se abilito l'echo qua sotto
-	 // mi stampa due volte? E' comunque un bug che risiede altrove.
-	 // echo $auto_query;
+         $auto_query = "select targa,marca,modello
+            from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
+            where AutoUtenti.idUtente='".getUserId()."'";
+            echo $auto_query;
+            
+         // BUG DA CORREGGERE: perche' se abilito l'echo qua sotto
+         // mi stampa due volte? E' comunque un bug che risiede altrove.
+         // echo $auto_query;
          $res = execQuery($auto_query);
-         echo $_SESSION['userId'];
+
          # Nessun auto registrata
-         if ( ( mysql_num_rows($res) == 0) ) {
-            if ( $_GET['p'] == "nuovo" ) {
-                  #Funzione che restituisce un 'invito' a registrare la macchina
+         if (mysql_num_rows($res) == 0) {
+            if ( $_GET['p'] == "nuovo" )
                   return noAuto();
-               }
                
-            elseif ( $_GET['p'] == "auto" )
+            elseif ($_GET['p'] == "auto")
                $output = eregi_replace("<!-- REGISTEREDAUTOS -->",
                   "<label class='alertText'>Attualmente, non hai nessuna auto registrata</alert>",$template);
                 
             $final_content = $final_content.$output;
-            
          }
                
          # Almeno un'auto registrata
          else {
             $row = mysql_fetch_array($res);
                 
-            # Bisogna ancora prevedere il caso in cui il proprietario abbia più di una macchina.
-            $auto1= $row['marca']." - ".$row['modello']." - ".$row['targa'];
-                
-            #Andrà a finire in un campo hidden, per facilitare query successive.
-            $targa=$row['targa'];
-            
             # Pagina nuovo tragitto --> viene visualizzato l' oggetto selection
             if ($_GET['p']=="nuovo") {
                 
-            # La prima chiamata ha come parametro '$a'
-            $output = eregi_replace("<!-- AUTOS -->","<select id='selectAuto' name='selectAuto' > 
-               <option value='auto1' selected='selected'>'$auto1'</option></select>
-               <input type='hidden' name='targa' value='$targa'>",$template);
-             
+            $output = eregi_replace("<!-- AUTOS -->",cars_ofUser(getUserId()),$template);
              
                 # Pagina auto --> viene visualizzata la Selection insieme ad un form per 
                 # dare la possibilità di modificare i dati dell' auto
             }
             
             elseif ($_GET['p']=="auto") {
-                
                # La prima chiamata ha come parametro '$a'
-               $output = eregi_replace("<!-- REGISTEREDAUTOS -->",<<<RA
-                     Elenco delle auto gi&agrave; registrate : 
-                     <form class="registrazione" action="index.php?p=auto&action=modifyAuto" method="post">
-                        <select id='selectAuto' name='selectAuto' > 
-                        <option value='auto1' selected='selected'>$auto1</option></select>
-                        <input type="hidden" name="targa" value="$targa">
-                        <button id="modifyAutoButton" type="submit" onclick="disableText()" action="">
-                           Modifica Auto
-                           </button>
-                     </form>         
-RA
-,$template); 
-                }
-                $final_content = $final_content.$output;
+               $output = eregi_replace("<!-- REGISTEREDAUTOS -->",'
+                     Elenco delle auto gi&agrave; registrate :'.
+                        cars_ofUser(getUserId()).'
+                  <button id="modifyAutoButton" type="submit" onclick="disableText()" action="">
+                     Modifica Auto
+                  </button>',$template); 
+            }
+            $final_content = $final_content.$output;
          }
          
          break;

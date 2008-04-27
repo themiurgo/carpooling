@@ -99,7 +99,7 @@ function registraAuto() {
     $prop = true;
     
     #Registrazione nella tabella AutoUtenti
-    $registerAuto_query2 = "insert into AutoUtenti(idAuto,idUtente,valido) values('".$row['ID']."','".$_SESSION['userID']."',$prop)";
+    $registerAuto_query2 = "insert into AutoUtenti(idAuto,idUtente,valido) values('".$row['ID']."','".getUserId()."',$prop)";
     
     execQuery($registerAuto_query2);
     

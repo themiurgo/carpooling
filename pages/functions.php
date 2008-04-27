@@ -363,7 +363,10 @@ TRIP;
       case 'auto':   
             
          # Estrago le informazioni sulle eventuali auto registrate dall' utente corrente
-         $auto_query = "select targa,marca,modello from Auto join AutoUtenti on Auto.id=AutoUtenti.idAuto where AutoUtenti.idUtente='".$_SESSION['userId']."'"; 
+         $auto_query = "select targa,marca,modello from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto where AutoUtenti.idUtente='".getUserId()."'"; 
+	 // BUG DA CORREGGERE: perche' se abilito l'echo qua sotto
+	 // mi stampa due volte? E' comunque un bug che risiede altrove.
+	 // echo $auto_query;
          $res = execQuery($auto_query);
          echo $_SESSION['userId'];
          # Nessun auto registrata

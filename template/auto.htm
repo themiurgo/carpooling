@@ -1,58 +1,59 @@
 <script type="text/javascript" src="script/dateSelector.js"></script>
 <script type="text/javascript" src="script/livevalidation_standalone.compressed.js"></script>
-<script type="text/javascript" src="script/focusFirst.js"></script>
+<script type="text/javascript">
+   setFormFocus("autoForm");
+</script>
 <!-- Contenitore colorato -->
 <div class="bgGreen"> 
-	<div class="intestazione">   
-		<h2 class="titoli">Form per la registrazione di un auto</h2>
-	</div>
-	<div>
-		<!-- REGISTEREDAUTOS -->
-	</div>
-	<!-- Form per la registrazione di un Auto -->
-	<form id="autoForm" name="autoForm" class="registrazione" action="index.php?p=auto&action=registerAuto" method="post">
-		<div>Ti ricordiamo che &egrave; necessario inserire tutti i campi.</div>
-		<ul>
-			<li>
-				<label for="marca">Marca : </label>
-				<input id="marca" name="marca" class="textField" size="20"/> <br/>
-				<label for="modello">Modello : </label>
-				<input id="modello" name="modello" class="textField" size="20"/> <br/>
-				<label for="targa">Targa : </label>
-				<input id="targa" name="targa" class="textField" size="20"/> <br/>
-				<label for="cilindrata">Cilindrata : </label>
-				<input id="cilindrata" name="cilindrata" class="textField" size="20"/>
-			</li>
-			<li>
-				<label for="gAuto">Data immatricolazione auto</label><br/>
-				<input id="gAuto" name="gAuto"  size="2" /> / 
-				<input id="mAuto" name="mAuto" size="2" /> / 
-				<input id="aAuto" name="aAuto"  size="4" />  
-			</li>
-			<li>
-				<label for="fumatoreNo">Che voto daresti alle condizioni della tua macchina?</label>  <br/>
-				<input id="voto1" name="voto"  type="radio" value="1"/>
-				<label class="radiolabel" for="voto1">1</label>
-				<input id="voto2" checked="checked" name="voto"  type="radio" value="2"  />
-				<label class="radiolabel" for="voto2">2</label>
-				<input id="voto3" checked="checked" name="voto"  type="radio" value="3"  />
-				<label class="radiolabel" for="voto3">3</label>
-				<input id="voto4" checked="checked" name="voto"  type="radio" value="4"  />
-				<label class="radiolabel" for="voto4">4</label>
-				<input id="voto5" checked="checked" name="voto"  type="radio" value="5"  />
-				<label class="radiolabel" for="voto5">5</label>
-				<br/>
-				<label for="noteAuto">Note</label><br/>
-				<textarea name="noteAuto" cols=40 rows=5></textarea> <br>
-				<label id="noteAutoLabel" for="noteAuto">Puoi scrivere delle precisazioni sulla condizione della tua macchina</label>
-			</li>   
-			<li>
-				<button id="registerAutoButton" type="submit">Registra l' Auto</button>
-				<button id="clearButton" type="reset">Cancella i campi</button>
-			</li>
-		</ul>	    
-		<!-- Validazione contenuti del form -->
-				<script type="text/javascript" src="script/carValidate.js"></script>
-	</form> <!-- Fine del Form -->
+   <div class="intestazione">   
+      <h2 class="titoli">Form per la registrazione di un auto</h2>
+   </div>
+   <div>
+      <!-- REGISTEREDAUTOS -->
+   </div>
+   <!-- Form per la registrazione di un Auto -->
+   <form id="autoForm" name="autoForm" class="registrazione" action="index.php?p=auto&action=registerAuto" method="post">
+      <div>Ti ricordiamo che &egrave; necessario inserire tutti i campi.</div>
+      <ul>
+         <li>
+            <label for="marca">Marca : </label>
+            <input id="marca" name="marca" class="textField" size="20"/> <br/>
+            <label for="modello">Modello : </label>
+            <input id="modello" name="modello" class="textField" size="20"/> <br/>
+            <label for="targa">Targa : </label>
+            <input id="targa" name="targa" class="textField" size="20"/> <br/>
+            <label for="cilindrata">Cilindrata : </label>
+            <input id="cilindrata" name="cilindrata" class="textField" size="20"/>
+         </li>
+         <li>
+            <label for="gAuto">Data immatricolazione auto</label><br/>
+            <input id="gAuto" name="gAuto"  size="2" /> / 
+            <input id="mAuto" name="mAuto" size="2" /> / 
+            <input id="aAuto" name="aAuto"  size="4" />  
+         </li>
+         <li>
+            <label for="fumatoreNo">Che voto daresti alle condizioni della tua macchina?</label>  <br/>
+            <input id="voto1" name="voto"  type="radio" value="1"/>
+            <label class="radiolabel" for="voto1">1</label>
+            <input id="voto2" checked="checked" name="voto"  type="radio" value="2"  />
+            <label class="radiolabel" for="voto2">2</label>
+            <input id="voto3" checked="checked" name="voto"  type="radio" value="3"  />
+            <label class="radiolabel" for="voto3">3</label>
+            <input id="voto4" checked="checked" name="voto"  type="radio" value="4"  />
+            <label class="radiolabel" for="voto4">4</label>
+            <input id="voto5" checked="checked" name="voto"  type="radio" value="5"  />
+            <label class="radiolabel" for="voto5">5</label>
+            <br/>
+            <label for="noteAuto">Note</label><br/>
+            <textarea name="noteAuto" cols=40 rows=5></textarea> <br>
+            <label id="noteAutoLabel" for="noteAuto">Puoi scrivere delle precisazioni sulla condizione della tua macchina</label>
+         </li>   
+         <li>
+            <button id="registerAutoButton" type="submit">Registra l' Auto</button>
+            <button id="clearButton" type="reset">Cancella i campi</button>
+         </li>
+      </ul>     
+      <!-- Validazione contenuti del form -->
+            <script type="text/javascript" src="script/carValidate.js"></script>
+   </form> <!-- Fine del Form -->
 </div> <!-- Fine del contenitore colorato -->
-

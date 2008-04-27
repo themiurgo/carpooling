@@ -22,7 +22,7 @@ function loginScript() {
  * Da' il focus al primo input attivo del form.
  */
 function setFormFocus(formId){
-   var form = document.getElementById(formId);
+    var form = document.getElementById(formId);
     var len = form.elements.length;
 
     for(var i = 0;i < len;i++){

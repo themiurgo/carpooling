@@ -69,3 +69,30 @@ function disableText(){
     document.autoForm.mAuto.readOnly = true; 
     document.autoForm.aAuto.readOnly = true; 
 }	
+
+
+/* Aggiornamento AJAX dei tragitti nella pagina 'cerca'*/
+function risultatiAjax() {
+   var xmlHttp=GetXmlHttpObject();
+   res = document.getElementById("risultati");
+   mapForm = document.getElementById("mapForm"); 
+   //userName=document.getElementById("search_username");
+   
+   xmlHttp.onreadystatechange=function() {
+      if(xmlHttp.readyState==4) {
+         res.innerHTML=xmlHttp.responseText;
+         creaPercorso();
+      }
+   }
+   if (xmlHttp==null) {
+      alert ("Il browser non supporta AJAX");
+      return;
+   }
+   var url="./pages/ajax.php";
+   var partenza = mapForm.partenzaText.value;
+   var arrivo = mapForm.arrivoText.value;
+   url=url+"?pa=" + partenza+"&ar="+arrivo;
+   //alert (url);
+   xmlHttp.open("GET",url,true);
+   xmlHttp.send(null);
+}

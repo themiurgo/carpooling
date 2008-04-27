@@ -221,6 +221,9 @@ function prepare_content ($template) {
             join Utenti on idPropr=Utenti.ID
             order by `dataPart` desc,`oraPart` desc limit 5";
          $res = execQuery($trips_query);
+
+               
+            
             
             while ($row = mysql_fetch_array($res)) {           
                $search = array ("{ PROPRIETARIO }",
@@ -244,6 +247,69 @@ function prepare_content ($template) {
                $o = str_replace($search,$replace,$template);
                $final_content = $final_content.$o;
             }
+            
+            #Eventuali dettagli sul tragitto tragitto selezionato
+            if ( isset($_GET['idTrip'] ) ){
+               $trip_query="select * from tragitto where ID='".$_GET['idTrip']."'";
+               $res = execQuery($trip_query);
+               $row=mysql_fetch_array($res);
+               $idT= $row['ID'];
+               $pro = $row['idPropr'];
+               $name_query="select userName from utenti where ID=$pro";
+              $res_name = execQuery($name_query);
+              $row_name = mysql_fetch_array($res_name);
+              $nome = $row_name['userName'];
+              $posti = $row['postiDisp'];
+              $pa = $row['partenza'];
+              $ar = $row['destinaz'];
+              $ora = $row['oraPart'];
+              $durata=$row['durata'];
+              $data = $row['dataPart'];
+              
+              if ( $row['fumo'] ) {
+                  $fumo = "Per Fumatori";
+              } else {
+                  $fumo = "NO Fumatori";
+              }
+              
+               if ( $row['musica'] ) {
+                  $mus = "Con Musica";
+              } else {
+                  $mus = "NO Musica";
+              }
+               
+               # Non capisco perchè non mi accetta $row['postiDisp'] dentro la heredoc :/
+               # CLAMOROSO BUG: anche se il metodo è 'post', si comporta come get ( che è quello che voglio).
+               $dettagli = <<<TRIP
+               <div style='padding:0' class='bgRed'><h2>Dettagli Tragitto</h2>
+               <span class="utenti">
+                  Organizzatore:  <b>$nome</b>
+               </span>
+               <span class="posti">
+                  <b>$posti</b> posti disponibili
+               </span>
+               <p class="listatragitti">
+               <span class="tragitto">
+               Da <b>$pa</b> a <b>$ar</b>
+               </span>
+               <span class="altro">
+               <b>$fumo</b> - <b>$mus</b>
+               </span>
+               <span class="orario">
+               <b>$data </b><b>$ora</b> ( <b>$durata</b> )
+               </span>
+               <br/> <br/>
+               <form id="joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$idT&posti=$posti" method="post">
+               <span class="join">
+               <label for="joinButton">Vuoi Partecipare?</label><br/>
+               <button id="registerAutoButton" type="submit">Conferma</button>
+               <span>
+               </form>
+               </div>
+TRIP;
+              $final_content = $dettagli.$final_content;
+              }
+            
             break;
 
       case 'utenti':
@@ -304,20 +370,22 @@ function prepare_content ($template) {
       case 'auto':   
             
          # Estrago le informazioni sulle eventuali auto registrate dall' utente corrente
-         $auto_query = "select targa,marca,modello from Auto join AutoUtenti on Auto.id=AutoUtenti.idAuto where AutoUtenti.idUtente='".$_SESSION['userID']."'"; 
+         $auto_query = "select targa,marca,modello from Auto join AutoUtenti on Auto.id=AutoUtenti.idAuto where AutoUtenti.idUtente='".$_SESSION['userId']."'"; 
          $res = execQuery($auto_query);
-         
+         echo $_SESSION['userId'];
          # Nessun auto registrata
          if ( ( mysql_num_rows($res) == 0) ) {
-            if ( $_GET['p'] == "nuovo" ) 
-               $output = eregi_replace("<!-- AUTOS -->","Non hai auto! Provvedi subito a 
-                        <a href='index.php?p=auto'>registrarne</a> una.",$template);
+            if ( $_GET['p'] == "nuovo" ) {
+                  #Funzione che restituisce un 'invito' a registrare la macchina
+                  return noAuto();
+               }
                
             elseif ( $_GET['p'] == "auto" )
                $output = eregi_replace("<!-- REGISTEREDAUTOS -->",
                   "<label class='alertText'>Attualmente, non hai nessuna auto registrata</alert>",$template);
                 
             $final_content = $final_content.$output;
+            
          }
                
          # Almeno un'auto registrata
@@ -348,11 +416,13 @@ function prepare_content ($template) {
                # La prima chiamata ha come parametro '$a'
                $output = eregi_replace("<!-- REGISTEREDAUTOS -->",<<<RA
                      Elenco delle auto gi&agrave; registrate : 
-                     <form class="registrazione" onsubmit="" method="post">
+                     <form class="registrazione" action="index.php?p=auto&action=modifyAuto" method="post">
                         <select id='selectAuto' name='selectAuto' > 
                         <option value='auto1' selected='selected'>$auto1</option></select>
                         <input type="hidden" name="targa" value="$targa">
-                        <input id="modifyAutoButton" type="button" value="Modifica" onclick="disableText()"/>
+                        <button id="modifyAutoButton" type="submit" onclick="disableText()" action="">
+                           Modifica Auto
+                           </button>
                      </form>         
 RA
 ,$template); 
@@ -408,6 +478,17 @@ return <<<ERR
 <div style="padding:0" class="bgAzure">
    <p>Non hai i permessi per visitare questa pagina!</p>
          <a href="./index.php">home</a>
+</div>
+ERR;
+
+}
+
+function noAuto() {
+return <<<ERR
+<div style="padding:0" class="bgGold">
+   <p>Non hai auto! Provvedi subito a 
+      <a href='index.php?p=auto'>registrarne</a> una.
+   <p>
 </div>
 ERR;
 

@@ -72,6 +72,7 @@ function modificaAuto() {
     $selectAuto_query = "select * from auto where targa='$targa'";
     $res = execQuery($selectAuto_query);
     $row = mysql_fetch_array($res);
+    
 } 
 	
     
@@ -141,6 +142,23 @@ function registraTragitto() {
     
     execQuery($registerTrip_query2);
 } 
+
+
+function partecipaTragitto(){
+      $postiRes = $_GET['posti'] - 1;
+      echo $idTrip;
+      
+      $join_query = "insert into utentitragitto(idUtente,idTragitto) values('".$_SESSION['userId']."','".$_GET['idTrip']."')";
+      
+      execQuery($join_query);
+      
+      $join_query2 = "update tragitto set postiDisp=$postiRes where ID='".$_GET['idTrip']."'";
+      
+   execQuery($join_query2);
+
+}
+
+
 	
 function users_recentSignup () {
    $query = "select userName from Utenti order by dataIscriz desc limit 5"; 

@@ -2,32 +2,6 @@
 <p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!</p>
 <p>Leggi <a href="index.php?p=about">come funziona</a> e <a href="index.php?p=iscrizione">registrati subito!</a></p>
 
-<script>
-function risultatiAjax() {
-   var xmlHttp=GetXmlHttpObject();
-   res = document.getElementById("risultati");
-   mapForm = document.getElementById("mapForm"); 
-   //userName=document.getElementById("search_username");
-   
-   xmlHttp.onreadystatechange=function() {
-      if(xmlHttp.readyState==4) {
-         res.innerHTML=xmlHttp.responseText;
-         creaPercorso();
-      }
-   }
-   if (xmlHttp==null) {
-      alert ("Il browser non supporta AJAX");
-      return;
-   }
-   var url="./pages/ajax.php";
-   var partenza = mapForm.partenzaText.value;
-   var arrivo = mapForm.arrivoText.value;
-   url=url+"?pa=" + partenza+"&ar="+arrivo;
-   //alert (url);
-   xmlHttp.open("GET",url,true);
-   xmlHttp.send(null);
-}
-</script>
 <!--  Tabella con intestazione, 1 riga e 2 celle -->
 <table class="directions">
    <tr>

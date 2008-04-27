@@ -240,6 +240,14 @@ div.horRule hr { display: none; }
    padding-top: 1em;
 }
 
+.bgRed {
+   background-color: #F87431;
+   border: 1px solid #800517;
+   margin-bottom: 20px;
+   padding-bottom: 1em;
+   padding-top: 1em;
+}
+
 .bgGreen {
    padding-bottom: 1em;
    padding-top: 1em;
@@ -329,9 +337,14 @@ span.tragitto {
    left: 5px;
 }
 
+span.join{
+    position: relative;
+   left: 300px;
+   }
+
 span.orario {
    position: absolute;
-   right: 150px;
+   right: 190px;
 }
 
 span.altro {

@@ -124,17 +124,43 @@ function registerTrip($idAuto,$partenza,$destinaz,$data,$oraPart,
 
 
 function partecipaTragitto(){
-      $postiRes = $_GET['posti'] - 1;
-      echo $idTrip;
+   
+   #Controllo se l'utente si può aggiungere
+   if ( $check = controllaTrip() ) {
       
+      #Decremento i posti disponibili
+      $postiRes =  $_GET['posti']--;
+      echo $postiRes;
       $join_query = "insert into utentitragitto(idUtente,idTragitto) values('".$_SESSION['userId']."','".$_GET['idTrip']."')";
-      
       execQuery($join_query);
-      
       $join_query2 = "update tragitto set postiDisp=$postiRes where ID='".$_GET['idTrip']."'";
-      
-   execQuery($join_query2);
+      execQuery($join_query2);
+   }
 
+}
+
+
+function controllaTrip() {
+   
+   # Controllo se ci sono posti disponibili
+   $trip_query = "select postiDisp from Tragitto where ID = '".$_GET['idTrip']."' ";
+   $res = execQuery($trip_query);
+   $row = mysql_fetch_array($res);
+   
+   if ( !$row['postiDisp'] ) {
+      return false;
+   }
+   # Controllo se l'utente è già presente nel percorso
+   $trip_query2 = "select idUtente from UtentiTragitto where IdTragitto= '".$_GET['idTrip']."' ";
+   $res = execQuery($trip_query2);
+   $row = mysql_fetch_array($res);
+   
+   if (in_array($_SESSION['userId'],$row)) { 
+      echo "Non puoi!";
+      return false;
+   }
+
+   return true;
 }
 	
 function users_recentSignup () {

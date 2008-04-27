@@ -28,7 +28,7 @@ cilindrata.add(Validate.Presence, {failureMessage:"Vuoto"});
 cilindrata.add(Validate.Numericality, cil);
 
 targa.add(Validate.Presence, {failureMessage:"Vuoto"});
-targa.add(Validate.Format, { pattern: /^[a-z][a-z][0-9][0-9][0-9][a-z][a-z]$/, failureMessage:"Targa non Italiana"});
+targa.add(Validate.Format, { pattern: /^\w\w[0-9][0-9][0-9]\w\w$/, failureMessage:"Targa non Italiana"});
 gAuto.add(Validate.Presence, {failureMessage:"Vuoto"});
 gAuto.add( Validate.Numericality, giorno);
 mAuto.add(Validate.Presence, {failureMessage:"Vuoto"});

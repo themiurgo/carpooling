@@ -291,7 +291,7 @@ function prepare_content ($template) {
                   <b>$row[oraPart]</b> (<b>$row[durata]</b>)
                </span>
                <br/> <br/>
-               <form id="joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$$row[postiDisp]" method="post">
+               <form id="joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
                <span class="join">
                <label for="joinButton">Vuoi Partecipare?</label><br/>
                <button id="registerAutoButton" type="submit">Conferma</button>

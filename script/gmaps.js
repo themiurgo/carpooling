@@ -35,6 +35,8 @@ function creaMappa(centroDefault) {
         
         /* Ottieni l'oggetto geocoder per ricavare le coordinate dei luoghi */
         geocoder = new GClientGeocoder();
+        /* Bastava quest'unica riga... che in effetti impedisce alla funzione di creare 'loop' con la cache */
+        geocoder.setCache(null);
         
         /* Inizializza la mappa. 
             * Il  principio a'¨ questo: ho bisogno delle coordinate geografiche

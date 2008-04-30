@@ -192,6 +192,7 @@ div#body {
    margin-right: auto;
    overflow: auto;
    margin-bottom: 2.5em;
+/*    border: 1px solid #000000; */
 }
 
 
@@ -249,34 +250,42 @@ div.horRule hr { display: none; }
 .bgAzure {
    background-color: #e8eef7;
    border: 1px solid #c3d9ff;
-   margin-bottom: 20px;
-   padding-bottom: 1em;
-   padding-top: 1em;
-   padding-left: 20px;
-   padding-right: 20px;
+   padding: 1em 20px 1em 20px;
+   margin: 0px 0px 20px 0px;
+}
+
+.bgAzure h4 {
+   color: #4a6ca6;
+   font-weight: bold;
+   text-align: center;
+   margin-bottom:0.8em;
 }
 
 .bgGold {
    background-color: #fffecc;
    border: 1px solid #f5f1a6;
    margin-bottom: 20px;
-   padding-bottom: 1em;
-   padding-top: 1em;
+   padding: 1em 20px 1em 20px;
 }
 .bgRed {
    background-color: #ffcccc;
    border: 1px solid #800517;
    margin-bottom: 20px;
-   padding-bottom: 1em;
-   padding-top: 1em;
+   padding: 1em 20px 1em 20px;
 }
 
 .bgGreen {
-   padding-bottom: 1em;
-   padding-top: 1em;
-   margin-bottom: 20px;
    background-color: #ccffde;
    border: 1px solid #b3eabc;
+   margin-bottom: 20px;
+   padding: 1em 20px 1em 20px;
+}
+
+.bgGreen h4 {
+   color: #49a655;
+   font-weight: bold;
+   text-align: center;
+   margin-bottom:0.8em;
 }
 
 .pulsanti {
@@ -305,6 +314,10 @@ div.left {
 }
 
 div.little {
+   width: 260px;
+}
+
+div#profilo {
    width: 300px;
 }
 
@@ -313,10 +326,6 @@ div.medium {
 }
 
 div.right {
-/*   position: absolute;
-   top: 0px;
-   border: 1px solid #000000;
-   right: 0px; */
    float: right;
 }
 

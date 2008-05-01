@@ -1,6 +1,53 @@
 <?php
 
 /*
+ * Gestisce le azioni
+ */
+function handle_action () {
+   switch ($_GET['action']) {
+      case "login":
+	 checkUser($_POST['username'],$_POST['password']);
+	 break;
+
+      case "logout":
+	 unset($_SESSION['user']);
+	 break;
+
+      case "register":
+	 registraUtente();
+	 break;
+
+      case "registerAuto":
+	 registerCar();
+	 break;
+      /* Funzione ancora incompleta*/
+      case "modifyAuto":
+	 modificaAuto();
+	 break;
+
+      case "registerTrip":
+      echo $_POST['oraPart'];
+	 registerTrip($_POST['idAuto'],$_POST['partenza'],
+	    $_POST['destinaz'],
+	    $_POST['y'].'-'.$_POST['m'].'-'.$_POST['d'],
+	    $_POST['oraPart'],$_POST['durata'],$_POST['fumo'],
+	    $_POST['musica'],$_POST['postiDisp'],$_POST['spese'],
+	    $_POST['note']);
+	 break;
+      
+      case "joinTrip":
+	 partecipaTragitto();
+	 break;
+   }
+}
+
+function parseTemplate ($location) {
+   $output = implode ("",file($location));
+   $output = preg_replace ("/\{ ([\$]?)(\w+)(..)? \}/e","$1$2$3",$output);
+   return $output;
+}
+
+/*
  * Effettua il login, variando opportunamente le variabili di
  * sessione 'user' e 'userId'. Ritorna l'username dell'utente in
  * caso di successo e null in caso di insuccesso.

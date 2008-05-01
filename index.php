@@ -8,7 +8,8 @@ include("./pages/functions.php");
 // Gestisco evenutali azioni di login/logout/registrazione
 handle_action();
 
-echo parseTemplate("template/index.htm");
+$template = implode ("",file("template/index.htm"));
+echo parseTemplate($template);
 
 // Chiudo le connessioni
 if ($db_conn)

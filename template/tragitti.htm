@@ -1,4 +1,3 @@
-
 <div class="listatragitti"> 
    <p class="listatragitti">
    <span class="posti">
@@ -6,14 +5,14 @@
    </p>
    <p class="listatragitti">
    <span class="tragitto">
-   { ORA } ({ DURATA })
-   <a href="index.php?p=tragitti&amp;idTrip={ IDTRIP }">
-   { PARTENZA } - { DESTINAZ }</a>
-   (<a href="index.php?p=profilo&amp;userId={ USERID }">{ PROPRIETARIO }</a>)
+   { $r1[dataPart] } ({ $r1[durata] })
+   <a href="index.php?p=tragitti&amp;idTrip={$r1[ID] }">
+   { $r1[partenza] } - { $r1[destinaz] }</a>
+   (<a href="index.php?p=profilo&amp;userId={$r1[userName] }">{ $r1[userName] }</a>)
    </span>
    <span class="altro">
-   { NPDISP } posti
-   FUMO { FUMO } - MUSICA { MUSICA }
+   { $r1[postiDisp] } posti
+   FUMO { $r1[fumo] } - MUSICA { $r1[musica] }
    </span>
    <span class="orario">
    </span>

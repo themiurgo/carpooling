@@ -41,10 +41,12 @@ function handle_action () {
    }
 }
 
-function parseTemplate ($location) {
-   $output = implode ("",file($location));
-   $output = preg_replace ("/\{ ([\$]?)(\w+)(..)? \}/e","$1$2$3",$output);
-   return $output;
+function parseTemplate ($template) {
+   /* return preg_replace ("/\{ ([\$]?)(\w+)(..)? \}/e","$1$2$3",
+      $template); */
+//   return preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+
+   return preg_replace("/\{\s(.*)\s\}/e","$1",$template);
 }
 
 /*
@@ -264,39 +266,17 @@ function prepare_content ($template) {
         
       case 'tragitti':
             
-         $trips_query = "select Tragitto.*, userName from `Tragitto`
+         $q1 = "select Tragitto.*, userName from `Tragitto`
             join Utenti on idPropr=Utenti.ID
             order by `dataPart` desc,`oraPart` desc limit 5";
-         $res = execQuery($trips_query);
+         $res = execQuery($q1);
   
-            while ($row = mysql_fetch_array($res)) {           
-               $search = array ("{ IDTRIP }",
-		  "{ PROPRIETARIO }",
-                  "{ NPDISP }",
-                  "{ PARTENZA }",
-                  "{ DESTINAZ }",
-                  "{ ORA }",
-                  "{ DURATA }",
-                  "{ FUMO }",
-                  "{ MUSICA }",
-		  "{ USERID }");
-               
-               $replace = array ($row['ID'],
-		  $row['userName'],
-                  $row['postiDisp'],
-                  $row['partenza'],
-                  $row['destinaz'],
-                  $row['dataPart']." ".$row['oraPart'],
-                  $row['durata'],
-                  $row['fumo'],
-                  $row['musica'],
-		  3);
-                
-               $o = str_replace($search,$replace,$template);
+            while ($r1 = mysql_fetch_array($res)) {
+	       $o=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
                $final_content = $final_content.$o;
             }
             
-            #Eventuali dettagli sul tragitto tragitto selezionato
+            #Eventuali dettagli sul tragitto selezionato
             if ( isset($_GET['idTrip'] ) ){
                $trip_query="select * from Tragitto where ID='".$_GET['idTrip']."'";
                $res = execQuery($trip_query);
@@ -354,54 +334,30 @@ TRIP;
             break;
 
       case 'utenti':
-         // echo 'blabla';
-         $search = array(
-            "{ LASTINSCRIPTIONS }",
-            "{ users_mostActive }");
-         $replace = array (
-            users_recentSignup(),
-            users_mostActive());
-         $final_content = str_replace ($search,$replace,$template);
+   	 $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
          break;
 
       case 'profilo':
          if (!isset($_GET['u']))
             $_GET['u']=getUser();
 
-         $query="select *,UNIX_TIMESTAMP(`dataIscriz`) from `Utenti`
+         $q1="select *,UNIX_TIMESTAMP(`dataIscriz`) as dataisc,
+	    DATE_FORMAT(NOW(), '%Y')-DATE_FORMAT(dataNascita, '%Y')-
+   	       (DATE_FORMAT(NOW(), '00-%m-%d') <
+	       DATE_FORMAT(dataNascita, '00-%m-%d')) as eta,
+	    DATE_FORMAT(NOW(), '%Y')-DATE_FORMAT(dataPatente, '%Y')-
+   	       (DATE_FORMAT(NOW(), '00-%m-%d') <
+	       DATE_FORMAT(dataPatente, '00-%m-%d')) as patente,
+	    DATE_FORMAT(dataIscriz,'%d.%m.%Y') as dataIscriz
+   	    from `Utenti`
             where `userName`='".$_GET['u']."'";
-         $res=execQuery($query);
-         $row=mysql_fetch_array($res,MYSQL_ASSOC);
+         $res=execQuery($q1);
+         $r1=mysql_fetch_array($res,MYSQL_ASSOC);
         
-         if (getUser()!=$_GET['u']) {
-            $feedback=feedback($row['ID']);
-         }
-
-         $search = array ("/{userName}/",
-            "/{nome}/",
-            "/{cognome}/",
-            "/{eta}/",
-            "/{email}/",
-            "/{dataPatente}/",
-            "/{localita}/",
-            "/{dataIscriz}/",
-            "/{feedback}/");
-
-         $replace = array ($row['userName'],
-            $row['nome'],
-            $row['cognome'],
-            age($row['dataNascita']),
-            $row['email'],
-            age($row['dataPatente']),
-            $row['localita'],
-            strftime("%e %B %Y",
-               $row['UNIX_TIMESTAMP(`dataIscriz`)']),
-            $feedback);
-
-         ksort($search);
-         ksort($replace);
-         
-         $final_content = preg_replace($search, $replace, $template);
+         if (getUser()!=$_GET['u'])
+            $feedback=feedback($r1['ID']);
+	    echo $row[nome];
+   	 $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
 
          break;
             
@@ -469,29 +425,10 @@ TRIP;
     return $final_content;
 }
 
-
-
-
 /* ---------------------
  * FUNZIONI DI SERVIZIO
  * --------------------- */
  
- /*
- * Restituisce gli anni di distanza da una data nel formato
- * YYYY-MM-DD.
- */
-function age ($birthday) {
-   list($year,$month,$day) = explode("-",$birthday);
-   $year_diff  = date("Y") - $year;
-   $month_diff = date("m") - $month;
-   $day_diff   = date("d") - $day;
-   if ($day_diff < 0 || $month_diff < 0)
-      $year_diff--;
-   
-   return $year_diff;
-}
-
-
 /*
  * Affidabilita' dell'utente
  */

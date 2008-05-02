@@ -130,13 +130,32 @@ function partecipaTragitto(){
    if ( $check = controllaTrip() ) {
       
       #Decremento i posti disponibili
-      $postiRes =  $_GET['posti']--;
+      $postiRes =  $_GET['posti'] - 1;
       echo $postiRes;
       $join_query = "insert into utentitragitto(idUtente,idTragitto) values('".$_SESSION['userId']."','".$_GET['idTrip']."')";
       execQuery($join_query);
       $join_query2 = "update tragitto set postiDisp=$postiRes where ID='".$_GET['idTrip']."'";
       execQuery($join_query2);
    }
+
+}
+
+
+function bloccaTragitto() {
+   #Controllo contro i furbacchioni. 'sec' sta per security
+   $sec_query="select idPropr from tragitto where ID='".$_GET['idTrip']."'";
+    $res = execQuery($sec_query);
+   $row = mysql_fetch_array($res);
+   
+   if ( $row['idPropr']== $_SESSION['userId'] ) {
+      $block_query=" update tragitto set postiDisp=0 where ID='".$_GET['idTrip']."'";
+      execQuery($block_query);
+   } else {
+      echo "Errore, furbetto!";
+   
+   }
+
+
 
 }
 

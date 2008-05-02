@@ -38,6 +38,10 @@ function handle_action () {
       case "joinTrip":
 	 partecipaTragitto();
 	 break;
+     
+     case "blockTrip":
+      bloccaTragitto();
+      break;
    }
 }
 
@@ -318,24 +322,40 @@ function prepare_content ($template) {
                </span>
                <br/> <br/>
 TRIP;
+               # L'utente corrente e' il proprietario del tragitto, quindi di sbloccano lel unzioni avanzate.
                if ( $pro == $_SESSION['userId'] ) {
-               $extra= <<<MOD
-               <form id=joinForm" action="index.php?p=tragitti&action=modTrip&idTrip=$row[ID]" method="post">
-               <span class="join">
-               <label for="joinButton">Sei il proprietario del tragitto</label><br/>
-               <button id="registerAutoButton" type="submit">Modifica Tragitto</button>
-               <span>
-               </form>
-               </div>
+               
+                  if ( canModify() ) {
+                     $mod= <<<MOD
+                     <span class="tragitto">
+                        <form id="joinForm" action="index.php?p=tragitti&action=modTrip&idTrip=$row[ID]" method="post">
+                           <label for="joinButton">Sei il proprietario del tragitto</label><br/>
+                           <button id="registerAutoButton" type="submit">Modifica Tragitto</button>
+                        </form>
+                     </span>
+              
 MOD;
-
+                     $dettagli=$dettagli.$mod;
+                  } 
+                        $block= <<<BLOCK
+                        <span class="tragitto">
+                              <form id="blockForm" action="index.php?p=tragitti&action=blockTrip&idTrip=$row[ID]" method="post">
+                              <label for="blockButton">Hai avuto un'imprevisto?</label><br/>
+                              <button id="registerAutoButton" type="submit">Blocca Tragitto</button>
+                           </form>
+                        </span>
+                        
+                        </div>
+BLOCK;
+                     $dettagli=$dettagli.$block;
+            # L'utente corrente nON e' il proprietario del tragitto, gli viene data la possibilità di partecipare.
             } else {
                $extra= <<<JOIN
                <form id=joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
                <span class="join">
                <label for="joinButton">Vuoi Partecipare?</label><br/>
                <button id="registerAutoButton" type="submit">Conferma</button>
-               <span>
+               </span>
                </form>
                </div>
 JOIN;
@@ -515,6 +535,20 @@ return <<<ERR
    <p>
 </div>
 ERR;
+
+}
+
+function canModify() {
+   
+   $check_query = "select count(idUtente) as num from UtentiTragitto where idTragitto = '".$_GET['idTrip']."'";
+   $res = execQuery($check_query) or die("Query non valida1: " . mysql_error());
+   $row = mysql_fetch_array($res);
+   
+   if ( $row['num']  > 1 ) {
+      return false;
+   }
+   return true;
+
 
 }
 

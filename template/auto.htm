@@ -5,22 +5,17 @@
 function dofill() {
    var to_update = new Array ('targa','marca','modello',
       'cilindrata','condizioni','note');
-   var to_disable = new Array('targa','marca','modello',
-      'cilindrata');
 
    new Ajax.Updater( 'result', 'pages/getdata_auto.php', 
     { method: 'post', parameters: $('autoForm').serialize(),
-  onSuccess: function( transport ) {
+   onSuccess: function( transport ) {
 
    for (var i=0; i<to_update.length; i++)
       $(to_update[i]).value = transport.responseXML.
 	 getElementsByTagName(to_update[i])[0].firstChild.nodeValue;
    } } );
 
-
-  for (var i=0; i<to_disable.length; i++) {
-     $(to_disable[i]).disable();
-  }
+   $('targa','marca','modello','cilindrata').invoke("disable");
 }
 </script>
 

@@ -26,7 +26,7 @@ function handle_action () {
 	 break;
 
       case "registerTrip":
-      echo $_POST['oraPart'];
+      #echo $_POST['oraPart'];
 	 registerTrip($_POST['idAuto'],$_POST['partenza'],
 	    $_POST['destinaz'],
 	    $_POST['y'].'-'.$_POST['m'].'-'.$_POST['d'],
@@ -181,6 +181,8 @@ function bodyType() {
  * Restituisce il menu.
  */
 function menu () {
+
+
    # Utente NON LOGGATO
    if (!getUser()) {
       return <<<MNNL

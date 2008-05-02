@@ -102,7 +102,7 @@ function registerCar() {
  */
 function registerTrip($idAuto,$partenza,$destinaz,$data,$oraPart,
    $durata,$fumo,$musica,$postiDisp,$spese,$note) {
-
+ if ( controllaData() ) {
    $q1 = "insert into  
       Tragitto(idPropr,idAuto,partenza,destinaz,dataPart,
 	 oraPart,durata,fumo,musica,postiDisp,spese,note)
@@ -121,6 +121,12 @@ function registerTrip($idAuto,$partenza,$destinaz,$data,$oraPart,
       values('".mysql_insert_id()."','".getUserId()."')";
     
     execQuery($registerTrip_query) or die("Query non valida2: " . mysql_error());
+    
+    } else {
+      echo "la data di partenza è nel passato";
+    }
+    
+    
 } 
 
 
@@ -182,6 +188,24 @@ function controllaTrip() {
 
    return true;
 }
+
+function controllaData() {
+   
+   list($ora,$minuti) = explode(":",$_POST['oraPart']);
+   
+   $start = mktime($ora,$minuti,0,$_POST['m'],$_POST['d'],$_POST['y']);
+  
+   $t = getdate(); 
+   $now =mktime($t['hours'],$t['minutes'],0,$t['mon'],$t['mday'],$t['year']);
+
+   $diff = $start - $now ;
+   if  ( $diff < 0 ) {
+      return false;
+   }
+   
+   return true;
+}
+
 	
 function users_recentSignup () {
    $query = "select userName from Utenti order by dataIscriz desc limit 5"; 

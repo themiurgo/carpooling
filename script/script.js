@@ -71,6 +71,8 @@ function disableText(){
 }	
 
 
+
+
 /* Aggiornamento AJAX dei tragitti nella pagina 'cerca'*/
 function risultatiAjax() {
    var xmlHttp=GetXmlHttpObject();

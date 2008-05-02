@@ -39,19 +39,20 @@ function execQuery ($query) {
  * Registrazione di un utente al sito
  */
 function registraUtente() { 
-    $dataNascita=$_POST['aNascita']."-".$_POST['mNascita']."-".$_POST['gNascita'];
-    $dataPatente=$_POST['aPatente']."-".$_POST['mPatente']."-".$_POST['gPatente'];
+    $dataNascita=$_POST['yBorn']."-".$_POST['mBorn']."-".$_POST['dBorn'];
+    $dataPatente=$_POST['yDrive']."-".$_POST['mDrive']."-".$_POST['dDrive'];
     
     # Data corrente per l'iscrizione
     $today = getdate(); 
     $dataIscriz=$today['year']."-".$today['mon']."-".$today['mday'];
     
     $registerUser_query = "insert into 
-        Utenti(userName,psw,nome,cognome,dataNascita,email,dataPatente,fumatore,dataIscriz,localita) 
+        Utenti(userName,psw,nome,cognome,dataNascita,email,dataPatente,fumatore,dataIscriz,localita,sesso) 
         values('".$_POST['user']."','".$_POST['psw']."','".$_POST['nome']."','".$_POST['cognome']."',
-        '$dataNascita','".$_POST['mail']."','$dataPatente',".$_POST['fumatore'].",'$dataIscriz','".$_POST['citta']."')";
+        '$dataNascita','".$_POST['email']."','$dataPatente',".$_POST['fumatore'].",'$dataIscriz','".$_POST['citta']."','".$_POST['sesso']."')";
+      
+      execQuery($registerUser_query)  or die("Query non valida: " . mysql_error());
     
-    execQuery($registerUser_query);
 }
 	
 	

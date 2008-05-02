@@ -317,14 +317,31 @@ function prepare_content ($template) {
                   <b>$row[oraPart]</b> (<b>$row[durata]</b>)
                </span>
                <br/> <br/>
-               <form id="joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
+TRIP;
+               if ( $pro == $_SESSION['userId'] ) {
+               $extra= <<<MOD
+               <form id=joinForm" action="index.php?p=tragitti&action=modTrip&idTrip=$row[ID]" method="post">
+               <span class="join">
+               <label for="joinButton">Sei il proprietario del tragitto</label><br/>
+               <button id="registerAutoButton" type="submit">Modifica Tragitto</button>
+               <span>
+               </form>
+               </div>
+MOD;
+
+            } else {
+               $extra= <<<JOIN
+               <form id=joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
                <span class="join">
                <label for="joinButton">Vuoi Partecipare?</label><br/>
                <button id="registerAutoButton" type="submit">Conferma</button>
                <span>
                </form>
                </div>
-TRIP;
+JOIN;
+               
+               }
+               $dettagli=$dettagli.$extra;
                $final_content = $dettagli.$final_content;
             }
             

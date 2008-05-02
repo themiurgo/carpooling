@@ -2,36 +2,37 @@
 <script type="text/javascript" src="script/livevalidation_standalone.compressed.js"></script>
 <script type="text/javascript" src="script/prototype.js"></script>
 <script type="text/javascript">
-   setFormFocus("autoForm");
-</script>
-<script type="text/javascript">
 function dofill() {
-  new Ajax.Updater( 'result', 'pages/getdata_auto.php', 
+   var to_update = new Array ('targa','marca','modello',
+      'cilindrata','condizioni','note');
+   var to_disable = new Array('targa','marca','modello',
+      'cilindrata');
+
+   new Ajax.Updater( 'result', 'pages/getdata_auto.php', 
     { method: 'post', parameters: $('autoForm').serialize(),
   onSuccess: function( transport ) {
-    $('targa').value = transport.responseXML.getElementsByTagName('targa')
-      [0].firstChild.nodeValue;
-    $('marca').value = transport.responseXML.getElementsByTagName('marca')
-      [0].firstChild.nodeValue;
-    $('modello').value = transport.responseXML.getElementsByTagName('modello')
-      [0].firstChild.nodeValue;
-    $('cilindrata').value = transport.responseXML.getElementsByTagName('cilindrata')
-      [0].firstChild.nodeValue;
-    $('note').value = transport.responseXML.getElementsByTagName('note')
-      [0].firstChild.nodeValue;
-  } } );
+
+   for (var i=0; i<to_update.length; i++)
+      $(to_update[i]).value = transport.responseXML.
+	 getElementsByTagName(to_update[i])[0].firstChild.nodeValue;
+   } } );
+
+
+  for (var i=0; i<to_disable.length; i++) {
+     $(to_disable[i]).disable();
+  }
 }
 </script>
 
 <!-- Contenitore colorato -->
 <div class="bgGreen" style="width: 500px; margin: auto;">
    <h1 class="green">Gestione auto</h1>
-   <form id="autoForm" name="autoForm" class="registrazione" action="index.php?p=auto&action=registerAuto" method="post">
+   <form id="autoForm" class="registrazione" action="index.php?p=auto&amp;action=registerAuto" method="post">
    <div>
       <!-- REGISTEREDAUTOS -->
    </div>
       <div>Tutti i campi sono obbligatori.</div>
-      <ul style="position: relative; width: 400px;">
+      <ul style="width: auto;">
          <li>
             <label for="marca">Marca</label>
             <input id="marca" name="marca" class="textField" size="20"/>
@@ -49,12 +50,12 @@ function dofill() {
             <input id="cilindrata" name="cilindrata" class="textField" size="20"/>
          </li>
          <li>
-            <label for="gAuto">Data immatricolazione</label><br/> 
+            Immatricolazione<br/> 
 	    Inserire select
          </li>
          <li>
-            Condizioni generali
-	    <select name ="voto" id="voto" >
+            <label for="condizioni">Condizioni generali</label>
+	    <select name ="condizioni" id="condizioni" >
 	       <option value=""> </option>
 	       <option value="1">Pessima</option>
 	       <option value="2">Scarsa</option>
@@ -64,17 +65,18 @@ function dofill() {
 	    </select>
 	 </li>
 	 <li>
-            <label for="noteAuto">Note</label><br/>
-            <textarea name="noteAuto" cols=40 rows=5></textarea> <br>
-            Puoi scrivere delle precisazioni sulla condizione della tua macchina
-         </li> 
+            <label for="note">Note</label><br/>
+            <textarea name="note" id="note" cols="40" rows="5">
+	    </textarea><br />
+            <span class="notes">Puoi scrivere altro sull'auto o sulle sue condizioni</span>
+         </li>
          <li class="center">
          <!-- Validazione contenuti del form -->
       <script type="text/javascript" src="script/carValidate.js"></script>
-            <button id="signUpButton" type="button" value="Registrati!" onClick="validaAuto()">
-      Registra l'  auto
+      <button id="signUpButton" type="button" value="Registrati!" onclick="validaAuto()">
+   	 Invia
       </button>
-            <button id="clearButton" type="reset">Cancella i campi</button>
+      <button id="clearButton" type="reset">Pulisci</button>
          </li>
       </ul>     
       

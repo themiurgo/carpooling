@@ -430,17 +430,20 @@ TRIP;
          break;
       
       case 'cerca':
-            if ( getUser() ) {
-               $output = eregi_replace("<!-- WELCOME -->", "<p>Ciao <b>$_SESSION[user]</b> !<p> <p>Se hai dubbi sul funzionamento della ricerca
-                                                 puoi sempre consultare la pagine delle <a href='index.php?p=about'>istruzioni</a> .",$template);
-            
-            } else {
-               $output = eregi_replace("<!-- WELCOME -->", "<p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!</p>
-                                                <p>Leggi <a href='index.php?p=about'>come funziona</a> e <a href='index.php?p=iscrizione'>registrati subito!</a></p>",$template);
-               
-            }
-            $final_content = $final_content.$output;
-            break;
+	 if (getUser())
+	    $welcome=<<<WLCM
+	<p>Ciao <b>$_SESSION[user]</b>! Se hai dubbi sul funzionamento
+	della ricerca puoi sempre consultare la pagine delle
+	<a href='index.php?p=about'>istruzioni</a></p>.
+WLCM;
+	 else
+	    $welcome=<<<WLCM
+	    <p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!                                            Leggi <a href='index.php?p=about'>come funziona</a> e <a href='index.php?p=iscrizione'>registrati subito!</a></p>
+WLCM;
+
+      $output = eregi_replace("<!-- WELCOME -->",$welcome,$template);
+	 $final_content = $final_content.$output;
+      	 break;
       
       # Nuovo Tragitto e inserimento Auto
       case 'nuovo':
@@ -486,7 +489,7 @@ TRIP;
                $output = eregi_replace("<!-- REGISTEREDAUTOS -->",'
                      Elenco delle auto gi&agrave; registrate :'.
                         cars_ofUser(getUserId()).'
-                  <button id="modifyAutoButton" type="button" onclick="dofill()" action="">
+                  <button id="modifyAutoButton" type="button" onclick="dofill()">
                      Modifica Auto
                   </button>',$template); 
             }

@@ -556,7 +556,6 @@ float:right;
  * Stile dei form
  */
 form {
-   border:1px solid #000000;
    margin-top:0.5em;
 }
 form.registrazione {
@@ -564,6 +563,10 @@ form.registrazione {
 }
 form label, form li {
    font-weight: bold;
+}
+
+form#mapForm input {
+   width:8em;
 }
 
 div#iscrizione {
@@ -632,4 +635,50 @@ input.LV_invalid_field:active,
 textarea.LV_invalid_field:hover, 
 textarea.LV_invalid_field:active {
     border: 1px solid #CC0000;
+}
+
+/* --------------------------
+ * Pagina di ricerca tragitti
+ * --------------------------
+ */
+
+/* Div che contiene la gmap */
+div#carPoolingMap {
+   width: 510px;
+   height: 400px;
+   border:1px solid #000000;
+   margin-bottom:1em;
+}
+
+div#sidebar {
+   float: right;
+   width: 200px;
+}
+
+/* -------------------------
+ * Pagina di gestione auto
+ * -----------------------
+ */
+form#autoForm {
+   width: auto;
+   margin: auto;
+}
+
+form#autoForm ul {
+   margin:0;
+}
+
+form#autoForm li {
+   margin-left: auto;
+   margin-right: auto;
+}
+
+form#autoForm li {
+   min-height: 4em;
+   height: auto;
+}
+
+form .notes {
+   font-size:0.9em;
+   font-weight: normal;
 }

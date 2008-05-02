@@ -1,41 +1,32 @@
 <!-- Contenitore globale-->
 <!-- WELCOME -->
-<!--  Tabella con intestazione, 1 riga e 2 celle -->
-<table class="directions">
-   <tr>
-      <!-- Prima cella: GMap -->
-      <td valign="top">
-      <div id="carPoolingMap" style="width: 510px; height: 400px; border:1px solid #000000"></div>
-      </td>
-      <!-- Seconda cella: form ed indicazioni  -->
-      <td valign="top" rowspan="2"> 
-         <form id="mapForm" action="">
-            <ul class="center bgAzure" style="margin: auto; width: 160px;">
-            <li>
-               <label for="partenza" class="red">Citt&agrave; di partenza</label><br />
-               <input id="partenza" name="partenza"  size="16"/>
-            </li>
-            <li>
-               <label for="destinaz" class="green">Citt&agrave; di arrivo</label><br />
-               <input id="destinaz" name="destinaz"  size="16"/>
-            </li>
-            <!-- Bottoni Funzione  -->
-            <li>
-               <button id="searchButton" type="button" onclick="risultatiAjax()">Ricerca</button>
-               <button id="directionsButton"  type="button" onclick="creaIndicazioni()">Mostra indicazioni</button>
-            </li>
-            <!-- Contenitore delle direzioni  -->
 
-            </ul>
-         </form>
-         <div id="risultati">
-               Qui andranno i risultati della ricerca (cioe' i tragitti che corrispondono).
-         </div>
-      </td>
-   </tr>
-   <tr>
-      <td>
-         <div id="directions"></div>
-      </td>
-   </tr>
-</table>  <!-- Fine della tabella   -->
+<!-- Contenuti che stanno sulla destra -->
+<div id="sidebar">
+   <form id="mapForm">
+      <ul class="center bgAzure" style="margin: auto; width: 140px;">
+	 <li>
+	    <label for="partenza" class="red">Citt&agrave; di partenza</label><br />
+	    <input id="partenza" name="partenza"  size="16"/>
+	 </li>
+	 <li>
+	    <label for="destinaz" class="green">Citt&agrave; di arrivo</label><br />
+	    <input id="destinaz" name="destinaz"  size="16"/>
+	 </li>
+	 <!-- Bottoni Funzione  -->
+	 <li>
+	    <button id="searchButton" type="button" onclick="risultatiAjax()">Ricerca</button>
+	    <button id="directionsButton"  type="button" onclick="creaIndicazioni()">Mostra indicazioni</button>
+	 </li>
+	 <!-- Contenitore delle direzioni  -->
+      </ul>
+   </form>
+   <div id="risultati">
+	       Qui andranno i risultati della ricerca (cioe' i tragitti che corrispondono).
+   </div>
+</div>
+<!-- Contenuti che stanno a sinistra -->
+<div style="width: 510px;">
+   <div id="carPoolingMap"></div>
+   <div id="directions"></div>
+</div>

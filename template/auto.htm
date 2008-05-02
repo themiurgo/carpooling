@@ -1,16 +1,35 @@
 <script type="text/javascript" src="script/dateSelector.js"></script>
 <script type="text/javascript" src="script/livevalidation_standalone.compressed.js"></script>
+<script type="text/javascript" src="script/prototype.js"></script>
 <script type="text/javascript">
    setFormFocus("autoForm");
+</script>
+<script type="text/javascript">
+function dofill() {
+  new Ajax.Updater( 'result', 'pages/getdata_auto.php', 
+    { method: 'post', parameters: $('autoForm').serialize(),
+  onSuccess: function( transport ) {
+    $('targa').value = transport.responseXML.getElementsByTagName('targa')
+      [0].firstChild.nodeValue;
+    $('marca').value = transport.responseXML.getElementsByTagName('marca')
+      [0].firstChild.nodeValue;
+    $('modello').value = transport.responseXML.getElementsByTagName('modello')
+      [0].firstChild.nodeValue;
+    $('cilindrata').value = transport.responseXML.getElementsByTagName('cilindrata')
+      [0].firstChild.nodeValue;
+    $('note').value = transport.responseXML.getElementsByTagName('note')
+      [0].firstChild.nodeValue;
+  } } );
+}
 </script>
 
 <!-- Contenitore colorato -->
 <div class="bgGreen" style="width: 500px; margin: auto;">
    <h1 class="green">Gestione auto</h1>
+   <form id="autoForm" name="autoForm" class="registrazione" action="index.php?p=auto&action=registerAuto" method="post">
    <div>
       <!-- REGISTEREDAUTOS -->
    </div>
-   <form id="autoForm" name="autoForm" class="registrazione" action="index.php?p=auto&action=registerAuto" method="post">
       <div>Tutti i campi sono obbligatori.</div>
       <ul style="position: relative; width: 400px;">
          <li>
@@ -30,10 +49,8 @@
             <input id="cilindrata" name="cilindrata" class="textField" size="20"/>
          </li>
          <li>
-            <label for="dAuto">Data immatricolazione</label><br/> 
-            <input id="dAuto" name="dAuto"  size="2" /> / 
-            <input id="mAuto" name="mAuto" size="2" /> / 
-            <input id="yAuto" name="yAuto"  size="4" />  
+            <label for="gAuto">Data immatricolazione</label><br/> 
+	    Inserire select
          </li>
          <li>
             Condizioni generali
@@ -50,7 +67,7 @@
             <label for="noteAuto">Note</label><br/>
             <textarea name="noteAuto" cols=40 rows=5></textarea> <br>
             Puoi scrivere delle precisazioni sulla condizione della tua macchina
-         </li>   
+         </li> 
          <li class="center">
          <!-- Validazione contenuti del form -->
       <script type="text/javascript" src="script/carValidate.js"></script>

@@ -466,7 +466,7 @@ TRIP;
                $output = eregi_replace("<!-- REGISTEREDAUTOS -->",'
                      Elenco delle auto gi&agrave; registrate :'.
                         cars_ofUser(getUserId()).'
-                  <button id="modifyAutoButton" type="submit" onclick="disableText()" action="">
+                  <button id="modifyAutoButton" type="button" onclick="dofill()" action="">
                      Modifica Auto
                   </button>',$template); 
             }

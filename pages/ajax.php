@@ -13,8 +13,9 @@ if (isset ($_GET['pa']) ) {
       echo "Elenco dei tragitti disponibili";
 
    $out="<ol>";
+
    while ($row = mysql_fetch_array($res)) {
-        
+     
       $pro = $row['idPropr'];
       $name_query="select userName from Utenti where ID=$pro";
       $res_name = execQuery($name_query);
@@ -32,9 +33,9 @@ if (isset ($_GET['pa']) ) {
       <br />$disp posti - Fumo :$fumo ($nome) <p>
    </li>
 TRIP;
-	 $out=$out.$piece."</ol>";
+	 $out=$out.$piece;
    }
-   
+   $out=$out."</ol>";
    echo $out;
 }
 

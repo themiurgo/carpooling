@@ -16,10 +16,10 @@ var soldi = {minimum:0,
    notANumberMessage: "Errore", notAnIntegerMessage: "Errore",
    tooLowMessage:"Non valido"};
 
-var gPartenza=new LiveValidation('gPartenza',presenzaTesto);
-var mPartenza=new LiveValidation('mPartenza',presenzaTesto);
-var aPartenza=new LiveValidation('aPartenza',presenzaTesto);
-var oraPartenza=new LiveValidation('oraPartenza',presenzaTesto);
+var gPartenza=new LiveValidation('d',presenzaTesto);
+var mPartenza=new LiveValidation('m',presenzaTesto);
+var aPartenza=new LiveValidation('y',presenzaTesto);
+var oraPartenza=new LiveValidation('oraPart',presenzaTesto);
 var durata=new LiveValidation('durata',presenzaTesto);
 var passeggeri=new LiveValidation('passeggeri',presenzaTesto);
 var spese=new LiveValidation('spese',presenzaTesto);
@@ -32,7 +32,7 @@ aPartenza.add(Validate.Presence, {failureMessage:"Vuoto"});
 aPartenza.add( Validate.Numericality, anno);
 
 oraPartenza.add(Validate.Presence, {failureMessage:"Vuoto"});
-oraPartenza.add(Validate.Format, { pattern: /^[0-2][0-9]:[0-5][0-9]$/, failureMessage:"Valore Errato"});
+oraPartenza.add(Validate.Format, { pattern: /^[0-9]:[0-5][0-9]$/, failureMessage:"Valore Errato"});
 durata.add(Validate.Presence, {failureMessage:"Vuoto"});
 durata.add(Validate.Format, { pattern: /^[0-2][0-9]:[0-5][0-9]$/, failureMessage:"Valore Errato"});
 

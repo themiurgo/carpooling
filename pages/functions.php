@@ -296,10 +296,8 @@ function prepare_content ($template) {
                $row['musica'] ?
                   $mus = "Con Musica" : $mus = "NO Musica"; 
                
-               # Non capisco perchè non mi accetta $row['postiDisp'] dentro la heredoc :/
-               // (Anto: non lo accettava perché lo devi scrivere senza virgolette)
+               
                # CLAMOROSO BUG: anche se il metodo è 'post', si comporta come get ( che è quello che voglio).
-               // Anto: in che senso?
                $dettagli = <<<TRIP
                <div style='padding:0' class='bgRed'><h2>Dettagli Tragitto</h2>
                <span class="utenti">
@@ -334,7 +332,8 @@ TRIP;
             break;
 
       case 'utenti':
-   	 $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+            # Dovresti spiegarmi cosa succede qui.... tr criptico!
+            $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
          break;
 
       case 'profilo':
@@ -357,11 +356,56 @@ TRIP;
          if (getUser()!=$_GET['u'])
             $feedback=feedback($r1['ID']);
 	    echo $row[nome];
-   	 $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+         $output=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+         
+         $trip_query = "select * from Tragitto
+            where idPropr = $_SESSION[userId]
+            order by `dataPart` desc,`oraPart`";
+         $res = execQuery($trip_query);
+         if (mysql_num_rows($res) != 0) {
+            $out="<ol>";
+            
+            while ($row = mysql_fetch_array($res)) {
+              
+               $ora = $row['oraPart'];
+               $data = $row['dataPart'];
+               $fumo = $row['fumo'];
+               $part = $row['partenza'];
+               $dest = $row['destinaz'];
+               $idTrip = $row['ID'];
+              
+              $piece = <<<TRIP
+               <li>
+                  <a href="index.php?p=tragitti&idTrip=$idTrip">$ora  $data</a>
+                  <br />Da : <b>$part</b>  a : <b>$dest</b> <p>
+               </li>
+TRIP;
+               $out=$out.$piece."</ol>";
+            }  
+             $out=$out."</ol>";
+            $output=eregi_replace("<!-- LISTATRAGITTI -->",$out,$output);
+            
+         } else {
+            $output=eregi_replace("<!-- LISTATRAGITTI -->","<p>Non hai creato alcun tragitto finora</p>",$output);
+         
+         }
+     $final_content = $final_content.$output;
 
          break;
+      
+      case 'cerca':
+            if ( getUser() ) {
+               $output = eregi_replace("<!-- WELCOME -->", "<p>Ciao <b>$_SESSION[user]</b> !<p> <p>Se hai dubbi sul funzionamento della ricerca
+                                                 puoi sempre consultare la pagine delle <a href='index.php?p=about'>istruzioni</a> .",$template);
             
-        
+            } else {
+               $output = eregi_replace("<!-- WELCOME -->", "<p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!</p>
+                                                <p>Leggi <a href='index.php?p=about'>come funziona</a> e <a href='index.php?p=iscrizione'>registrati subito!</a></p>",$template);
+               
+            }
+            $final_content = $final_content.$output;
+            break;
+      
       # Nuovo Tragitto e inserimento Auto
       case 'nuovo':
       case 'auto':   

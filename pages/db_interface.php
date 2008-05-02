@@ -51,7 +51,7 @@ function registraUtente() {
         values('".$_POST['user']."','".$_POST['psw']."','".$_POST['nome']."','".$_POST['cognome']."',
         '$dataNascita','".$_POST['email']."','$dataPatente',".$_POST['fumatore'].",'$dataIscriz','".$_POST['citta']."','".$_POST['sesso']."')";
       
-      execQuery($registerUser_query)  or die("Query non valida: " . mysql_error());
+      execQuery($registerUser_query)  ;
     
 }
 	
@@ -72,14 +72,14 @@ function modificaAuto() {
  * Registrazione di un auto al sito
  */
 function registerCar() {
-    $annoImm = $_POST['aAuto']."-".$_POST['mAuto']."-".$_POST['gAuto'];
+    $annoImm = $_POST['yAuto']."-".$_POST['mAuto']."-".$_POST['dAuto'];
    
     # Registrazione nella tabella Auto
     $q1 = "insert into Auto(targa,marca,modello,cilindrata,annoImmatr,condizioni,note) 
     values ('".$_POST['targa']."','".$_POST['marca']."','".$_POST['modello']."',
             ".$_POST['cilindrata'].",'$annoImm',".$_POST['voto'].",'".$_POST['noteAuto']."')";
 
-    execQuery($q1);
+    execQuery($q1) or die("Query non valida1: " . mysql_error());
     
     # Ottiene l'id dell'auto:Si potrebbe ottimizzare
     $query="select ID from Auto where targa='".$_POST['targa']."'";
@@ -92,7 +92,7 @@ function registerCar() {
     #Registrazione nella tabella AutoUtenti
     $registerAuto_query2 = "insert into AutoUtenti(idAuto,idUtente,valido) values('".$row['ID']."','".getUserId()."',$prop)";
     
-    execQuery($registerAuto_query2);
+    execQuery($registerAuto_query2) ;
 }
 
 
@@ -114,13 +114,13 @@ function registerTrip($idAuto,$partenza,$destinaz,$data,$oraPart,
 	 '".$note."')";
     
     echo $q1;
-    execQuery($q1);
+    execQuery($q1) or die("Query non valida1: " . mysql_error());
     
     $registerTrip_query = "insert 
-      into UtentiTragitto(idPercorso,idUtente) 
+      into UtentiTragitto(idTragitto,idUtente) 
       values('".mysql_insert_id()."','".getUserId()."')";
     
-    execQuery($registerTrip_query);
+    execQuery($registerTrip_query) or die("Query non valida2: " . mysql_error());
 } 
 
 

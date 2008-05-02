@@ -88,7 +88,9 @@
    <textarea name="note" cols=40 rows=5></textarea>
 </li>
 <li>
-   <button id="confirmButton"  type="submit" value="Conferma!">
+<!-- Validazione contenuti del form -->
+<script type="text/javascript" src="script/tragittoValidate.js"></script>
+   <button id="confirmButton"  type="button" value="Conferma!"onclick="validaTrip()">
       Registra il tragitto
    </button>
    <button id="clearButton" type="reset" value="Cancella i campi">
@@ -98,8 +100,7 @@
 </div> <!-- Fine del contenitore con allineamento al centro-->
 </ul>
 
-<!-- Validazione contenuti del form -->
-<script type="text/javascript" src="script/tragittoValidate.js"></script>
+
 </form>
 </div> <!-- Fine del contenitore colorato-->
 </td>

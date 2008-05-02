@@ -18,9 +18,9 @@ var marca=new LiveValidation('marca',presenzaTesto);
 var modello=new LiveValidation('modello',presenzaTesto);
 var cilindrata=new LiveValidation('cilindrata',presenzaTesto);
 var targa=new LiveValidation('targa',presenzaTesto);
-var gAuto=new LiveValidation('gAuto',presenzaTesto);
+var dAuto=new LiveValidation('dAuto',presenzaTesto);
 var mAuto=new LiveValidation('mAuto',presenzaTesto);
-var aAuto=new LiveValidation('aAuto',presenzaTesto);
+var yAuto=new LiveValidation('yAuto',presenzaTesto);
 
 marca.add(Validate.Presence, {failureMessage:"Vuoto"});
 modello.add(Validate.Presence, {failureMessage:"Vuoto"});
@@ -29,9 +29,19 @@ cilindrata.add(Validate.Numericality, cil);
 
 targa.add(Validate.Presence, {failureMessage:"Vuoto"});
 targa.add(Validate.Format, { pattern: /^\w\w[0-9][0-9][0-9]\w\w$/, failureMessage:"Targa non Italiana"});
-gAuto.add(Validate.Presence, {failureMessage:"Vuoto"});
-gAuto.add( Validate.Numericality, giorno);
+dAuto.add(Validate.Presence, {failureMessage:"Vuoto"});
+dAuto.add( Validate.Numericality, giorno);
 mAuto.add(Validate.Presence, {failureMessage:"Vuoto"});
 mAuto.add( Validate.Numericality, mese);
-aAuto.add(Validate.Presence, {failureMessage:"Vuoto"});
-aAuto.add( Validate.Numericality, anno);
+yAuto.add(Validate.Presence, {failureMessage:"Vuoto"});
+yAuto.add( Validate.Numericality, anno);
+
+function validaAuto() {
+   var areAllValid = LiveValidation.massValidate( [  marca, modello, cilindrata,dAuto,mAuto,yAuto ] );
+    
+    
+   if (areAllValid) {
+      document.autoForm.submit();
+   }
+   
+}

@@ -30,14 +30,14 @@
             <input id="cilindrata" name="cilindrata" class="textField" size="20"/>
          </li>
          <li>
-            <label for="gAuto">Data immatricolazione</label><br/> 
-            <input id="gAuto" name="gAuto"  size="2" /> / 
+            <label for="dAuto">Data immatricolazione</label><br/> 
+            <input id="dAuto" name="dAuto"  size="2" /> / 
             <input id="mAuto" name="mAuto" size="2" /> / 
-            <input id="aAuto" name="aAuto"  size="4" />  
+            <input id="yAuto" name="yAuto"  size="4" />  
          </li>
          <li>
             Condizioni generali
-	    <select id="voto" name"voto">
+	    <select name ="voto" id="voto" >
 	       <option value=""> </option>
 	       <option value="1">Pessima</option>
 	       <option value="2">Scarsa</option>
@@ -52,11 +52,14 @@
             Puoi scrivere delle precisazioni sulla condizione della tua macchina
          </li>   
          <li class="center">
-            <button id="registerAutoButton" type="submit">Registra l' Auto</button>
+         <!-- Validazione contenuti del form -->
+      <script type="text/javascript" src="script/carValidate.js"></script>
+            <button id="signUpButton" type="button" value="Registrati!" onClick="validaAuto()">
+      Registra l'  auto
+      </button>
             <button id="clearButton" type="reset">Cancella i campi</button>
          </li>
       </ul>     
-      <!-- Validazione contenuti del form -->
-      <script type="text/javascript" src="script/carValidate.js"></script>
+      
    </form> <!-- Fine del Form -->
 </div> <!-- Fine del contenitore colorato -->

@@ -5,50 +5,53 @@
 </script>
 
 <!-- Contenitore colorato -->
-<div class="bgGreen"> 
-   <div class="intestazione">   
-      <h2 class="titoli">Gestione auto</h2>
-   </div>
+<div class="bgGreen" style="width: 500px; margin: auto;">
+   <h1 class="green">Gestione auto</h1>
    <div>
       <!-- REGISTEREDAUTOS -->
    </div>
    <form id="autoForm" name="autoForm" class="registrazione" action="index.php?p=auto&action=registerAuto" method="post">
       <div>Tutti i campi sono obbligatori.</div>
-      <ul>
+      <ul style="position: relative; width: 400px;">
          <li>
-            <label for="marca">Marca : </label>
-            <input id="marca" name="marca" class="textField" size="20"/> <br/>
-            <label for="modello">Modello : </label>
-            <input id="modello" name="modello" class="textField" size="20"/> <br/>
-            <label for="targa">Targa : </label>
-            <input id="targa" name="targa" class="textField" size="20"/> <br/>
-            <label for="cilindrata">Cilindrata : </label>
+            <label for="marca">Marca</label>
+            <input id="marca" name="marca" class="textField" size="20"/>
+	 </li>
+	 <li>
+            <label for="modello">Modello</label>
+            <input id="modello" name="modello" class="textField" size="20"/>
+	 </li>
+	 <li>
+            <label for="targa">Targa</label>
+            <input id="targa" name="targa" class="textField" size="20"/>
+	 </li>
+	 <li>
+            <label for="cilindrata">Cilindrata</label>
             <input id="cilindrata" name="cilindrata" class="textField" size="20"/>
          </li>
          <li>
-            <label for="gAuto">Data immatricolazione auto</label><br/> 
+            <label for="gAuto">Data immatricolazione</label><br/> 
             <input id="gAuto" name="gAuto"  size="2" /> / 
             <input id="mAuto" name="mAuto" size="2" /> / 
             <input id="aAuto" name="aAuto"  size="4" />  
          </li>
          <li>
-            <label for="fumatoreNo">Che voto daresti alle condizioni della tua macchina?</label>  <br/>
-            <input id="voto1" name="voto"  type="radio" value="1"/>
-            <label class="radiolabel" for="voto1">1</label>
-            <input id="voto2" checked="checked" name="voto"  type="radio" value="2"  />
-            <label class="radiolabel" for="voto2">2</label>
-            <input id="voto3" checked="checked" name="voto"  type="radio" value="3"  />
-            <label class="radiolabel" for="voto3">3</label>
-            <input id="voto4" checked="checked" name="voto"  type="radio" value="4"  />
-            <label class="radiolabel" for="voto4">4</label>
-            <input id="voto5" checked="checked" name="voto"  type="radio" value="5"  />
-            <label class="radiolabel" for="voto5">5</label>
-            <br/>
+            Condizioni generali
+	    <select id="voto" name"voto">
+	       <option value=""> </option>
+	       <option value="1">Pessima</option>
+	       <option value="2">Scarsa</option>
+	       <option value="3">Buona</option>
+	       <option value="4">Ottima</option>
+	       <option value="5">Eccellente</option>
+	    </select>
+	 </li>
+	 <li>
             <label for="noteAuto">Note</label><br/>
             <textarea name="noteAuto" cols=40 rows=5></textarea> <br>
-            <label id="noteAutoLabel" for="noteAuto">Puoi scrivere delle precisazioni sulla condizione della tua macchina</label>
+            Puoi scrivere delle precisazioni sulla condizione della tua macchina
          </li>   
-         <li>
+         <li class="center">
             <button id="registerAutoButton" type="submit">Registra l' Auto</button>
             <button id="clearButton" type="reset">Cancella i campi</button>
          </li>

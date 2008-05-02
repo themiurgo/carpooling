@@ -277,8 +277,8 @@ div.horRule hr { display: none; }
 .bgGreen {
    background-color: #ccffde;
    border: 1px solid #b3eabc;
-   margin-bottom: 20px;
    padding: 1em 20px 1em 20px;
+   margin: 0px 0px 20px 0px;
 }
 
 .bgGreen h4 {
@@ -298,7 +298,17 @@ div.horRule hr { display: none; }
 form input {
    border: 1px solid #000000;
    font-size:1.4em;
-   height: 1.2em;
+}
+
+form#autoForm li {
+   width: 30em;
+/*   height:3.5em; */
+}
+
+form#autoForm label {
+   display:block;
+   float:left;
+   width: 10em;
 }
 
 form input:focus {
@@ -517,11 +527,6 @@ float:right;
  * ------------------------------------
  */
 
-.textField {
-   margin-top:2em;
-margin-left:1.2em;   
-}
-
 #noteAutoLabel{
        font-size:11px;
        line-height:9px;
@@ -547,29 +552,28 @@ margin-left:1.2em;
    }
  
 
-/* SEZIONE CASELLE DI TESTO E LABEL*/
-/* Insieme di casella di testo e label di commento */
-form label {
+/*
+ * Stile dei form
+ */
+form {
+   border:1px solid #000000;
+   margin-top:0.5em;
+}
+form.registrazione {
+   text-align: left;
+}
+form label, form li {
    font-weight: bold;
 }
 
-form li {
-   position: relative;
-/*   float: left;
-   clear: right; */
-   margin-bottom:1.5em;
-}
-
-form.registrazione input {
-/*   margin-bottom: 2em; */
+div#iscrizione {
+   width: 20em;
 }
 
 form.registrazione li {
-   margin-left: 1em;
-}
-
-form.registrazione caption {
-   font-size: 0.5em;
+   position: relative;
+   margin: 1em 1em 1em 1em;
+   height:5em;
 }
 
 form.registrazione label.commento {
@@ -582,8 +586,9 @@ form.registrazione label.commento {
    padding: 0;
 }
 
-form.registrazione {
-   text-align: left;
+
+form.registrazione input.textField {
+   width:12.5em;
 }
 
 td {
@@ -599,10 +604,9 @@ h3 {
  * VALIDAZIONE
  */
 .LV_validation_message{
-    display:inline;
+    display:block;
     font-weight:bold;
-    position: relative;
-    left:20px;
+    text-align:center;
 }
 
 .LV_valid {

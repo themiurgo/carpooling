@@ -213,39 +213,37 @@ MNL;
  */
 function content () {
     
-# Pagina visualizzata di default se non è specificata
-# una pagina differente.
-   if (!isset($_GET['p'])) {
+   // Pagina visualizzata di default
+   if (!isset($_GET['p']))
       $_GET['p']="tragitti";
-   }
 
-   if (getUser()) {
-      #Lista delle pagine consentite per un utente loggato
+   // Pagine consentite per...
+   getUser() ?
+      // ...un utente loggato
       $allowed = array("profilo","tragitti","cerca","nuovo","auto",
-         "utenti","about");
-   } else {
-      #Lista delle pagine consentite per un utente NON loggato
+         "utenti","about") :
+      # ...un utente NON loggato
       $allowed = array("tragitti","cerca","utenti","about","iscrizione");
-   }
 
    $content = "";
    
    if (isset($_SESSION['wronglogin'])) {
-      $output="Login errato";
+      $content="<h1>Login errato</h1>";
       unset($_SESSION['wronglogin']);
    }
 
    // Controllo che la pag richiesta sia consentita...
    if (in_array($_GET['p'],$allowed)) {
 
-      // ... la recupero ...
-      $pagina = "template/".$_GET[p].".htm";
-      $file = file($pagina)
+      // ... recupero il template ...
+      $file_content = implode ("",file("template/".$_GET[p].".htm"))
          or die("Pagina non trovata");
-      $file_content = implode ("",$file);
-       # Ottieni il corretto contenuto da 'sostituire' all'interno della pagina
+      
+      // ... ed effettuo le opportune sostituzioni.
       $content = $content.prepare_content($file_content);
-   } else {
+   }
+   
+   else {
       $error = accessDenied();
       $content = $content.$error;
    }
@@ -261,7 +259,7 @@ function content () {
  */
 function prepare_content ($template) {
 
-   # Il contenuto è diverso a seconda della pagina selezionata.
+   // Devo effettuare sostituzioni diverse per ogni pagina
    switch ($_GET['p']) {
         
       case 'tragitti':
@@ -271,6 +269,7 @@ function prepare_content ($template) {
             order by `dataPart` desc,`oraPart` desc limit 5";
          $res = execQuery($q1);
   
+	    // Stampo i tragitti
             while ($r1 = mysql_fetch_array($res)) {
 	       $o=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
                $final_content = $final_content.$o;
@@ -355,7 +354,7 @@ TRIP;
         
          if (getUser()!=$_GET['u'])
             $feedback=feedback($r1['ID']);
-	    echo $row[nome];
+
          $output=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
          
          $trip_query = "select * from Tragitto
@@ -422,8 +421,8 @@ TRIP;
 
          # Nessun auto registrata
          if (mysql_num_rows($res) == 0) {
-            if ( $_GET['p'] == "nuovo" )
-                  return noAuto();
+            if ($_GET['p'] == "nuovo")
+	       return noAuto();
                
             elseif ($_GET['p'] == "auto")
                $output = eregi_replace("<!-- REGISTEREDAUTOS -->",
@@ -441,10 +440,10 @@ TRIP;
                 
             $output = eregi_replace("<!-- AUTOS -->",cars_ofUser(getUserId()),$template);
              
-                # Pagina auto --> viene visualizzata la Selection insieme ad un form per 
-                # dare la possibilità di modificare i dati dell' auto
             }
             
+	    # Pagina auto --> viene visualizzata la Selection insieme ad un form per 
+	    # dare la possibilità di modificare i dati dell' auto
             elseif ($_GET['p']=="auto") {
                # La prima chiamata ha come parametro '$a'
                $output = eregi_replace("<!-- REGISTEREDAUTOS -->",'

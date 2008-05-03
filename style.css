@@ -478,6 +478,10 @@ table.directions {
    color:#33CC00;
 }
 
+#citta{
+margin:100px,10px,10px,10px;
+}
+
 form ul{
    margin:0;
    padding:0;

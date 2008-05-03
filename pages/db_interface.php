@@ -39,8 +39,8 @@ function execQuery ($query) {
  * Registrazione di un utente al sito
  */
 function registraUtente() { 
-    $dataNascita=$_POST['yBorn']."-".$_POST['mBorn']."-".$_POST['dBorn'];
-    $dataPatente=$_POST['yDrive']."-".$_POST['mDrive']."-".$_POST['dDrive'];
+    $dataNascita=$_POST['annoNascita']."-".$_POST['meseNascita']."-".$_POST['giornoNascita'];
+    $dataPatente=$_POST['annoPatente']."-".$_POST['mesePatente']."-".$_POST['giornoPatente'];
     
     # Data corrente per l'iscrizione
     $today = getdate(); 

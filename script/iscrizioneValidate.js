@@ -12,12 +12,12 @@ var year = {minimum:1900,maximum:2050,
 
 var nome=new LiveValidation('nome',options);
 var cognome=new LiveValidation('cognome',options);
-var dBorn=new LiveValidation('dBorn',options);
-var mBorn=new LiveValidation('mBorn',options);
-var yBorn=new LiveValidation('yBorn',options);
-var dDrive=new LiveValidation('dDrive',options);
-var mDrive=new LiveValidation('mDrive',options);
-var yDrive=new LiveValidation('yDrive',options);
+var dBorn=new LiveValidation('giornoNascita',options);
+var mBorn=new LiveValidation('meseNascita',options);
+var yBorn=new LiveValidation('annoNascita',options);
+var dDrive=new LiveValidation('giornoPatente',options);
+var mDrive=new LiveValidation('mesePatente',options);
+var yDrive=new LiveValidation('annoPatente',options);
 var email=new LiveValidation('email',options);
 var user=new LiveValidation('user',options);
 var psw=new LiveValidation('psw',options);
@@ -30,25 +30,30 @@ cognome.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 
 dBorn.add(Validate.Presence, {failureMessage:"Vuoto"});
 dBorn.add( Validate.Numericality, day);
+
 mBorn.add(Validate.Presence, {failureMessage:"Vuoto"});
 mBorn.add( Validate.Numericality, month);
+
 yBorn.add(Validate.Presence, {failureMessage:"Vuoto"});
 yBorn.add( Validate.Numericality, year);
 
 dDrive.add(Validate.Presence, {failureMessage:"Vuoto"});
+dDrive.add( Validate.Numericality, day);
+
 mDrive.add(Validate.Presence, {failureMessage:"Vuoto"});
+mDrive.add( Validate.Numericality, month);
+
 yDrive.add(Validate.Presence, {failureMessage:"Vuoto"});
+yDrive.add( Validate.Numericality, year);
 
 email.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 email.add(Validate.Email, {failureMessage: "Indirizzo non valido"});
 
 user.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 
-
 psw.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 
 psw2.add( Validate.Confirmation, { match: 'psw', failureMessage: "Le password sono diverse" } );
-
 
 citta.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 
@@ -56,7 +61,7 @@ citta.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 setFormFocus("iscrizione");
 
 function validaIscr() {
-   var areAllValid = LiveValidation.massValidate( [  nome, cognome,email,user,psw,psw2,citta ] );
+   var areAllValid = LiveValidation.massValidate( [  nome, cognome,email,dBorn,mBorn,yBorn,dDrive,mDrive,yDrive,user,psw,psw2,citta ] );
     is = document.getElementById("iscrizioneForm"); 
     
    if (areAllValid) {

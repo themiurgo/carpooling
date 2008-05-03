@@ -300,16 +300,6 @@ form input {
    font-size:1.4em;
 }
 
-form#autoForm li {
-   width: 30em;
-/*   height:3.5em; */
-}
-
-form#autoForm label {
-   display:block;
-   float:left;
-   width: 10em;
-}
 
 form input:focus {
    background-color: #ffffcc;
@@ -552,47 +542,12 @@ float:right;
    }
  
 
-/*
- * Stile dei form
- */
-form {
-   margin-top:0.5em;
-}
-form.registrazione {
-   text-align: left;
-}
-form label, form li {
-   font-weight: bold;
-}
-
-form#mapForm input {
-   width:8em;
-}
 
 div#iscrizione {
    width: 20em;
 }
 
-form.registrazione li {
-   position: relative;
-   margin: 1em 1em 1em 1em;
-   height:5em;
-}
 
-form.registrazione label.commento {
-   float:right;
-   width: 50px;
-   text-align: center;
-   font-size:10px;
-   color:#444;
-   border: 1px solid #000000;
-   padding: 0;
-}
-
-
-form.registrazione input.textField {
-   width:12.5em;
-}
 
 td {
    text-align: center;
@@ -655,10 +610,29 @@ div#sidebar {
    width: 200px;
 }
 
-/* -------------------------
- * Pagina di gestione auto
- * -----------------------
+/*
+ * Stile dei form
  */
+form {
+   text-align: left;
+   margin-top:0.5em;
+}
+
+form label, form li {
+   font-weight: bold;
+}
+
+form .notes {
+   font-size:0.9em;
+   font-weight: normal;
+}
+
+form.registrazione li {
+   position: relative;
+   margin: 1em 1em 1em 1em;
+   height:5em;
+}
+
 form#autoForm {
    width: auto;
    margin: auto;
@@ -668,17 +642,55 @@ form#autoForm ul {
    margin:0;
 }
 
+form.newTrip li,
 form#autoForm li {
    margin-left: auto;
    margin-right: auto;
-}
-
-form#autoForm li {
    min-height: 4em;
    height: auto;
+   width: 30em;
+   margin: 1em 1em 1em 1em;
 }
 
-form .notes {
-   font-size:0.9em;
-   font-weight: normal;
+
+form.newTrip label,
+form#autoForm label {
+   display:block;
+   float:left;
+   clear:left;
+   width: 10em;
+}
+
+form.newTrip label.radiolabel {
+   display:inline;
+   float:none;
+   clear:none;
+   width: auto;
+}
+
+form.newTrip input.radioField {
+   width: auto;
+}
+
+form#mapForm input {
+   width:8em;
+}
+
+form#mapForm input.radioField {
+   width: auto;
+}
+
+form.registrazione label.commento {
+   float:right;
+   width: 50px;
+   text-align: center;
+   font-size:10px;
+   color:#444;
+   border: 1px solid #000000;
+   padding: 0;
+}
+
+
+form.registrazione input.textField {
+   width:12.5em;
 }

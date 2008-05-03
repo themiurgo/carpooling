@@ -267,6 +267,28 @@ function prepare_content ($template) {
 
    // Devo effettuare sostituzioni diverse per ogni pagina
    switch ($_GET['p']) {
+      case 'tragitto':
+	 if (isset($_GET['idTrip'])) {
+	    $q1="select * from Tragitto where ID='".$_GET['idTrip']."'";
+               $r1=mysql_fetch_array($execQuery($q1));
+               $idT= $row['ID'];
+               $pro = $row['idPropr'];
+               $name_query="select userName from Utenti where ID=$r1[idPropr]";
+               $res_name = execQuery($name_query);
+               $row_name = mysql_fetch_array($res_name);
+               $ora = $row['oraPart'];
+               $durata=$row['durata'];
+               $data = $row['dataPart'];
+              
+               $row['fumo'] ? 
+                  $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
+              
+               $row['musica'] ?
+                  $mus = "Con Musica" : $mus = "NO Musica"; 
+	 }
+
+      break;
+
         
       case 'tragitti':
             
@@ -351,18 +373,17 @@ MOD;
 BLOCK;
                      $dettagli=$dettagli.$block;
             # L'utente corrente nON e' il proprietario del tragitto, gli viene data la possibilità di partecipare.
-            } else {
-               $extra= <<<JOIN
-               <form id=joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
-               <span class="join">
-               <label for="joinButton">Vuoi Partecipare?</label><br/>
-               <button id="registerAutoButton" type="submit">Conferma</button>
-               </span>
-               </form>
-               </div>
-JOIN;
-               
-               }
+            } 
+	    else
+	       $extra= <<<FORM
+   <form id=joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
+   <span class="join">
+   <label for="joinButton">Vuoi Partecipare?</label><br/>
+   <button id="registerAutoButton" type="submit">Conferma</button>
+   </span>
+   </form>
+   </div>
+FORM;
                $dettagli=$dettagli.$extra;
                $final_content = $dettagli.$final_content;
             }
@@ -370,7 +391,6 @@ JOIN;
             break;
 
       case 'utenti':
-            # Dovresti spiegarmi cosa succede qui.... tr criptico!
             $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
          break;
 
@@ -412,21 +432,23 @@ JOIN;
                $dest = $row['destinaz'];
                $idTrip = $row['ID'];
               
-              $piece = <<<TRIP
+              $piece = <<<TR
                <li>
                   <a href="index.php?p=tragitti&idTrip=$idTrip">$ora  $data</a>
                   <br />Da : <b>$part</b>  a : <b>$dest</b> <p>
                </li>
-TRIP;
+TR;
                $out=$out.$piece."</ol>";
             }  
              $out=$out."</ol>";
             $output=eregi_replace("<!-- LISTATRAGITTI -->",$out,$output);
             
-         } else {
+         } 
+	 
+	 else 
             $output=eregi_replace("<!-- LISTATRAGITTI -->","<p>Non hai creato alcun tragitto finora</p>",$output);
          
-         }
+         
      $final_content = $final_content.$output;
 
          break;
@@ -440,7 +462,8 @@ TRIP;
 WLCM;
 	 else
 	    $welcome=<<<WLCM
-	    <p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!                                            Leggi <a href='index.php?p=about'>come funziona</a> e <a href='index.php?p=iscrizione'>registrati subito!</a></p>
+	 <p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!
+      	 Leggi <a href='index.php?p=about'>come funziona</a> e <a href='index.php?p=iscrizione'>registrati subito!</a></p>
 WLCM;
 
       $output = eregi_replace("<!-- WELCOME -->",$welcome,$template);

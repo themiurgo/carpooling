@@ -1,111 +1,100 @@
 <script type="text/javascript" src="script/dateSelector.js"></script>
 <script type="text/javascript" src="script/livevalidation_standalone.compressed.js"></script>
 <script type="text/javascript" src="script/focusFirst.js"></script>
+
 <!-- Contenitore globale di tutti gli elementi -->
 <div id="container"> 
    <p>In questa pagina potrai creare e pubblicare un tragitto.</p>
-    
-    <!-- Tabella che contiene la GMap , le indicazioni ed il Form. Intestazione 1 riga , 2 celle-->
-   <table class="directions">
-      <tr>
-         <th>Mappa</th>
-         <th>Indicazioni Stradali</th>
-      </tr>
-      <tr>
-      <td valign="top">
-         <!-- GMap -->
-         <div id="carPoolingMap" style="width: 530px; height: 330px"></div>
-         <p>Inserisci le informazioni relative al tuo percorso completando tutti i campi sottostanti</p>
-         <!--  Form per la creazione del percorso. NON cambiare il nome del Form	-->
-         <div class="bgGold">
-            <form action="index.php?action=registerTrip" method="post" name="mapForm"  id="mapForm">
-               <ul>
-               <!-- Selezione auto-->
-               <li> 
-                  <label for="selectAuto">Seleziona un'auto : </label>
-                  <!-- AUTOS -->
-               </li>
-               <!-- Citta' di partenza e arrivo e relativi bottoni -->
-               <li>
-                  <span class="destra">
-                     <button id="searchButtonN"  type="button" value="Visualizza" onclick="creaPercorso()"/>
-                     Visualizza Tragitto
-                     </button><br/>
-                     <button id="directionsButtonN"  type="button" value="Indicazioni" onclick="creaIndicazioni()"/>
-                     Mostra Indicazioni
-                 </button> 
-         </span>
-         <span>
-                 <label for="partenza">Citt&agrave; di partenza : </label>
-                 <input id="partenza" name="partenza" size="16"/><br/>
-                 <label for="destinaz">Citt&agrave; di arrivo : </label>
-                 <input id="destinaz" name="destinaz" size="16"/>
-         </span>
- </li>
+   <div id="carPoolingMap" style="width: 530px; height: 330px"></div>
+   <p>Inserisci le informazioni relative al tuo percorso completando tutti i campi sottostanti</p>
+<!--  Form per la creazione del percorso. NON cambiare il nome del Form	-->
+<div class="bgGold">
+
+<form action="index.php?action=registerTrip" method="post" name="mapForm" id="mapForm" class="newTrip">
+   <ul>
+      <!-- Selezione auto-->
+      <li> 
+   	 <label for="selectAuto">Auto</label>
+      	    <!-- AUTOS -->
+      </li>
+	 <!-- Citta' di partenza e arrivo e relativi bottoni -->
+      <li>
+	 <label for="partenza">Citt&agrave; di partenza</label>
+	 <input id="partenza" name="partenza" size="16"/><br/>
+      </li>
+      <li>
+	 <label for="destinaz">Citt&agrave; di arrivo</label>
+	 <input id="destinaz" name="destinaz" size="16"/>
+      </li>
+      <li class="center">
+	 <button id="searchButtonN"  type="button" value="Visualizza" onclick="creaPercorso()"/>
+	 Visualizza Tragitto
+	 </button>
+	 <button id="directionsButtonN"  type="button" value="Indicazioni" onclick="creaIndicazioni()"/>
+	 Mostra Indicazioni
+    	 </button> 
+      </li>
 <!-- Altre informazioni , contenute in un unico blocco -->
-<div class="center">
- <li >
-   <label for="d">Data della Partenza</label> <br/>
-   <input id="d" name="d" size="2" /> /
-   <input id="m" name="m" size="2" /> / 
-   <input id="y" name="y" size="4" />  
- </li>
- <li>
-   <label for="oraPart">Orario di partenza</label> <br/>
-   <input id="oraPart" name="oraPart" size="20"/> <br/>
-   <label class="commento" for="oraPart">es. 08:00</label>
- </li>
- <li>
-   <label for="durata">Durata del viaggio</label> <br/>
-   <input id="durata" name="durata"  size="20"/> <br/>
-   <label class="commento" for="durata">es. 1:30 per 1h e 30 m</label>
- </li>
- <li>
-   <label for="postiDisp">Numero di passeggeri</label>  <br/>
-   <input id="postiDisp" name="postiDisp" size="20"/>
- </li>
- <li>
-   <label for="fumoSi">E' un viaggio per fumatori?</label>  <br/>
-   <input id="fumoSi" name="fumo" type="radio" value="true"/>
-   <label class="radiolabel" for="fumoSi">Si</label>
-   <input id="fumoNo" checked="checked" name="fumo" type="radio" value="false"  />
-   <label class="radiolabel" for="fumatoreNo">No</label>
- </li>
- <li>
-   <label for="musicaSi">Hai musica a bordo?</label>  <br/>
-   <input id="musicaSi" name="musica"  type="radio" value="true"/>
-   <label class="radiolabel" for="musicaSi">Si</label>
-   <input id="musicaNo" checked="checked" name="musica" class="radioField" type="radio" value="false"  />
-   <label class="radiolabel" for="musicaNo">No</label>
- </li>
- <li>
-   <label for="spese">Spese previste ( in &#8364; )</label> <br/>
-   <input id="spese" name="spese"  size="20"/>  <br/>
-   <label class="commento" for="spese">Saranno divise tra i partecipanti</label>
-</li> 
-<li>
-   <label class="upLabel" id="titolo9" for="note">Note</label> <br/>
-   <textarea name="note" cols=40 rows=5></textarea>
-</li>
-<li>
-<!-- Validazione contenuti del form -->
-<script type="text/javascript" src="script/tragittoValidate.js"></script>
-   <button id="confirmButton"  type="button" value="Conferma!"onclick="validaTrip()">
-      Registra il tragitto
-   </button>
-   <button id="clearButton" type="reset" value="Cancella i campi">
-      Cancella i campi
-   </button>
-</li>
+   <li>
+      <label for="d">Data della Partenza</label> <br/>
+      <input id="d" name="d" size="2" /> /
+      <input id="m" name="m" size="2" /> / 
+      <input id="y" name="y" size="4" />  
+   </li>
+   <li>
+      <label for="oraPart">Orario di partenza</label> <br/>
+      <input id="oraPart" name="oraPart" size="20"/> <br/>
+      <span class="notes">es. 08:00</span>
+   </li>
+   <li>
+      <label for="durata">Durata del viaggio</label> <br/>
+      <input id="durata" name="durata"  size="20"/> <br/>
+      <span class="notes">es. 1:30 per 1h e 30 m</span>
+   </li>
+   <li>
+      <label for="postiDisp">Posti Disponibili</label>
+      <input id="postiDisp" name="postiDisp" size="20"/><br />
+      <span class="notes">Numero di persone che puoi ospitare</span>
+   </li>
+   <li>
+      E' un viaggio per fumatori?
+      <input id="fumoSi" class="radioField" name="fumo" type="radio" value="true"/>
+      <label for="fumoSi" class="radiolabel">Si</label>
+      <input id="fumoNo"  class="radioField" checked="checked" name="fumo" type="radio" value="false"  />
+      <label for="fumatoreNo" class="radiolabel">No</label>
+   </li>
+   <li>
+      Hai musica a bordo?
+      <input id="musicaSi" class="radioField" name="musica" type="radio" value="true"/>
+      <label class="radiolabel" for="musicaSi">Si</label>
+      <input id="musicaNo" checked="checked" name="musica" class="radioField" type="radio" value="false"  />
+      <label class="radiolabel" for="musicaNo">No</label>
+   </li>
+   <li>
+      <label for="spese">Spese previste</label>
+      <input id="spese" name="spese"  size="20"/><br/>
+      <span class="notes">(in &#8364;) Saranno divise tra i partecipanti</span>
+   </li> 
+   <li>
+      <label class="upLabel" for="note">Note</label><br/>
+      <textarea name="note" cols="40" rows="5"></textarea>
+   </li>
+   <li class="center">
+   <!-- Validazione contenuti del form -->
+   <script type="text/javascript" src="script/tragittoValidate.js"></script>
+      <button id="confirmButton" type="button" value="Conferma!" onclick="validaTrip()">
+	 Registra il tragitto
+      </button>
+      <button id="clearButton" type="reset" value="Cancella i campi">
+	 Cancella i campi
+      </button>
+   </li>
 </div> <!-- Fine del contenitore con allineamento al centro-->
 </ul>
 
 
 </form>
 </div> <!-- Fine del contenitore colorato-->
-</td>
 <!-- Tabella delle indicazioni -->
-<td valign="top"><div id="directions" style="width: 200px"></div></td>
-</tr>
-</table> 	   <!-- Fine della tabella-->
+<div id="directions" style="width: 200px"></div>
 </div>	<!-- Fine del contenitore generale -->    

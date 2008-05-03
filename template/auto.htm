@@ -6,6 +6,7 @@
 function doFill() {
    showForm();
    
+   
    var to_update = new Array ('annoImmatr','targa','marca','modello',
       'cilindrata','condizioni','note');
 
@@ -19,6 +20,10 @@ function doFill() {
    } } );
 
    $('targa','marca','modello','cilindrata','annoImmatr').invoke("disable");
+   /*Modifica del campo hidden per distinguere le operazioni di modifica e nuova auto*/
+   var e = document.getElementById("mecha");
+   e.value = "update";
+   
 }
 
 function showForm() {
@@ -37,7 +42,7 @@ function showForm() {
 <div class="bgGreen" style="width: 500px; margin: auto;">
    <h1 class="green">Gestione auto</h1>
    <h2>Registra le tue auto e tieni aggiornati i loro dati</h2><br/>
-   <form id="autoForm" class="registrazione" action="index.php?p=auto&amp;action=registerAuto" method="post">
+   <form id="autoForm" class="registrazione" action="index.php?p=auto&amp;action=manageAuto" method="post">
    <div id="autoSelection" class="center">
    { carSelect() }
    </div>
@@ -62,6 +67,10 @@ function showForm() {
          <li>
             Immatricolazione { numericDropDown(annoImmatr,1950,2008,AAAA) }
          </li>
+         <div >
+         <!-- Campo hidden per distinguere tra 'nuovo' e 'modifica' v. funzione javascript-->
+         <input id="mecha" type="hidden" name="mecha" value="new">
+         </div>
          <li>
             <label for="condizioni">Condizioni generali</label>
 	    <select name ="condizioni" id="condizioni" >

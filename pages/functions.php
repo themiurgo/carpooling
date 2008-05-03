@@ -17,12 +17,8 @@ function handle_action () {
          registraUtente();
          break;
 
-      case "registerAuto":
-         registerCar();
-         break;
-      
-      case "modifyAuto":
-         modificaAuto();
+      case "manageAuto":
+         gestioneAuto();
          break;
       
       case "registerTrip":

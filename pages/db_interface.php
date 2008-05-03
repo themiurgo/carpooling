@@ -69,15 +69,17 @@ function modificaAuto() {
 	
     
 /*
- * Registrazione di un auto al sito
+ * Registrazione e modifica di un auto
  */
-function registerCar() {
-    $annoImm = $_POST['yAuto']."-".$_POST['mAuto']."-".$_POST['dAuto'];
+function gestioneAuto() {
    
-    # Registrazione nella tabella Auto
+   #Il campo hidden ci comunica che l'operazione è di registrazione auto;
+   if ( $_POST['mecha'] == "new" ) {
+      
+      # Registrazione nella tabella Auto
     $q1 = "insert into Auto(targa,marca,modello,cilindrata,annoImmatr,condizioni,note) 
     values ('".$_POST['targa']."','".$_POST['marca']."','".$_POST['modello']."',
-            ".$_POST['cilindrata'].",'$annoImm',".$_POST['voto'].",'".$_POST['noteAuto']."')";
+            ".$_POST['cilindrata'].",'".$_POST['annoImmatr']."',".$_POST['condizioni'].",'".$_POST['note']."')";
 
     execQuery($q1) or die("Query non valida1: " . mysql_error());
     
@@ -92,7 +94,15 @@ function registerCar() {
     #Registrazione nella tabella AutoUtenti
     $registerAuto_query2 = "insert into AutoUtenti(idAuto,idUtente,valido) values('".$row['ID']."','".getUserId()."',$prop)";
     
-    execQuery($registerAuto_query2) ;
+    execQuery($registerAuto_query2) or die("Query non valida2: " . mysql_error());
+    } 
+   #Il campo hidden dichiara che è un'operazione di aggiornamento 
+    else if ( $_POST['mecha'] == "update" ) {
+     
+      $q2="update auto set note='".$_POST['note']."',condizioni= '".$_POST['condizioni']."' where ID='".$_POST['idAuto']."'";
+      execQuery($q2) or die("Query non validaU: " . mysql_error());
+    
+    }
 }
 
 

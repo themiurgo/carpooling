@@ -409,15 +409,13 @@ FORM;
          $r1=mysql_fetch_array(execQuery($q1));
         
 	 // Sostituisco
-	 $output=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+	 $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
          
          // Se visualizzo un profilo non mio, estraggo i tragitti
 	 // su cui posso fare feedback
 	 if (getUser()!=$_GET['u'])
             $feedback=feedback($r1['ID']); 
          
-	 $final_content = $final_content.$output;
-
          break;
       
       
@@ -426,6 +424,7 @@ FORM;
       case 'utenti':
       case 'nuovo':
       case 'auto':   
+      case 'iscrizione':
          
 	 $final_content=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
 	 break;
@@ -479,13 +478,13 @@ function canModify() {
    return true;
 }
 
-function italianDate () {
+function italianDate ($suffix=null) {
    $monthName = array(1=> "Gen","Feb","Mar","Apr","Mag",
      "Giu","Lug","Ago","Set","Ott","Nov","Dic");
 
-   return numericDropDown("giorno",1,31,"GG").' - '.
-      numericDropDown("mese",1,12,"MM",$monthName).' - '.
-      numericDropDown("anno",2008,2010,"AAAA");
+   return numericDropDown("giorno$suffix",1,31,"GG").' - '.
+      numericDropDown("mese$suffix",1,12,"MM",$monthName).' - '.
+      numericDropDown("anno$suffix",2008,2010,"AAAA");
 }
 
 function timeSelect () {

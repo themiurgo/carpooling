@@ -269,7 +269,8 @@ function cars_ofUser($userId) {
 }
 
 /*
- * Pagina cerca.htm
+ * Messaggio di benvenuto
+ * -Pagina cerca
  */
 function welcome () {
    if (getUser())
@@ -287,7 +288,8 @@ WLCM;
 }
 
 /*
- * Ultimi tragitti di cui e' proprietario
+ * Ultimi tragitti di cui e' proprietario un l'utente con id specificato.
+ * -Pagina profilo
  */
 function trips_lastOrganized($id) {
    $q = "select * from Tragitto

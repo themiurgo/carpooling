@@ -342,7 +342,6 @@ function prepare_content ($template) {
 TRIP;
                # L'utente corrente e' il proprietario del tragitto, quindi di sbloccano lel unzioni avanzate.
                if ( $pro == $_SESSION['userId'] ) {
-               
                   if ( canModify() ) {
                      $mod= <<<MOD
                      <span class="tragitto">
@@ -355,35 +354,39 @@ TRIP;
 MOD;
                      $dettagli=$dettagli.$mod;
                   } 
-                        $block= <<<BLOCK
-                        <span class="tragitto">
-                              <form id="blockForm" action="index.php?p=tragitti&action=blockTrip&idTrip=$row[ID]" method="post">
-                              <label for="blockButton">Hai avuto un'imprevisto?</label><br/>
-                              <button id="registerAutoButton" type="submit">Blocca Tragitto</button>
-                           </form>
-                        </span>
-                        
-                        </div>
+                  $block= <<<BLOCK
+                  <span class="tragitto">
+                        <form id="blockForm" action="index.php?p=tragitti&action=blockTrip&idTrip=$row[ID]" method="post">
+                        <label for="blockButton">Hai avuto un'imprevisto?</label><br/>
+                        <button id="registerAutoButton" type="submit">Blocca Tragitto</button>
+                     </form>
+                  </span>
+                  
+                  </div>
 BLOCK;
-                     $dettagli=$dettagli.$block;
-            # L'utente corrente nON e' il proprietario del tragitto, gli viene data la possibilità di partecipare.
-            } 
-	    else
-	       $extra= <<<FORM
-   <form id=joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
-   <span class="join">
-   <label for="joinButton">Vuoi Partecipare?</label><br/>
-   <button id="registerAutoButton" type="submit">Conferma</button>
-   </span>
-   </form>
-   </div>
+                  $dettagli=$dettagli.$block;
+                  # L'utente corrente nON e' il proprietario del tragitto, gli viene data la possibilità di partecipare.
+               } 
+               if ( (getUser()) ) {
+                  $extra= <<<FORM
+                  <form id=joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
+                  <span class="join">
+                  <label for="joinButton">Vuoi Partecipare?</label><br/>
+                  <button id="registerAutoButton" type="submit">Conferma</button>
+                  </span>
+                  </form>
+                  </div>
 FORM;
                $dettagli=$dettagli.$extra;
                $final_content = $dettagli.$final_content;
+               }
             }
             
             break;
 
+      case 'utenti' :
+            $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+         break;
 
       case 'profilo':
 	 // Se non e' specificato un utente,

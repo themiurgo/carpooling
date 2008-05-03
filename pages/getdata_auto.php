@@ -17,9 +17,9 @@ $q = "select *
    <marca><?php echo $r[marca]; ?></marca>
    <modello><?php echo $r[modello]; ?></modello>
    <cilindrata><?php echo $r[cilindrata]; ?></cilindrata>
-   <giornoImmatr><?php echo $data[2]; ?></giornoImmatr>
-   <meseImmatr><?php echo $data[1]; ?></meseImmatr>
-   <annoImmatr><?php echo $data[0]; ?></annoImmatr>
+   <giorno.><?php echo $data[2]; ?></giorno.>
+   <mese.><?php echo $data[1]; ?></mese.>
+   <anno.><?php echo $data[0]; ?></anno.>
    <condizioni><?php echo $r[condizioni]; ?></condizioni>
    <note><?php echo $r[note]; ?></note>
 </data>

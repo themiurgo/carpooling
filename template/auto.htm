@@ -7,8 +7,8 @@ function doFill() {
    showForm();
 
    var to_update = new Array ('targa','marca','modello',
-      'cilindrata','condizioni','note','giornoImmatr',
-      'meseImmatr','annoImmatr');
+      'cilindrata','condizioni','note','giorno.',
+      'mese.','anno.');
 
    new Ajax.Updater( 'result', 'pages/getdata_auto.php', 
     { method: 'post', parameters: $('autoForm').serialize(),

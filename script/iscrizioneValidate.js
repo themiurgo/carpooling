@@ -1,8 +1,9 @@
-var options = {validMessage : " ",onlyOnBlur:true};
+var options = {validMessage: ' ',onlyOnBlur:true};
 
 var day = {minimum:1,maximum:31,
    notANumberMessage: "Errore", notAnIntegerMessage: "Errore",
-   tooLowMessage:"Errore",tooHighMessage:"Errore"};
+   tooLowMessage:"Errore",tooHighMessage:"Errore",
+   insertAfterWhatNode:"annoNascita"};
 var month = {minimum:1,maximum:12,
    notANumberMessage: "Errore", notAnIntegerMessage: "Errore",
    tooLowMessage:"Errore",tooHighMessage:"Errore"};
@@ -10,15 +11,21 @@ var year = {minimum:1900,maximum:2050,
    notANumberMessage: "Errore", notAnIntegerMessage: "Errore",
    tooLowMessage:"Errore",tooHighMessage:"Errore"};
 
-var nome=new LiveValidation('nome',options);
-var cognome=new LiveValidation('cognome',options);
-var dBorn=new LiveValidation('giornoNascita',options);
-var mBorn=new LiveValidation('meseNascita',options);
-var yBorn=new LiveValidation('annoNascita',options);
+var nome=new LiveValidation('nome',{
+   validMessage: ' ', onlyOnBlur: true,insertAfterWhatNode:'nomeLabel'});
+var cognome=new LiveValidation('cognome',{
+   validMessage: ' ', onlyOnBlur: true,insertAfterWhatNode:'cognomeLabel'});
+var dBorn=new LiveValidation('giornoNascita',{
+   insertAfterWhatNode:'nascitaLabel',validMessage: ' ',onlyOnBlur:true});
+var dBorn=new LiveValidation('meseNascita',{
+   insertAfterWhatNode:'nascitaLabel',validMessage: ' ',onlyOnBlur:true});
+var dBorn=new LiveValidation('annoNascita',{
+   insertAfterWhatNode:'nascitaLabel',validMessage: ' ',onlyOnBlur:true});
 var dDrive=new LiveValidation('giornoPatente',options);
 var mDrive=new LiveValidation('mesePatente',options);
 var yDrive=new LiveValidation('annoPatente',options);
-var email=new LiveValidation('email',options);
+var email=new LiveValidation('email',{
+   validMessage: ' ', onlyOnBlur: true,insertAfterWhatNode:'emailLabel'});
 var user=new LiveValidation('user',options);
 var psw=new LiveValidation('psw',options);
 var psw2=new LiveValidation('psw2',options);
@@ -28,7 +35,8 @@ nome.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 
 cognome.add(Validate.Presence, {failureMessage:"Campo vuoto"});
 
-dBorn.add(Validate.Presence, {failureMessage:"Vuoto"});
+dBorn.add(Validate.Presence, {
+   failureMessage:"Vuoto"});
 dBorn.add( Validate.Numericality, day);
 
 mBorn.add(Validate.Presence, {failureMessage:"Vuoto"});

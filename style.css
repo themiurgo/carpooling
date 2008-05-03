@@ -566,9 +566,10 @@ h3 {
  * VALIDAZIONE
  */
 .LV_validation_message{
-    display:block;
-    font-weight:bold;
-    text-align:center;
+   display:inline;
+   font-weight:bold;
+   text-align:center;
+   margin-left:2em;
 }
 
 .LV_valid {

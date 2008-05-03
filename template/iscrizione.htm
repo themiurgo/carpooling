@@ -2,7 +2,7 @@
 <script type="text/javascript" src="script/livevalidation_standalone.compressed.js"></script>
 <script type="text/javascript" src="script/focusFirst.js"></script>
 <div class="bgAzure" style="width: 350px; margin: auto;">
-<form class="registrazione" method="post" id="iscrizioneForm" name="iscrizioneForm" action="index.php?action=register">
+<form class="registrazione" method="post" id="iscrizioneForm" action="index.php?action=register">
 <div class="intestazione">
    <h1 class="titoli red">Iscriviti!</h1>
    <h2 class="titoli green">Semplice, veloce, gratuito</h2>
@@ -10,15 +10,15 @@
 <p>Tutti i campi sono obbligatori.</p>
 <ul>
    <li>
-      <label for="nome">Nome</label><br />
+      <label for="nome" id="nomeLabel">Nome</label><br />
       <input id="nome" name="nome"  size="20"/>
    </li>
    <li>
-      <label for="cognome">Cognome</label><br />
+      <label for="cognome" id="cognomeLabel">Cognome</label><br />
       <input id="cognome"  name="cognome"  size="20" />
    </li>
    <li>
-      Data di Nascita<br/>
+      <span id="nascitaLabel">Data di Nascita</span><br/>
       { italianDate(1930,1990,Nascita) }
    </li>
    <li>
@@ -26,8 +26,8 @@
       { italianDate(1948,2008,Patente) }
    </li>
    <li>
-      <label for="email">Indirizzo e-mail</label><br />
-      <input id="email" name="email"  size="30"/><br />
+      <label for="email" id="emailLabel">Indirizzo e-mail</label><br />
+      <input id="email" name="email"  size="20"/><br />
       <span class="notes">
 	 Riceverai un'email di conferma a questo indirizzo
       </span>
@@ -41,31 +41,31 @@
    </li>
    <li>
       <label for="sessoF">Sesso</label>
-      <input id="sessoF" name="sesso"  type="radio" value="f"/>
+      <input id="sessoF" name="sesso" type="radio" value="f"/>
       <label for="sessoF">F</label>
       <input id="sessoM" checked="checked" name="sesso"  type="radio" value="m"  />
       <label for="sessoM">M</label>
    </li>
+   <li>
       <label for="user">Username</label><br />
       <input id="user" name="user"  size="20"/>
+   </li>
    <li>
       <label for="psw">Password</label><br />
       <input id="psw" name="psw" type="password" size="10"/><br />
-
+   </li>
+   <li>
       <label for="psw2">Reinserisci la password</label><br />
       <input id="psw2" name="psw" type="password" size="10"/>
    </li>
-   <br />
-   <br />
    <li>
       <label id="titolo6" for="citta">Citt&agrave; preferenziale per la partenza</label><br />
       <input id="citta" name="citta"  size="30" /> <br />
-      Potrai eventualmente modificarla in seguito
+      <span class="notes">Potrai eventualmente modificarla in seguito</span>
    </li>
    <!-- Validazione contenuti del form -->
-<script type="text/javascript" src="script/iscrizioneValidate.js"></script>
    <li class="center">
-      <button id="signUpButton" type="button" value="Registrati!" onClick="validaIscr()">
+      <button id="signUpButton" type="button" value="Registrati!" onclick="validaIscr()">
       Registrati
       </button>
       <button id="clearButton" type="reset" value="Cancella i campi">
@@ -73,6 +73,6 @@
       </button>
    </li>
 </ul>
-
+<script type="text/javascript" src="script/iscrizioneValidate.js"></script>
 </form>
 </div>

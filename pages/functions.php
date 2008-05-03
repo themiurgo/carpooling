@@ -473,7 +473,9 @@ WLCM;
       # Nuovo Tragitto e inserimento Auto
       case 'nuovo':
       case 'auto':   
-            
+         
+	 $output=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
+
          # Estrago le informazioni sulle eventuali auto registrate dall' utente corrente
          $auto_query = "select targa,marca,modello
             from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
@@ -503,7 +505,7 @@ WLCM;
             # Pagina nuovo tragitto --> viene visualizzato l' oggetto selection
             if ($_GET['p']=="nuovo") {
                 
-            $output = eregi_replace("<!-- AUTOS -->",cars_ofUser(getUserId()),$template);
+            
              
             }
             
@@ -576,9 +578,49 @@ function canModify() {
       return false;
    }
    return true;
-
-
 }
 
+function italianDate () {
+   $monthName = array(1=> "Gen","Feb","Mar","Apr","Mag",
+     "Giu","Lug","Ago","Set","Ott","Nov","Dic");
+
+   return numericDropDown("giorno",1,31,"GG").' - '.
+      numericDropDown("mese",1,12,"MM",$monthName).' - '.
+      numericDropDown("anno",2008,2010,"AAAA");
+}
+
+function timeSelect () {
+   return numericDropDown("ora",0,23,"HH").' : '.
+      numericDropDown("minuti",0,59,"MM");
+}
+
+function durataSelect () {
+   return numericDropDown("durataOre",0,23," ").' ore e '.
+      numericDropDown("durataMinuti",0,59," ").' minuti';
+}
+
+function numericDropDown($id,$start,$stop,$first=null,$names=null) {
+   
+   if ($useDate == 0)
+      $useDate = Time();
+
+   $a="<select id=\"$id.\" name=\"$id\">
+      <option value=\" \">$first</option>
+      <option value=\" \"> </option>\n";
+
+   if ($names)
+      for($i = $start; $i <= $stop; $i++)
+	 $a=$a."<option value=\"$i\">".
+	    "$names[$i]</option>\n";
+
+   else
+      for($i = $start; $i <= $stop; $i++)
+	 $a=$a."<option value=\"$i\">".
+	    "$i</option>\n";
+
+   $a=$a.'</select>';
+
+   return $a;
+}
 
 ?>

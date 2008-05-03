@@ -246,7 +246,8 @@ function search_userName($userName) {
 }
 
 function cars_ofUser($userId) {
-   $output='<select id="idAuto" name="idAuto">';
+   $output='<label for="selectAuto">Auto</label>
+      <select id="idAuto" name="idAuto">';
    $query = "select Auto.*
       from Auto join AutoUtenti on Auto.ID = AutoUtenti.idAuto
       where AutoUtenti.idUtente = '".getUserId()."'";

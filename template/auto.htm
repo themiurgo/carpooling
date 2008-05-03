@@ -5,7 +5,8 @@
 <!--
 function dofill() {
    var to_update = new Array ('targa','marca','modello',
-      'cilindrata','condizioni','note');
+      'cilindrata','condizioni','note','giornoImmatr',
+      'meseImmatr','annoImmatr');
 
    new Ajax.Updater( 'result', 'pages/getdata_auto.php', 
     { method: 'post', parameters: $('autoForm').serialize(),
@@ -47,8 +48,7 @@ function dofill() {
             <input id="cilindrata" name="cilindrata" class="textField" size="20"/>
          </li>
          <li>
-            Immatricolazione<br/> 
-	    Inserire select
+            Immatricolazione { italianDate() }
          </li>
          <li>
             <label for="condizioni">Condizioni generali</label>

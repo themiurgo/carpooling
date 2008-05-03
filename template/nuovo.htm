@@ -14,8 +14,7 @@
    <ul>
       <!-- Selezione auto-->
       <li> 
-   	 <label for="selectAuto">Auto</label>
-      	    <!-- AUTOS -->
+	 { cars_ofUser(getUserId()) }
       </li>
 	 <!-- Citta' di partenza e arrivo e relativi bottoni -->
       <li>
@@ -27,28 +26,26 @@
 	 <input id="destinaz" name="destinaz" size="16"/>
       </li>
       <li class="center">
-	 <button id="searchButtonN"  type="button" value="Visualizza" onclick="creaPercorso()"/>
+	 <button id="searchButtonN"  type="button" value="Visualizza" onclick="creaPercorso()">
 	 Visualizza Tragitto
 	 </button>
-	 <button id="directionsButtonN"  type="button" value="Indicazioni" onclick="creaIndicazioni()"/>
+	 <button id="directionsButtonN"  type="button" value="Indicazioni" onclick="creaIndicazioni()">
 	 Mostra Indicazioni
     	 </button> 
       </li>
 <!-- Altre informazioni , contenute in un unico blocco -->
    <li>
-      <label for="d">Data della Partenza</label> <br/>
-      <input id="d" name="d" size="2" /> /
-      <input id="m" name="m" size="2" /> / 
-      <input id="y" name="y" size="4" />  
+      Data della Partenza
+      { italianDate() }
    </li>
    <li>
-      <label for="oraPart">Orario di partenza</label> <br/>
-      <input id="oraPart" name="oraPart" size="20"/> <br/>
+      Orario di partenza
+      { timeSelect() }<br />
       <span class="notes">es. 08:00</span>
    </li>
    <li>
-      <label for="durata">Durata del viaggio</label> <br/>
-      <input id="durata" name="durata"  size="20"/> <br/>
+      <label for="durata">Durata prevista del viaggio</label> <br/>
+      { durataSelect() }<br />
       <span class="notes">es. 1:30 per 1h e 30 m</span>
    </li>
    <li>

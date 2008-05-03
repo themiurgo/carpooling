@@ -14,15 +14,15 @@ body {
 }
 
 ol li {
-   list-style:decimal inside;
+   list-style:decimal outside;
 }
 
 ul.disco li {
-   list-style:disc inside;
+   list-style:disc outside;
 }
 
 ul.cerchio li {
-   list-style:circle inside;
+   list-style:circle outside;
 }
 
 a:link, a:active, a:visited {
@@ -693,4 +693,9 @@ form.registrazione label.commento {
 
 form.registrazione input.textField {
    width:12.5em;
+}
+
+div#autoFormDiv {
+   visibility: hidden;
+   display: none;
 }

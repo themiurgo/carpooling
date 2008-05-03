@@ -3,7 +3,9 @@
 <script type="text/javascript" src="script/prototype.js"></script>
 <script type="text/javascript">
 <!--
-function dofill() {
+function doFill() {
+   showForm();
+
    var to_update = new Array ('targa','marca','modello',
       'cilindrata','condizioni','note','giornoImmatr',
       'meseImmatr','annoImmatr');
@@ -19,17 +21,28 @@ function dofill() {
 
    $('targa','marca','modello','cilindrata').invoke("disable");
 }
+
+function showForm() {
+   var a=document.getElementById('autoSelection');
+   a.style.visibility='hidden';
+   a.style.display='none';
+
+   var e=document.getElementById('autoFormDiv');
+   e.style.visibility='visible';
+   e.style.display='block';
+}
 -->
 </script>
 
 <!-- Contenitore colorato -->
 <div class="bgGreen" style="width: 500px; margin: auto;">
    <h1 class="green">Gestione auto</h1>
+   <h2>Registra le tue auto e tieni aggiornati i loro dati</h2><br/>
    <form id="autoForm" class="registrazione" action="index.php?p=auto&amp;action=registerAuto" method="post">
-   <div>
-      <!-- REGISTEREDAUTOS -->
+   <div id="autoSelection" class="center">
+   { carSelect() }
    </div>
-      <div>Tutti i campi sono obbligatori.</div>
+   <div id="autoFormDiv">Tutti i campi sono obbligatori.
       <ul style="width: auto;">
          <li>
             <label for="marca">Marca</label>
@@ -75,7 +88,7 @@ function dofill() {
       </button>
       <button id="clearButton" type="reset">Pulisci</button>
          </li>
-      </ul>     
-      
+      </ul>
+   </div>  
    </form> <!-- Fine del Form -->
 </div> <!-- Fine del contenitore colorato -->

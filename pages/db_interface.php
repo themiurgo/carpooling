@@ -249,8 +249,9 @@ function search_userName($userName) {
 }
 
 function cars_ofUser($userId) {
-   $output='<label for="selectAuto">Auto</label>
-      <select id="idAuto" name="idAuto">';
+   /*<label for="selectAuto">Auto</label>*/
+
+   $output='<select id="idAuto" name="idAuto">';
    $query = "select Auto.*
       from Auto join AutoUtenti on Auto.ID = AutoUtenti.idAuto
       where AutoUtenti.idUtente = '".getUserId()."'";
@@ -266,4 +267,56 @@ function cars_ofUser($userId) {
 
    return $output; 
 }
+
+/*
+ * Pagina cerca.htm
+ */
+function welcome () {
+   if (getUser())
+      return <<<WLCM
+	<p>Ciao <b>$_SESSION[user]</b>! Se hai dubbi sul funzionamento
+	della ricerca puoi sempre consultare la pagina delle
+	<a href='index.php?p=about'>istruzioni</a>.</p>
+WLCM;
+
+   else
+      return <<<WLCM
+	 <p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!
+      	 Leggi <a href='index.php?p=about'>come funziona</a> e <a href='index.php?p=iscrizione'>registrati subito!</a>.</p>
+WLCM;
+}
+
+/*
+ * Ultimi tragitti di cui e' proprietario
+ */
+function trips_lastOrganized($id) {
+   $q = "select * from Tragitto
+      where idPropr ='$id'
+      order by `dataPart` desc,`oraPart`";
+
+   $res = execQuery($q);
+   
+   if (mysql_num_rows($res) != 0) {
+      $out="<ol style=\"margin: 1em; list-style-position:outside\">";
+            
+      while ($r = mysql_fetch_array($res)) {
+	 $piece = <<<TR
+<li>
+   <a href="index.php?p=tragitti&idTrip=$r[ID]">
+      $r[oraPart] $r[dataPart]
+   </a><br />
+   Da <b>$r[partenza]</b> a <b>$r[destinaz]</b>
+</li>
+TR;
+   	 $out=$out.$piece;
+      }  
+      $out=$out."</ol>";
+   } 
+	 
+   else
+      $out="<p>Non hai creato alcun tragitto finora</p>";
+
+   return $out;
+}
+
 ?>

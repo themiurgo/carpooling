@@ -384,15 +384,15 @@ FORM;
             
             break;
 
-      case 'utenti':
-            $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
-         break;
 
       case 'profilo':
+	 // Se non e' specificato un utente,
+	 // visualizzo il profilo dell'utente corrente
          if (!isset($_GET['u']))
             $_GET['u']=getUser();
 
-         $q1="select *,UNIX_TIMESTAMP(`dataIscriz`) as dataisc,
+         // Estraggo le informazioni sul profilo
+	 $q1="select *,UNIX_TIMESTAMP(`dataIscriz`) as dataisc,
 	    DATE_FORMAT(NOW(), '%Y')-DATE_FORMAT(dataNascita, '%Y')-
    	       (DATE_FORMAT(NOW(), '00-%m-%d') <
 	       DATE_FORMAT(dataNascita, '00-%m-%d')) as eta,
@@ -402,127 +402,36 @@ FORM;
 	    DATE_FORMAT(dataIscriz,'%d.%m.%Y') as dataIscriz
    	    from `Utenti`
             where `userName`='".$_GET['u']."'";
-         $res=execQuery($q1);
-         $r1=mysql_fetch_array($res,MYSQL_ASSOC);
-        
-         if (getUser()!=$_GET['u'])
-            $feedback=feedback($r1['ID']);
 
-         $output=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+         $r1=mysql_fetch_array(execQuery($q1));
+        
+	 // Sostituisco
+	 $output=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
          
-         $trip_query = "select * from Tragitto
-            where idPropr = $_SESSION[userId]
-            order by `dataPart` desc,`oraPart`";
-         $res = execQuery($trip_query);
-         if (mysql_num_rows($res) != 0) {
-            $out="<ol>";
-            
-            while ($row = mysql_fetch_array($res)) {
-              
-               $ora = $row['oraPart'];
-               $data = $row['dataPart'];
-               $fumo = $row['fumo'];
-               $part = $row['partenza'];
-               $dest = $row['destinaz'];
-               $idTrip = $row['ID'];
-              
-              $piece = <<<TR
-               <li>
-                  <a href="index.php?p=tragitti&idTrip=$idTrip">$ora  $data</a>
-                  <br />Da : <b>$part</b>  a : <b>$dest</b> <p>
-               </li>
-TR;
-               $out=$out.$piece."</ol>";
-            }  
-             $out=$out."</ol>";
-            $output=eregi_replace("<!-- LISTATRAGITTI -->",$out,$output);
-            
-         } 
-	 
-	 else 
-            $output=eregi_replace("<!-- LISTATRAGITTI -->","<p>Non hai creato alcun tragitto finora</p>",$output);
+         // Se visualizzo un profilo non mio, estraggo i tragitti
+	 // su cui posso fare feedback
+	 if (getUser()!=$_GET['u'])
+            $feedback=feedback($r1['ID']); 
          
-         
-     $final_content = $final_content.$output;
+	 $final_content = $final_content.$output;
 
          break;
       
-      case 'cerca':
-	 if (getUser())
-	    $welcome=<<<WLCM
-	<p>Ciao <b>$_SESSION[user]</b>! Se hai dubbi sul funzionamento
-	della ricerca puoi sempre consultare la pagine delle
-	<a href='index.php?p=about'>istruzioni</a></p>.
-WLCM;
-	 else
-	    $welcome=<<<WLCM
-	 <p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!
-      	 Leggi <a href='index.php?p=about'>come funziona</a> e <a href='index.php?p=iscrizione'>registrati subito!</a></p>
-WLCM;
-
-      $output = eregi_replace("<!-- WELCOME -->",$welcome,$template);
-	 $final_content = $final_content.$output;
-      	 break;
       
-      # Nuovo Tragitto e inserimento Auto
+      // Nuovo Tragitto e inserimento Auto
+      case 'cerca':
+      case 'utenti':
       case 'nuovo':
       case 'auto':   
          
-	 $output=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
+	 $final_content=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
+	 break;
 
-         # Estrago le informazioni sulle eventuali auto registrate dall' utente corrente
-         $auto_query = "select targa,marca,modello
-            from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
-            where AutoUtenti.idUtente='".getUserId()."'";
-            
-         // BUG DA CORREGGERE: perche' se abilito l'echo qua sotto
-         // mi stampa due volte? E' comunque un bug che risiede altrove.
-         // echo $auto_query;
-         $res = execQuery($auto_query);
-
-         # Nessun auto registrata
-         if (mysql_num_rows($res) == 0) {
-            if ($_GET['p'] == "nuovo")
-	       return noAuto();
-               
-            elseif ($_GET['p'] == "auto")
-               $output = eregi_replace("<!-- REGISTEREDAUTOS -->",
-                  "<label class='alertText'>Attualmente, non hai nessuna auto registrata</alert>",$template);
-                
-            $final_content = $final_content.$output;
-         }
-               
-         # Almeno un'auto registrata
-         else {
-            $row = mysql_fetch_array($res);
-                
-            # Pagina nuovo tragitto --> viene visualizzato l' oggetto selection
-            if ($_GET['p']=="nuovo") {
-                
-            
-             
-            }
-            
-	    # Pagina auto --> viene visualizzata la Selection insieme ad un form per 
-	    # dare la possibilità di modificare i dati dell' auto
-            elseif ($_GET['p']=="auto") {
-               # La prima chiamata ha come parametro '$a'
-               $output = eregi_replace("<!-- REGISTEREDAUTOS -->",'
-                     Elenco delle auto gi&agrave; registrate :'.
-                        cars_ofUser(getUserId()).'
-                  <button id="modifyAutoButton" type="button" onclick="dofill()">
-                     Modifica Auto
-                  </button>',$template); 
-            }
-            $final_content = $final_content.$output;
-         }
-         
-         break;
-         default:
+      default:
         
-            # Nulla da sostituire
-            $final_content = $final_content.$template;
-            break;
+	 # Nulla da sostituire
+	 $final_content = $final_content.$template;
+	 break;
     }
    
     # Restituisce il contenuto
@@ -552,13 +461,6 @@ ERR;
 }
 
 function noAuto() {
-return <<<ERR
-<div style="padding:0" class="bgGold">
-   <p>Non hai auto! Provvedi subito a 
-      <a href='index.php?p=auto'>registrarne</a> una.
-   <p>
-</div>
-ERR;
 
 }
 
@@ -615,6 +517,46 @@ function numericDropDown($id,$start,$stop,$first=null,$names=null) {
    $a=$a.'</select>';
 
    return $a;
+}
+
+function carSelect () {
+   // Eventuali auto gia' registrate
+   $auto_query = "select targa,marca,modello
+      from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
+      where AutoUtenti.idUtente='".getUserId()."'";
+      
+   $res = execQuery($auto_query);
+
+   // Nessuna auto per nuovo tragitto
+   if ((mysql_num_rows($res) == 0) && ($_GET['p'] == "nuovo"))
+	 return <<<ERR
+<div style="padding:0" class="bgGold">
+   <p>Non hai auto! Provvedi subito a 
+      <a href='index.php?p=auto'>registrarne</a> una.
+   <p>
+</div>
+ERR;
+               
+   # Almeno un'auto
+   else {
+      $row = mysql_fetch_array($res);
+                
+      # Selezione dell'auto
+      $output=cars_ofUser(getUserId());
+            
+      # Nella pagina auto posso modificarla
+      if ($_GET['p']=="auto") {
+	 $output=$output.<<<MOD
+   <button id="modifyAutoButton" type="button" onclick="doFill()">
+      Modifica
+   </button>
+   <button id="newAuto" type="button" onclick="showForm()">
+      Inserisci nuova
+   </button>
+MOD;
+      }
+      return $output;
+   }
 }
 
 ?>

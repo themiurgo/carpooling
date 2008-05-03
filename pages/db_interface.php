@@ -100,18 +100,20 @@ function registerCar() {
  * Registrazione di un Tragitto ( Trip ) al sito
  * Data deve essere nel formato YYYY-MM-GG.
  */
-function registerTrip($idAuto,$partenza,$destinaz,$data,$oraPart,
-   $durata,$fumo,$musica,$postiDisp,$spese,$note) {
+function registerTrip() {
  if ( controllaData() ) {
+   $dataPart =$_POST['anno']."-".$_POST['mese']."-".$_POST['giorno'];
+   $oraPart = $_POST['ora'].":".$_POST['minuti'];
+   $durata = $_POST['durataOre'].":".$_POST['durataMinuti'];
    $q1 = "insert into  
       Tragitto(idPropr,idAuto,partenza,destinaz,dataPart,
 	 oraPart,durata,fumo,musica,postiDisp,spese,note)
-      values('".getUserId()."','".$idAuto."',
-	 '".$partenza."','".$destinaz."','$data',
+      values('".getUserId()."','".$_POST['idAuto']."',
+	 '".$_POST['partenza']."','".$_POST['destinaz']."','$dataPart',
 	 '".$oraPart."','".$durata."',
-	 ".$fumo.",".$musica.",
-	 ".$postiDisp.",".$spese.",
-	 '".$note."')";
+	 ".$_POST['fumo'].",".$_POST['musica'].",
+	 ".$_POST['postiDisp'].",".$_POST['spese'].",
+	 '".$_POST['note']."')";
     
     echo $q1;
     execQuery($q1) or die("Query non valida1: " . mysql_error());
@@ -191,14 +193,15 @@ function controllaTrip() {
 
 function controllaData() {
    
-   list($ora,$minuti) = explode(":",$_POST['oraPart']);
-   
-   $start = mktime($ora,$minuti,0,$_POST['m'],$_POST['d'],$_POST['y']);
+   #Data Completa della partenza
+   //echo $_POST['ora'].$_POST['minuti'].$_POST['mese'].$_POST['giorno'].$_POST['anno'];
+   $start = mktime($_POST['ora'],$_POST['minuti'],0,$_POST['mese'],$_POST['giorno'],$_POST['anno']);
   
    $t = getdate(); 
    $now =mktime($t['hours'],$t['minutes'],0,$t['mon'],$t['mday'],$t['year']);
 
    $diff = $start - $now ;
+   echo $diff;
    if  ( $diff < 0 ) {
       return false;
    }

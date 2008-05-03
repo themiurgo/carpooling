@@ -6,42 +6,36 @@
 function handle_action () {
    switch ($_GET['action']) {
       case "login":
-	 checkUser($_POST['username'],$_POST['password']);
-	 break;
-
+         checkUser($_POST['username'],$_POST['password']);
+         break;
+      
       case "logout":
-	 unset($_SESSION['user']);
-	 break;
+         unset($_SESSION['user']);
+         break;
 
       case "register":
-	 registraUtente();
-	 break;
+         registraUtente();
+         break;
 
       case "registerAuto":
-	 registerCar();
-	 break;
-      /* Funzione ancora incompleta*/
+         registerCar();
+         break;
+      
       case "modifyAuto":
-	 modificaAuto();
-	 break;
-
+         modificaAuto();
+         break;
+      
       case "registerTrip":
-      #echo $_POST['oraPart'];
-	 registerTrip($_POST['idAuto'],$_POST['partenza'],
-	    $_POST['destinaz'],
-	    $_POST['y'].'-'.$_POST['m'].'-'.$_POST['d'],
-	    $_POST['oraPart'],$_POST['durata'],$_POST['fumo'],
-	    $_POST['musica'],$_POST['postiDisp'],$_POST['spese'],
-	    $_POST['note']);
-	 break;
+         registerTrip();
+         break;
       
       case "joinTrip":
-	 partecipaTragitto();
-	 break;
+         partecipaTragitto();
+         break;
      
      case "blockTrip":
-      bloccaTragitto();
-      break;
+         bloccaTragitto();
+         break;
    }
 }
 

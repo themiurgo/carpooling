@@ -478,13 +478,13 @@ function canModify() {
    return true;
 }
 
-function italianDate ($suffix=null) {
+function italianDate ($firstY,$lastY,$suffix=null) {
    $monthName = array(1=> "Gen","Feb","Mar","Apr","Mag",
      "Giu","Lug","Ago","Set","Ott","Nov","Dic");
 
    return numericDropDown("giorno$suffix",1,31,"GG").' - '.
       numericDropDown("mese$suffix",1,12,"MM",$monthName).' - '.
-      numericDropDown("anno$suffix",2008,2010,"AAAA");
+      numericDropDown("anno$suffix",$firstY,$lastY,"AAAA");
 }
 
 function timeSelect () {
@@ -502,7 +502,7 @@ function numericDropDown($id,$start,$stop,$first=null,$names=null) {
    if ($useDate == 0)
       $useDate = Time();
 
-   $a="<select id=\"$id.\" name=\"$id\">
+   $a="<select id=\"$id\" name=\"$id\">
       <option value=\" \">$first</option>
       <option value=\" \"> </option>\n";
 

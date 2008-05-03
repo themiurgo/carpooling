@@ -9,7 +9,7 @@ create table Auto (
    marca       varchar(15) not null,
    modello     varchar(15) not null,
    cilindrata  int not null,
-   annoImmatr  date not null,
+   annoImmatr  int(4) not null,
    condizioni  int(1) not null,
    note        varchar(200)
 );
@@ -86,11 +86,11 @@ insert into
    ('vica','ciao10','Vincenzo','Castorina','m','1975-05-06','castorov@gmail.com','1994-01-09',0,'2006-11-19','Messina');
 
 insert into Auto(targa,marca,modello,cilindrata,annoImmatr,condizioni) values
-   ('WF345PY','Audi','A3',1990,'2000-12-12',3),
-   ('AB321FI','Alfa Romeo','159',1990,'2000-03-04',4),
-   ('ID458TV','Mercedes','A 180 Classic',1990,'2000-05-01',5),
-   ('MN432HC','Bmw','118',1990,'2000-10-20',4),
-   ('RD341OX','Citroen','C3',1990,'2000-02-07',3);
+   ('WF345PY','Audi','A3',1990,'2000',3),
+   ('AB321FI','Alfa Romeo','159',1990,'2000',4),
+   ('ID458TV','Mercedes','A 180 Classic',1990,'2000',5),
+   ('MN432HC','Bmw','118',1990,'2000',4),
+   ('RD341OX','Citroen','C3',1990,'2000',3);
 
 insert into AutoUtenti(idAuto,idUtente,valido) values 
    (1,1,true),

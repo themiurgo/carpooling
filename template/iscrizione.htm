@@ -19,16 +19,18 @@
    </li>
    <li>
       Data di Nascita
-      { italianDate(Nascita) }
+      { italianDate(1930,1990,Nascita) }
    </li>
    <li>
       Quando hai conseguito la patente?
-      { italianDate(Patente) }
+      { italianDate(1948,2008,Patente) }
    </li>
    <li>
       <label for="email">Indirizzo e-mail</label><br />
       <input id="email" name="email"  size="30"/><br />
-      A questo indirizzo ti verra' spedita la mail di conferma
+      <span class="notes">
+	 Riceverai un'email di conferma a questo indirizzo
+      </span>
    </li>
    <li>
       <label for="fumatoreNo">Sei un fumatore?</label>

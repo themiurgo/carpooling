@@ -5,10 +5,9 @@
 <!--
 function doFill() {
    showForm();
-
-   var to_update = new Array ('targa','marca','modello',
-      'cilindrata','condizioni','note','giorno.',
-      'mese.','anno.');
+   
+   var to_update = new Array ('annoImmatr','targa','marca','modello',
+      'cilindrata','condizioni','note');
 
    new Ajax.Updater( 'result', 'pages/getdata_auto.php', 
     { method: 'post', parameters: $('autoForm').serialize(),
@@ -19,7 +18,7 @@ function doFill() {
 	 getElementsByTagName(to_update[i])[0].firstChild.nodeValue;
    } } );
 
-   $('targa','marca','modello','cilindrata').invoke("disable");
+   $('targa','marca','modello','cilindrata','annoImmatr').invoke("disable");
 }
 
 function showForm() {
@@ -61,7 +60,7 @@ function showForm() {
             <input id="cilindrata" name="cilindrata" class="textField" size="20"/>
          </li>
          <li>
-            Immatricolazione { italianDate() }
+            Immatricolazione { numericDropDown(annoImmatr,1950,2008,AAAA) }
          </li>
          <li>
             <label for="condizioni">Condizioni generali</label>

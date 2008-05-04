@@ -21,6 +21,11 @@ function handle_action () {
          gestioneAuto();
          break;
       
+      case "manageProfilo":
+         if ( $_POST['hiddenProfilo'] == "updateProfilo")
+            aggiornaProfilo();
+         break;
+      
       case "registerTrip":
          registerTrip();
          break;
@@ -403,10 +408,31 @@ FORM;
             where `userName`='".$_GET['u']."'";
 
          $r1=mysql_fetch_array(execQuery($q1));
+         
+         if ( $r1['fumatore']==0) {
+            $r1['fumatore']="No";
+         } else {
+            $r1['fumatore']="Si";
+         }
         
-	 // Sostituisco
+	 // Varia il contenuto della pagina a seconda che si è in modalita 'leggi profilo' o 'modifica profilo'
 	 $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
          
+         if ( $_POST['hiddenProfilo']=="modifyProfilo" ) {
+              echo  $_POST['fill'];
+              $final_content= eregi_replace("<!--USER-->","<input id='userName' name='userName' class='modificatori' value='$r1[userName]'/>",$template);
+              $final_content=eregi_replace("<!--EMAIL-->","<input id='email' name='email' class='modificatori' value='$r1[email]'/>",$final_content);
+              $final_content=eregi_replace("<!--FUMATORE-->","<select name ='fumatore' id='fumatore' > <option value='0'>No</option><option value='1'>SI</option></select>",$final_content);
+              $final_content=eregi_replace("<!--LOCALITA-->","<input id='localita'  name='localita' class='modificatori'  value='$r1[localita]'/>",$final_content);
+              $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$final_content);
+              $final_content=eregi_replace("<!--PROFILEBUTTON-->","<button id='updateProfiloButton' type='button' onclick='updateProfilo()'>Aggiorna</button>",$final_content);
+         } else {
+         $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+         $final_content=preg_replace("/\<!--\s(.*)\s\-->/e","$1",$final_content);
+         $final_content=eregi_replace("<!--PROFILEBUTTON-->","<button type='submit' name='modifica' value='modifica'>Modifica</button>",$final_content);
+         }
+     
+          
          // Se visualizzo un profilo non mio, estraggo i tragitti
 	 // su cui posso fare feedback
 	 if (getUser()!=$_GET['u'])
@@ -516,6 +542,24 @@ function numericDropDown($id,$start,$stop,$first=null,$names=null) {
 
    return $a;
 }
+
+//~ function otherOwners(){
+   //~ // Eventuali auto gia' registrate
+   //~ $auto_query = "select targa,marca,modello
+      //~ from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
+      //~ where AutoUtenti.idUtente='".getUserId()."'";
+      
+   //~ $res = execQuery($auto_query);
+
+   //~ // Nessuna auto 
+   //~ if ((mysql_num_rows($res) == 0)) {
+         //~ return "";
+   //~ }
+
+   //~ $owner_query = 
+
+
+//~ }
 
 function carSelect () {
    // Eventuali auto gia' registrate

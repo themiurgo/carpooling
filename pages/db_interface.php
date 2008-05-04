@@ -106,6 +106,13 @@ function gestioneAuto() {
 }
 
 
+function aggiornaProfilo() {
+ 
+   $q1 = "update utenti set userName='".$_POST['userName']."',email='".$_POST['email']."',localita='".$_POST['localita']."' ,fumatore='".$_POST['fumatore']."' where ID='".getUserId()."'  ";
+   execQuery($q1) or die("Query non valida1: " . mysql_error());
+
+}
+
 /*
  * Registrazione di un Tragitto ( Trip ) al sito
  * Data deve essere nel formato YYYY-MM-GG.

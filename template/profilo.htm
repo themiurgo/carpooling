@@ -1,8 +1,22 @@
+<script type="text/javascript">
+<!--
+function updateProfilo() {
+      var e = document.getElementById("hiddenProfilo");
+   e.value = "updateProfilo";
+   var f = document.getElementById("profiloForm");
+   f.submit();
+   
+   
+}
+   
+-->
+</script>
 <div id="profilo" class="left">
 <ul class="profilo bgAzure">
+<form id="profiloForm" method="post" action="index.php?p=profilo&amp;action=manageProfilo">
 <li>
    <span class="commento">userName</span>
-   <span class="valori">{ $r1[userName] }</span>
+   <span class="valori"><!--USER--><!-- $r1[userName] --></span>
 </li>
 <li>
    <span class="commento">affidabilit&agrave;</span>
@@ -28,7 +42,7 @@
 </li>
 <li>
    <span class="commento">email</span>
-   <span class="valori">{ $r1[email] }</span>
+   <span class="valori"><!--EMAIL--><!-- $r1[email] --></span>
 </li>
 <li>
    <span class="commento">Guida da</span>
@@ -36,11 +50,11 @@
 </li>
 <li>
    <span class="commento">Fumatore</span>
-   <span class="valori">prova</span>
+   <span class="valori"><!--FUMATORE--><!-- $r1[fumatore] --></span>
 </li>
 <li>
    <span class="commento">Localit&agrave;</span>
-   <span class="valori">{ $r1[localita] }</span>
+   <span class="valori"><!--LOCALITA--><!-- $r1[localita] --></span>
 </li>
 <li>
    <span class="commento">Iscritto dal</span>
@@ -48,9 +62,11 @@
 </li>
 <li>
 <div class="pulsanti">
-<button type="button" name="modifica" value="modifica">Modifica</button>
+<input type="hidden" id="hiddenProfilo" name="hiddenProfilo" value="modifyProfilo"/>
+<!--PROFILEBUTTON-->
 </div>
 </li>
+</form>
 </ul>
 </div>
 <div class="right">

@@ -426,7 +426,7 @@ span.commento {
    font-weight: bold;
    position: absolute;
    right: 0;
-   bottom: 0.2em;
+   bottom: 0.02em;
    font-size: 0.9em;
 }
 
@@ -438,6 +438,11 @@ span.valori, div.valori {
    border-bottom: 1px solid #c3d9ff;
    vertical-align: baseline;
    font-size: 1.2em;
+}
+
+.modificatori{
+   width:170px;
+   border: 1px solid #0033CC;
 }
 
 

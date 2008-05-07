@@ -13,10 +13,17 @@
 	    <label for="destinaz" class="green">Citt&agrave; di arrivo</label><br />
 	    <input id="destinaz" name="destinaz"  size="16"/>
 	 </li>
-	 <!-- Bottoni Funzione  -->
 	 <li>
-	    <button id="searchButton" type="button" onclick="risultatiAjax()">Ricerca</button>
-	    <button id="directionsButton"  type="button" onclick="creaIndicazioni()">Mostra indicazioni</button>
+	    <label for="directionsCheck" style="font-weight:normal">
+	       Mostra indicazioni
+	    </label>
+	    <input name="directionsCheck" id="directionsCheck" 
+	       type="checkbox" value="directions" style="width: auto"/>
+	 </li>
+	 <li>
+	    <button id="searchButton" type="button" onclick="risultatiAjax()">
+	       Ricerca
+	    </button><br />
 	 </li>
 	 <!-- Contenitore delle direzioni  -->
       </ul>

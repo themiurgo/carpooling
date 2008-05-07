@@ -128,6 +128,7 @@ function headType() {
    switch ($_GET['p']) {
       case "nuovo":
       case "cerca":
+      case "tragitto":
         
       # Script per la gestione delle GMaps
       return <<<DH
@@ -165,8 +166,13 @@ function bodyType() {
          }
          break;
 
+      case "tragitto":
+	 $q = "select partenza,destinaz from Tragitto where ID='$_GET[idTrip]'";
+   	 $r = mysql_fetch_array(execQuery($q));
+	 return '<body onload="creaMappa(\''.$r['partenza'].'\')" onunload="GUnload()">';
+         break;
+
       default:
-         #Se non vi sono particolari funzioni, viene restituito semplicemente il tag
          return "<body>";
    }
 }
@@ -222,9 +228,9 @@ function content () {
    getUser() ?
       // ...un utente loggato
       $allowed = array("profilo","tragitti","cerca","nuovo","auto",
-         "utenti","about") :
+         "utenti","about","tragitto") :
       # ...un utente NON loggato
-      $allowed = array("tragitti","cerca","utenti","about","iscrizione");
+      $allowed = array("tragitti","tragitto","cerca","utenti","about","iscrizione");
 
    $content = "";
    
@@ -264,23 +270,28 @@ function prepare_content ($template) {
    switch ($_GET['p']) {
       case 'tragitto':
 	 if (isset($_GET['idTrip'])) {
-	    $q1="select * from Tragitto where ID='".$_GET['idTrip']."'";
-               $r1=mysql_fetch_array($execQuery($q1));
-               $idT= $row['ID'];
-               $pro = $row['idPropr'];
-               $name_query="select userName from Utenti where ID=$r1[idPropr]";
-               $res_name = execQuery($name_query);
-               $row_name = mysql_fetch_array($res_name);
-               $ora = $row['oraPart'];
-               $durata=$row['durata'];
-               $data = $row['dataPart'];
+	    $q="select *,Utenti.userName as proprietario,
+	       Utenti.userName=".getUserId()." as controllo
+	       from Tragitto join Utenti on Utenti.ID=Tragitto.idPropr
+	       where Tragitto.ID='".$_GET['idTrip']."'";
+	       echo $q;
+	    
+	    $r=mysql_fetch_array(execQuery($q));
               
-               $row['fumo'] ? 
+               $r['fumo'] ? 
                   $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
               
-               $row['musica'] ?
-                  $mus = "Con Musica" : $mus = "NO Musica"; 
+               $r['musica'] ?
+                  $mus = "Con Musica" : $mus = "NO Musica";
+
+	    $q2="select Utenti.*,Utenti.ID=".getUserId()." as partecipo
+	       from Tragitto join Utenti on Utenti.ID=Tragitto.idPropr
+	       where Tragitto.ID='".$_GET['idTrip']."'";
+	    
+	    $r2=mysql_fetch_array(execQuery($q2));
+
 	 }
+	 $final_content=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
 
       break;
 
@@ -578,6 +589,14 @@ function carSelect () {
    <p>
 </div>
 ERR;
+
+   elseif (mysql_num_rows($res)==0 && $_GET['p'] == "auto") {
+      return $output.<<<FRM
+   <button id="newAuto" type="button" onclick="showForm()">
+      Inserisci nuova
+   </button>
+FRM;
+   }
                
    # Almeno un'auto
    else {
@@ -601,4 +620,36 @@ MOD;
    }
 }
 
+/*
+ * Visualiza un pulsante che consente di partecipare al tragitto.
+ */
+function controltrip ($owner,$internal) {
+   if ($owner)
+      return <<<BLOCK
+      <button type="button">
+	 Blocca il tragitto
+      </button>
+BLOCK;
+
+   elseif ($internal)
+      return <<<LEAVE
+      <button type="button">
+	 Abbandona il tragitto
+      </button>
+LEAVE;
+
+   else
+      return <<<JOIN
+      <button type="button">
+	 Partecipa al tragitto
+      </button>
+JOIN;
+	 /* Blocco tragitto */
+
+/*	 <form id="blockForm" action="index.php?p=tragitti&action=blockTrip&idTrip={ $r[ID] }" method="post">
+	    <label for="blockButton">Hai avuto un'imprevisto?</label><br/>
+	    <button id="registerAutoButton" type="submit">Blocca Tragitto</button>
+   	 </form> */
+
+}
 ?>

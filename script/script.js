@@ -75,15 +75,21 @@ function disableText(){
 
 /* Aggiornamento AJAX dei tragitti nella pagina 'cerca'*/
 function risultatiAjax() {
+   document.getElementById("directions").style.visibility="hidden";
+   e=document.getElementById("directionsCheck");
+
    var xmlHttp=GetXmlHttpObject();
    res = document.getElementById("risultati");
    mapForm = document.getElementById("mapForm"); 
    //userName=document.getElementById("search_username");
    
+   var partenza = mapForm.partenza.value;
+   var arrivo = mapForm.destinaz.value;
+   creaPercorso(partenza,arrivo);
+   
    xmlHttp.onreadystatechange=function() {
       if(xmlHttp.readyState==4) {
          res.innerHTML=xmlHttp.responseText;
-         creaPercorso();
       }
    }
    if (xmlHttp==null) {
@@ -91,8 +97,6 @@ function risultatiAjax() {
       return;
    }
    var url="./pages/ajax.php";
-   var partenza = mapForm.partenza.value;
-   var arrivo = mapForm.destinaz.value;
    url=url+"?pa=" + partenza+"&ar="+arrivo;
    //alert (url);
    xmlHttp.open("GET",url,true);

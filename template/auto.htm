@@ -27,13 +27,22 @@ function doFill() {
 }
 
 function showForm() {
-   var a=document.getElementById('autoSelection');
-   a.style.visibility='hidden';
-   a.style.display='none';
+   $('autoSelection').setStyle({
+      display:'none',
+      visibility:'hidden'
+   });
 
-   var e=document.getElementById('autoFormDiv');
-   e.style.visibility='visible';
-   e.style.display='block';
+   $('autoFormDiv').setStyle({
+      visibility:'visible',
+      display:'block'
+   });
+}
+
+function hideForm() {
+   $('autoFormDiv').setStyle({
+      visibility:'hidden',
+      display:'none'
+   });
 }
 -->
 </script>

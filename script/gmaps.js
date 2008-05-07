@@ -2,40 +2,37 @@
  * FUNZIONI GoogleMap
  * --------------------- */
 
-/** Questo oggetto rappresenta la Mappa vera e propria */
+// Definisco la mappa...
 var mappa = null;
 
-/** 
- * Questo oggetto consente di ottenere le coordinate geografiche 
- * di una localita'  (anche se in modo contorto :)
- */
+// ...il geocoder...
 var geocoder = null;
 
-/** 
- *  Questo oggetto incapsula tutti i concetti inerenti alle
- * direzioni stradali.
- */
+// ...altri oggetti inerenti alle direzioni stradali
 var gdir;
 var addressMarker;
 
+/*
+ * Il geocoder consente di ottenere le coodrinate geografiche
+ * di una localita'.
+ * Gdir incapsula tutti i concetti inerenti alle direzioni stradali.
+ */
 
-/**
-  * Creazione della GMap centrata a Catania.
- * centroDefault a'¨ una stringa passata come argomento dal documento HTML
+
+/*
+ * Creazione della GMap centrata a 'centroDefault', che e' una
+ * passata come argomento dal documento HTML.
  */
 function creaMappa(centroDefault) {
     
-    /* Verifica la compatibilita'  del Browser    */
+    // Verifico la compatibilita' del browser con le GMap
     if ( GBrowserIsCompatible() ) {
         
-        /*  Aggancio della Mappa ad un elemento HTML  
-            *  il numero '2' rappresenta la attuale versione della GMap    
-            */
+        //  Aggancio la Mappa ad un elemento HTML  
         map = new GMap2( document.getElementById("carPoolingMap") );
         
-        /* Ottieni l'oggetto geocoder per ricavare le coordinate dei luoghi */
+        // Creo un nuovo geocoder e azzero la cache
         geocoder = new GClientGeocoder();
-        /* Bastava quest'unica riga... che in effetti impedisce alla funzione di creare 'loop' con la cache */
         geocoder.setCache(null);
         
         /* Inizializza la mappa. 
@@ -45,118 +42,123 @@ function creaMappa(centroDefault) {
             * il punto che mi interessa, che si a'¨ calcolato sempre automaticamente.
             */
         geocoder.getLatLng( centroDefault, function( puntoGeografico ) {
-            /* La localita'  non esiste*/
-            if (!puntoGeografico) { 
-            alert(partenza + " non e' una localita' valida."); 
+            // Localita' inesistente
+            if (!puntoGeografico) 
+	       alert(partenza + " non e' una localita' valida."); 
         
-            /* Caricamento delle coordinate del punto */
-            }else {  
-            /* Setta il centro. 13 e' il livello di zoom*/
-            map.setCenter(puntoGeografico, 13);
-            
-            /* Creazione del "fumetto" di benvenuto della GMap */
-            welcome = "Travel Together !"
-            map.openInfoWindow(map.getCenter(),document.createTextNode(welcome));
+            // altrimenti carico le coordinate del punto
+	    else {  
+	       //  con livello di zoom 13
+	       map.setCenter(puntoGeografico, 13);
+	       
+	       // Creo il testo di benvenuto
+	       welcome = "Travel Together !"
+	       map.openInfoWindow(map.getCenter(),document.createTextNode(welcome));
             }
-        });
+        } );
         
-        /* Aggiunta del pannello di zoom */
+        // Aggiungo zoom e scrooling
         map.addControl(new GSmallMapControl());
-        
-        /* Abilita lo zoom con lo scrool del mouse */
         map.enableScrollWheelZoom();
-        
-        /* Questa variabile identifica l'angolo in basso a sinistra della mappa.
-            * Il secondo parametro a'¨ un offset.
-            */
+
+        // Aggiungo il controllo mappa-satellite-ibrida in alto a destra
         var topRight = new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(5,5));
-        
-        /* Aggiunta del modificatore mappa-satellite-ibrida nell'angolo bottomLeft */
         map.addControl(new GMapTypeControl(),topRight);
     }
 }
     
+/*
+ * Crea e visualizza sulla mappa due localita' connesse in linea
+ * d'aria
+ */
+function creaPercorso(partenza,arrivo) {
     
-/*  Crea e visualizza sulla mappa un percorso relativo a due citta' */
-function creaPercorso() {
-   mapForm = document.getElementById("mapForm"); 
-    
-    /* Ottieni le citta'  di partenza ed arrivo dalle caselle di testo della pagina */
-    partenza = mapForm.partenza.value;
-    arrivo = mapForm.destinaz.value;
-    
-    /* Rimuove eventuali indicazioni presenti nella pagina */
-    var direzioni = document.getElementById("directions");
-    direzioni.innerHTML = "";
-    
-    /* Rappresenta un 'rettangolo di coordinate' */
-    var bounds = new GLatLngBounds();
-    
-    /* Rappresentano i punti geografici sulla mappa */
-    var puntoPartenza; 
-    var puntoArrivo;
+   /* Rimuove eventuali indicazioni presenti nella pagina */
+   var direzioni = document.getElementById("directions");
+   direzioni.innerHTML = "";
+   
+   /* Rappresenta un 'rettangolo di coordinate' */
+   var bounds = new GLatLngBounds();
+   
+   /* Rappresentano i punti geografici sulla mappa */
+   var puntoPartenza; 
+   var puntoArrivo;
     
     /* Crea una icona base */
-        var baseIcon = new GIcon();
-        baseIcon.iconAnchor = new GPoint(9, 34);
-        baseIcon.infoWindowAnchor = new GPoint(9, 2);
+   var baseIcon = new GIcon();
+   baseIcon.iconAnchor = new GPoint(9, 34);
+   baseIcon.infoWindowAnchor = new GPoint(9, 2);
         
-        /* Crea ed aggiunge il marker personalizzato alla mappa */
-        var partenzaIcona = new GIcon(baseIcon);
-        partenzaIcona.image = "./images/markerP.png";
-        markerPOptions = { icon:partenzaIcona };
-        /* Crea ed aggiunge il marker personalizzato alla mappa */
-        var arrivoIcona = new GIcon(baseIcon);
-        arrivoIcona.image = "./images/markerA.png";
-        markerAOptions = { icon:arrivoIcona };
+   // Aggiungo il marker partenza
+   var partenzaIcona = new GIcon(baseIcon);
+   partenzaIcona.image = "./images/markerP.png";
+   markerPOptions = { icon:partenzaIcona };
+   // Aggiungo il marker arrivo
+   var arrivoIcona = new GIcon(baseIcon);
+   arrivoIcona.image = "./images/markerA.png";
+   markerAOptions = { icon:arrivoIcona };
     
     
-    /* Questa funzione ha il solo scopo di 'caricare' le coordinate del punto di arrivo,
-        * secondo la logica della funzione precedente
-        */
-    geocoder.getLatLng(partenza, function(puntoGeografico) {
-        
-        /* La localita'  non esiste*/
-        if (!puntoGeografico) { alert(partenza + " non e' una localita' valida."); } 
+   // Carico il punto di partenza
+   geocoder.getLatLng(partenza, function(puntoGeografico) {
+        // La localita' non esiste
+        if (!puntoGeografico)
+	   alert(partenza + " non e' una localita' valida.");
         
         /* Caricamento delle coordinate del punto */
-        else {  puntoPartenza = puntoGeografico;    }});
-    
-    
-    geocoder.getLatLng(arrivo, function(puntoGeografico) {
-    
-         /* La localita'  non esiste*/
-        if (!puntoGeografico) {alert(arrivo + " non e' una localita' valida.");} 
+        else 
+	   puntoPartenza = puntoGeografico;
+   } );
+
+   // Carico il punto di arrivo
+   geocoder.getLatLng(arrivo, function(puntoGeografico) {
+      // La localita' non esiste
+      if (!puntoGeografico)
+	 alert(arrivo + " non e' una localita' valida.");
         
-        /* Caricamento delle coordinate del punto */
-        else {  puntoArrivo = puntoGeografico;
+      /* Caricamento delle coordinate del punto */
+      else {
+	 puntoArrivo = puntoGeografico;
             
-            /* Rimuove eventuali altri elementi presenti sulla mappa */
-            map.clearOverlays();
+	 /* Rimuovo eventuali altri elementi presenti sulla mappa */
+	 map.clearOverlays();
             
-           var markerP = new GMarker(puntoPartenza, markerPOptions);
-            map.addOverlay(markerP);
-            /* Crea l'ascoltatore per il click del mouse, che fara'  aprire una infoWindow */
-            GEvent.addListener(markerP, "click", function() { markerP.openInfoWindowHtml("<div class='gmapPopup'>Citta' di partenza : <br/><b>" + partenza+"</b></div>");});
-            /* Regola lo zoom */
-            fitZoom(bounds,puntoPartenza);
+	 var markerP = new GMarker(puntoPartenza, markerPOptions);
+	 map.addOverlay(markerP);
+
+	 /* Crea l'ascoltatore per il click del mouse, che fara'  aprire una infoWindow */
+	 GEvent.addListener(markerP, "click", function() {
+	    markerP.openInfoWindowHtml(
+	       "<div class='gmapPopup'>Citta' di partenza : <br/><b>"
+	        + partenza+"</b></div>");
+	 } );
+
+	 // Regolo lo zoom
+	 fitZoom(bounds,puntoPartenza);
             
-            var markerA = new GMarker(puntoArrivo, markerAOptions);
-            map.addOverlay(markerA);
-            /* Crea l'ascoltatore per il click del mouse, che fara'  aprire una infoWindow */
-            GEvent.addListener(markerA, "click", function() { markerA.openInfoWindowHtml("<div class='gmapPopup'>Citta' di arrivo : <br/><b>" + arrivo+"</b></div>");});
-             /* Regola lo zoom */
-            fitZoom(bounds,puntoArrivo); 
+	 // Rifaccio le stesse cose per il punto d'arrivo
+	 var markerA = new GMarker(puntoArrivo, markerAOptions);
+	 map.addOverlay(markerA);
+
+	 GEvent.addListener(markerA, "click", function() {
+	    markerA.openInfoWindowHtml(
+	       "<div class='gmapPopup'>Citta' di arrivo : <br/><b>"
+	       + arrivo+"</b></div>");
+	 });
+
+   	 fitZoom(bounds,puntoArrivo); 
             
-           /* Aggiungi la linea del percorso */
-            var percorso = new GPolyline([puntoPartenza,puntoArrivo], "#330099", 10);
-            map.addOverlay(percorso);
-        }
-    } );
+ 	 // Infine aggiungo la linea
+	 var percorso = new GPolyline([puntoPartenza,puntoArrivo], "#330099", 10);
+	 map.addOverlay(percorso);
+      }
+   } );
 }
     
 
-/** Regola lo zoom della mappa */
+/*
+ * Regola lo zoom della mappa
+ */
 function fitZoom(bounds,point){
     
     /* Estende il rettangolo delle coordinate affincha'¨ contenga il punto passato come parametro */
@@ -169,10 +171,10 @@ function fitZoom(bounds,point){
     /*Regola lo zoom della mappa */
     map.setCenter(newCenter,newZoom);
 }
-    
-    
-    
-/** Crea le indicazioni complete per raggiungere una localita'  */
+ 
+/* 
+ * Crea le indicazioni complete per raggiungere una localita'
+ */
 function creaIndicazioni() {
    mapForm = document.getElementById("mapForm"); 
 
@@ -205,15 +207,19 @@ function creaIndicazioni() {
     }
 }
 
-
+/* 
+ * Invia al server di google l'asserzione per ottenere le
+ * indicazioni, e stampa il risultato
+ */	
 function setDirezione(partenza, arrivo, lingua) {
 
-/* Invia al server di google l'asserzione per ottenere le indicazioni, e stampa il risultato */	
   gdir.load("from: " + partenza + " to: " + arrivo,{ "locale": lingua });
 }
 
-
-/** Vari messaggi di errori che si potrebbero verificare (non tutti i casi sono contemplati) */	
+/*
+ * Vari messaggi di errori che si potrebbero verificare
+ * (non tutti i casi sono contemplati)
+ */
 function gestioneErrori(){
    if (gdir.getStatus().code == G_GEO_UNKNOWN_ADDRESS)
      alert("Non e' stato possibile trovare una localita' geografica corrispondente ad almeno una delle citta' inserite. Questo puo' essere dovuto al fatto che l'indirizzo e' relativamente nuovo, oppure  scorretto.\nCodice Errore: " + gdir.getStatus().code);

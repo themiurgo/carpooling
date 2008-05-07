@@ -357,9 +357,12 @@ span.utenti {
 }
 
 span.posti {
+   display: block;
+   width:auto;
+   float:right;
+   clear: right;
+   border:1px solid #000000;
    text-align: right;
-   position: absolute;
-   right: 5px;
 }
 
 span.tragitto {
@@ -379,8 +382,8 @@ span.orario {
 }
 
 span.altro {
-   position: absolute;
-   right: 5px;
+   float: right;
+   clear: right;
 }
 
 img#verso {

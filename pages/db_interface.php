@@ -10,8 +10,7 @@ $db_name="Carpooling";
 $db_conn=null;
 
 /*
- * Connetti al server MySQL e Seleziona il DB
- *
+ * Connette al server MySQL e seleziona il DB
  */
 function connectDb (&$dbconn) {
    global $db_host,$db_usr,$db_psw,$db_name,$db_conn;
@@ -36,7 +35,7 @@ function execQuery ($query) {
 }
 
 /*
- * Registrazione di un utente al sito
+ * Effettua la registrazione di un utente.
  */
 function registraUtente() { 
     $dataNascita=$_POST['annoNascita']."-".$_POST['meseNascita']."-".$_POST['giornoNascita'];
@@ -69,7 +68,7 @@ function modificaAuto() {
 	
     
 /*
- * Registrazione e modifica di un auto
+ * Effettua la registrazione o la modifica di un auto
  */
 function gestioneAuto() {
    
@@ -227,49 +226,42 @@ function controllaData() {
 }
 
 	
+/*
+ * Restituisce gli ultimi utenti iscritti
+ */
 function users_recentSignup () {
    $query = "select userName from Utenti order by dataIscriz desc limit 5"; 
    $res = execQuery($query);
+   $o="";
    while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
       $line='<a href="">'.$row['userName'].'</a><br />';
-      $output=$output.$line;
+      $o=$o.$line;
    }
-   return $output;
+   return $o;
 }
 
+/*
+ * Restituisce gli utenti piu' attivi
+ */
 function users_mostActive() {
    $query = "select userName,count(*) as nTragitti
       from Utenti join Tragitto on Utenti.ID = Tragitto.idPropr
       group by Tragitto.idPropr
       order by nTragitti desc limit 5"; 
    $res = execQuery($query);
+   $o="";
    while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
       $line='<a href="">'.$row['userName'].'</a>
-         ('.$row['nTragitti'].'tragitti)<br />';
-      $output=$output.$line;
+         (n. di tragitti: '.$row['nTragitti'].')<br />';
+      $o=$o.$line;
    }
-   return $output;
+   return $o;
 }
 
-function search_userName($userName) {
-   $query = "select userName
-      from Utenti
-      where userName=$userName";
-   $res = execQuery($query);
-
-   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
-      $line='<a href="">'.$row['userName'].'</a><br />';
-      $output=$output.$line;
-   }
-
-   return $output;
-}
 
 function cars_ofUser($userId) {
-   /*<label for="selectAuto">Auto</label>*/
-
-   $output='<select id="idAuto" name="idAuto">';
-   $query = "select Auto.*
+   $o='<select id="idAuto" name="idAuto">';
+   $q = "select Auto.*
       from Auto join AutoUtenti on Auto.ID = AutoUtenti.idAuto
       where AutoUtenti.idUtente = '".getUserId()."'";
    $res = execQuery($query);
@@ -280,9 +272,9 @@ function cars_ofUser($userId) {
       $output=$output.'<option value="'.$row['ID'].'"
 	 selected="selected">'.$auto.'</option>';
    }
-   $output=$output.'</select>';
+   $o=$o.'</select>';
 
-   return $output; 
+   return $o; 
 }
 
 /*
@@ -336,6 +328,19 @@ TR;
       $out="<p>Non hai creato alcun tragitto finora</p>";
 
    return $out;
+}
+
+function users_searchUsername($userName) {
+   $q = "select userName from Utenti where userName='$userName'";
+   $res = execQuery($q);
+   $o="";
+   while ($r=mysql_fetch_array($res,MYSQL_ASSOC))
+      $o=$o.$line='<a href="">'.$r['userName'].'</a><br />';
+
+   if ($o == "")
+      return "Nessun utente trovato";
+
+   return $o;
 }
 
 ?>

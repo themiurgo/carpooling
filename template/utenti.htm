@@ -15,8 +15,7 @@ function risultati() {
    }
    var url="pages/ajax.php";
    url=url+"?q=search_username"
-   url=url+"&amp;username="+userName.value;
-   alert (url);
+   url=url+"&username="+userName.value;
    xmlHttp.open("GET",url,true);
    xmlHttp.send(null);
 }
@@ -24,9 +23,9 @@ function risultati() {
 
 
 <div class="medium left">
-   In questa pagina puoi cercare gli utenti o navigare tra le classifiche.
+   In questa pagina puoi cercare gli utenti o visualizzare le classifiche.
    <form action="">
-      <div>
+      <div style="margin: 1em">
       <input type="text" id="search_username" />
       <button type="button" onclick="risultati()">Cerca</button>
       </div>
@@ -43,11 +42,12 @@ function risultati() {
    <h4>Ultimi iscritti</h4>
    { users_recentSignup() }
 </div>
+<!--
 <div class="bgGold little ">
    Classifica 3
 </div>
 <div class="bgRed little ">
    Classifica 4
 </div>
-<em style="display: block">cdsd</em>
+-->
 </div>

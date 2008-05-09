@@ -39,4 +39,16 @@ TRIP;
    echo $out;
 }
 
+if (isset($_GET['q'])) {
+   switch ($_GET['q']) {
+      case "search_username":
+	 echo users_searchUsername($_GET['username']);
+
+	 break;
+
+      default:
+
+   }
+}
+
 ?>

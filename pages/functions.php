@@ -4,39 +4,41 @@
  * Gestisce le azioni
  */
 function handle_action () {
-   switch ($_GET['action']) {
-      case "login":
-         checkUser($_POST['username'],$_POST['password']);
-         break;
-      
-      case "logout":
-         unset($_SESSION['user']);
-         break;
+   if (isset($_GET['action'])) {
+      switch ($_GET['action']) {
+	 case "login":
+	    checkUser($_POST['username'],$_POST['password']);
+	    break;
+	 
+	 case "logout":
+	    unset($_SESSION['user']);
+	    break;
 
-      case "register":
-         registraUtente();
-         break;
+	 case "register":
+	    registraUtente();
+	    break;
 
-      case "manageAuto":
-         gestioneAuto();
-         break;
-      
-      case "manageProfilo":
-         if ( $_POST['hiddenProfilo'] == "updateProfilo")
-            aggiornaProfilo();
-         break;
-      
-      case "registerTrip":
-         registerTrip();
-         break;
-      
-      case "joinTrip":
-         partecipaTragitto();
-         break;
-     
-     case "blockTrip":
-         bloccaTragitto();
-         break;
+	 case "manageAuto":
+	    gestioneAuto();
+	    break;
+	 
+	 case "manageProfilo":
+	    if ( $_POST['hiddenProfilo'] == "updateProfilo")
+	       aggiornaProfilo();
+	    break;
+	 
+	 case "registerTrip":
+	    registerTrip();
+	    break;
+	 
+	 case "joinTrip":
+	    partecipaTragitto();
+	    break;
+	
+	case "blockTrip":
+	    bloccaTragitto();
+	    break;
+      }
    }
 }
 
@@ -243,7 +245,7 @@ function content () {
    if (in_array($_GET['p'],$allowed)) {
 
       // ... recupero il template ...
-      $file_content = implode ("",file("template/".$_GET[p].".htm"))
+      $file_content = implode ("",file("template/$_GET[p].htm"))
          or die("Pagina non trovata");
       
       // ... ed effettuo le opportune sostituzioni.

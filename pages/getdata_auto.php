@@ -9,7 +9,6 @@ $q = "select *
    $r=mysql_fetch_array(execQuery($q));
    
    if ($r[note]=='') $r[note]=' ';
-   
 
 ?>
 

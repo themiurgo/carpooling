@@ -2,7 +2,7 @@
 <script type="text/javascript" src="script/livevalidation_standalone.compressed.js"></script>
 <script type="text/javascript" src="script/focusFirst.js"></script>
 <div class="bgAzure" style="width: 350px; margin: auto;">
-<form class="registrazione" method="post" id="iscrizioneForm" action="index.php?action=register">
+<form class="registrazione" method="post" id="iscrizioneForm"  action="index.php?action=register">
 <div class="intestazione">
    <h1 class="titoli red">Iscriviti!</h1>
    <h2 class="titoli green">Semplice, veloce, gratuito</h2>
@@ -22,7 +22,7 @@
       { italianDate(1930,1990,Nascita) }
    </li>
    <li>
-      Quando hai conseguito la patente?<br/>
+      <span id="patenteLabel">Quando hai conseguito la patente ?</span><br/>
       { italianDate(1948,2008,Patente) }
    </li>
    <li>
@@ -59,7 +59,7 @@
       <input id="psw2" name="psw" type="password" size="10"/>
    </li>
    <li>
-      <label id="titolo6" for="citta" id="cittaLabel">Citt&agrave; preferenziale per la partenza</label><br />
+      <label for="citta" id="cittaLabel">Citt&agrave; preferenziale di partenza</label><br />
       <input id="citta" name="citta"  size="30" /> <br />
       <span class="notes">Potrai eventualmente modificarla in seguito</span>
    </li>

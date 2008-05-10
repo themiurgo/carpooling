@@ -1,0 +1,32 @@
+<div style='padding:20px' class='bgRed'>
+   <div style="float: right; width: 180px;">
+   <ul class="tragitto">
+      <li>
+      Organizzatore: <b>{ $r[proprietario] }</b>
+      </li>
+      <li>
+      Da <b>{ $r[partenza] }</b><br />
+      a <b>{ $r[destinaz] }</b>
+      </li>
+      <li>
+	 Partenza alle <b>{ $r[oraPart] }</b><br />
+	 del <b>{ $r[dataPart] }</b><br />
+	 (durata prevista { $r[durata] })
+      </li>
+      <li>
+	 <b>{ $fumo }</b><br />
+	 <b>{ $mus }</b>
+      </li>
+      <li id="postiDisp" class="center">
+	 { $r[postiDisp] } posti disponibili
+      </li>
+      <li>
+	 { controlTrip($r[controllo],0); }
+      </li>
+	 </span>		     
+      </div>
+   <div style="width: 510px;">
+      <div id="carPoolingMap"></div>
+   </div>
+</div>
+

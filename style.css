@@ -719,3 +719,8 @@ div#autoFormDiv {
    visibility: hidden;
    display: none;
 }
+
+ul.tragitto li {
+   text-align: center;
+   margin: 2.5em 0.2em 2.5em 0.2em;
+}

@@ -75,7 +75,9 @@ function creaPercorso(partenza,arrivo) {
     
    /* Rimuove eventuali indicazioni presenti nella pagina */
    var direzioni = document.getElementById("directions");
-   direzioni.innerHTML = "";
+   if (direzioni) {
+      direzioni.innerHTML = "";
+   }
    
    /* Rappresenta un 'rettangolo di coordinate' */
    var bounds = new GLatLngBounds();
@@ -212,8 +214,7 @@ function creaIndicazioni() {
  * indicazioni, e stampa il risultato
  */	
 function setDirezione(partenza, arrivo, lingua) {
-
-  gdir.load("from: " + partenza + " to: " + arrivo,{ "locale": lingua });
+   gdir.load("from: " + partenza + " to: " + arrivo,{ "locale": lingua });
 }
 
 /*
@@ -233,19 +234,3 @@ function gestioneErrori(){
      alert("La richiesta di direzioni non e' stata sottoposta correttamente a Parsing. Controlla gli indirizzi.\n Codice Errore: " + gdir.getStatus().code);
    else alert(gdir.getStatus().code);
 }
-
-function latestLoad(){ 
-/** Use this function to access information about the latest load() results.
-    e.g.
-    document.getElementById("getStatus").innerHTML = gdir.getStatus().code;
-    and yada yada yada... */
-}
-    
-/** Vecchie istruzioni */    
-//var marker = new GMarker(point);//map.addOverlay(marker);//marker.openInfoWindowHtml(address);
-//GEvent.addListener(map, "click", function() { alert("You clicked the map.");});
-//markerP.openInfoWindowHtml(partenza);
-//map.openInfoWindow(map.getCenter(),document.createTextNode(partenza));
-//markerA.openInfoWindowHtml(arrivo);
-//map.openInfoWindow(map.getCenter(),document.createTextNode(arrivo));
-//GEvent.addListener(map, "click", function() { alert("You clicked the map.");});

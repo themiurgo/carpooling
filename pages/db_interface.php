@@ -298,7 +298,8 @@ WLCM;
 
 function trips_lastJoined($id) {
    $q = "select * from Tragitto
-      where idPropr ='$id'
+      join UtentiTragitto on Tragitto.ID = UtentiTragitto.idTragitto
+      where idUtente ='$id'
       order by `dataPart` desc,`oraPart`";
 
    $res = execQuery($q);

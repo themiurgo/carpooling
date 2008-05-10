@@ -171,7 +171,8 @@ function bodyType() {
       case "tragitto":
 	 $q = "select partenza,destinaz from Tragitto where ID='$_GET[idTrip]'";
    	 $r = mysql_fetch_array(execQuery($q));
-	 return '<body onload="creaMappa(\''.$r['partenza'].'\')" onunload="GUnload()">';
+	 return "<body onload=\"creaMappa('$r[partenza]');
+	    creaPercorso('$r[partenza]','$r[destinaz]');\" onunload=\"GUnload()\">";
          break;
 
       default:
@@ -276,7 +277,6 @@ function prepare_content ($template) {
 	       Utenti.userName=".getUserId()." as controllo
 	       from Tragitto join Utenti on Utenti.ID=Tragitto.idPropr
 	       where Tragitto.ID='".$_GET['idTrip']."'";
-	       echo $q;
 	    
 	    $r=mysql_fetch_array(execQuery($q));
               

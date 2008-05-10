@@ -16,7 +16,7 @@ function updateProfilo() {
 <form id="profiloForm" method="post" action="index.php?p=profilo&amp;action=manageProfilo">
 <li>
    <span class="commento">userName</span>
-   <span class="valori"><!--USER--><!-- $r1[userName] --></span>
+   <span class="valori">{ $r1[userName] }</span>
 </li>
 <li>
    <span class="commento">affidabilit&agrave;</span>
@@ -42,7 +42,7 @@ function updateProfilo() {
 </li>
 <li>
    <span class="commento">email</span>
-   <span class="valori"><!--EMAIL--><!-- $r1[email] --></span>
+   <span class="valori">{ $r1[email] }</span>
 </li>
 <li>
    <span class="commento">Guida da</span>
@@ -50,11 +50,11 @@ function updateProfilo() {
 </li>
 <li>
    <span class="commento">Fumatore</span>
-   <span class="valori"><!--FUMATORE--><!-- $r1[fumatore] --></span>
+   <span class="valori">{ $r1[fumatore] }</span>
 </li>
 <li>
    <span class="commento">Localit&agrave;</span>
-   <span class="valori"><!--LOCALITA--><!-- $r1[localita] --></span>
+   <span class="valori">{ $r1[localita] }</span>
 </li>
 <li>
    <span class="commento">Iscritto dal</span>
@@ -63,15 +63,25 @@ function updateProfilo() {
 <li>
 <div class="pulsanti">
 <input type="hidden" id="hiddenProfilo" name="hiddenProfilo" value="modifyProfilo"/>
-<!--PROFILEBUTTON-->
+{ $button }
 </div>
 </li>
 </form>
 </ul>
 </div>
 <div class="right">
+   <div class="bgGold little ">
+      <h4>L'utente &egrave;...</h4>
+      { user_getTrusting(getUserId()) }
+      <br/>
+      { user_getFeedbacksReport(getUserId()) }
+   </div>
    <div class="bgGreen little ">
-      <h4>Gli ultimi tragitti</h4>
+      <h4>Ultimi tragitti organizzati</h4>
       { trips_lastOrganized(getUserId()) }
+   </div>
+   <div class="bgRed little ">
+      <h4>Ultimi tragitti a cui ha partecipato</h4>
+      { trips_lastJoined(getUserId()) }
    </div>
 </div>

@@ -296,6 +296,35 @@ WLCM;
 WLCM;
 }
 
+function trips_lastJoined($id) {
+   $q = "select * from Tragitto
+      where idPropr ='$id'
+      order by `dataPart` desc,`oraPart`";
+
+   $res = execQuery($q);
+   
+   if (mysql_num_rows($res) != 0) {
+      $out="<ol style=\"margin: 1em; list-style-position:outside\">";
+            
+      while ($r = mysql_fetch_array($res)) {
+	 $piece = <<<TR
+<li>
+   <a href="index.php?p=tragitti&idTrip=$r[ID]">
+      $r[oraPart] $r[dataPart]
+   </a><br />
+   Da <b>$r[partenza]</b> a <b>$r[destinaz]</b>
+</li>
+TR;
+   	 $out=$out.$piece;
+      }  
+      $out=$out."</ol>";
+   } 
+	 
+   else
+      $out="<p>L'utente non ha partecipato ad alcun tragitto.</p>";
+
+   return $out;
+}
 /*
  * Ultimi tragitti di cui e' proprietario un l'utente con id specificato.
  * -Pagina profilo
@@ -325,7 +354,7 @@ TR;
    } 
 	 
    else
-      $out="<p>Non hai creato alcun tragitto finora</p>";
+      $out="<p>L'utente non ha organizzato alcun tragitto.</p>";
 
    return $out;
 }
@@ -335,12 +364,28 @@ function users_searchUsername($userName) {
    $res = execQuery($q);
    $o="";
    while ($r=mysql_fetch_array($res,MYSQL_ASSOC))
-      $o=$o.$line='<a href="">'.$r['userName'].'</a><br />';
+      $o=$o.$line="<a href=\"index.php?p=profilo&amp;u=$r[userName]\">$r[userName]</a><br />";
 
    if ($o == "")
       return "Nessun utente trovato";
 
    return $o;
+}
+
+/**
+ * GESTIONE TRUSTING da completare!
+ */
+function newFeedback ($authorId,$objectId,$valutation,$notes) {
+   $q="insert into Feedback (autore,tragittoAut,valutato,
+      tragittoVal,valutazione,data,note)";
+}
+
+function user_getTrusting ($userId) {
+   return "Molto affidabile";
+}
+
+function user_getFeedbacksReport ($userId) {
+   return "Ha ricevuto 90 voti con una media del ";
 }
 
 ?>

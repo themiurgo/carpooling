@@ -422,28 +422,25 @@ FORM;
 
          $r1=mysql_fetch_array(execQuery($q1));
          
-         if ( $r1['fumatore']==0) {
-            $r1['fumatore']="No";
-         } else {
-            $r1['fumatore']="Si";
-         }
+         ($r1['fumatore'] == 0) ?
+	    $r1['fumatore']="No" : $r1['fumatore']="Si";
         
 	 // Varia il contenuto della pagina a seconda che si è in modalita 'leggi profilo' o 'modifica profilo'
-	 $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
          
-         if ( $_POST['hiddenProfilo']=="modifyProfilo" ) {
-              echo  $_POST['fill'];
-              $final_content= eregi_replace("<!--USER-->","<input id='userName' name='userName' class='modificatori' value='$r1[userName]'/>",$template);
-              $final_content=eregi_replace("<!--EMAIL-->","<input id='email' name='email' class='modificatori' value='$r1[email]'/>",$final_content);
-              $final_content=eregi_replace("<!--FUMATORE-->","<select name ='fumatore' id='fumatore' > <option value='0'>No</option><option value='1'>SI</option></select>",$final_content);
-              $final_content=eregi_replace("<!--LOCALITA-->","<input id='localita'  name='localita' class='modificatori'  value='$r1[localita]'/>",$final_content);
-              $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$final_content);
-              $final_content=eregi_replace("<!--PROFILEBUTTON-->","<button id='updateProfiloButton' type='button' onclick='updateProfilo()'>Aggiorna</button>",$final_content);
-         } else {
-         $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
-         $final_content=preg_replace("/\<!--\s(.*)\s\-->/e","$1",$final_content);
-         $final_content=eregi_replace("<!--PROFILEBUTTON-->","<button type='submit' name='modifica' value='modifica'>Modifica</button>",$final_content);
-         }
+	 if ( $_POST['hiddenProfilo']=="modifyProfilo" ) {
+	    echo  $_POST['fill'];
+
+	    $r1['userName']="<input id='userName' name='userName' class='modificatori' value='$r1[userName]'/>";
+	    $r1['email']="<input id='email' name='email' class='modificatori' value='$r1[email]'/>";
+      	    $r1['fumatore']="<select name ='fumatore' id='fumatore' class='modificatori' style='width: auto'> <option value='0'>No</option><option value='1'>SI</option></select>";
+	    $r1['localita']="<input id='localita'  name='localita' class='modificatori'  value='$r1[localita]'/>";
+	    $button = "<button id='updateProfiloButton' type='button' onclick='updateProfilo()'>Aggiorna</button>";
+	 }
+	    
+	 else
+	    $button="<button type='submit' name='modifica' value='modifica'>Modifica</button>";
+
+	 $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
      
           
          // Se visualizzo un profilo non mio, estraggo i tragitti

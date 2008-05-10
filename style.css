@@ -267,6 +267,12 @@ div.horRule hr { display: none; }
    margin-bottom: 20px;
    padding: 1em 20px 1em 20px;
 }
+
+.bgGold h4 {
+   font-weight: bold;
+   text-align: center;
+}
+
 .bgRed {
    background-color: #ffcccc;
    border: 1px solid #800517;
@@ -446,6 +452,7 @@ span.valori, div.valori {
 .modificatori{
    width:170px;
    border: 1px solid #0033CC;
+   font-size:1em;
 }
 
 

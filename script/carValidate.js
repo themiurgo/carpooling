@@ -8,10 +8,14 @@ var cil = {minimum:1,
    tooLowMessage:"Non valido"};
 
 
-var marca=new LiveValidation('marca',presenzaTesto);
-var modello=new LiveValidation('modello',presenzaTesto);
-var cilindrata=new LiveValidation('cilindrata',presenzaTesto);
-var targa=new LiveValidation('targa',presenzaTesto);
+var marca=new LiveValidation('marca',{
+   validMessage: ' ', onlyOnBlur: true,insertAfterWhatNode:'marcaLabel'});
+var modello=new LiveValidation('modello',{
+   validMessage: ' ', onlyOnBlur: true,insertAfterWhatNode:'modelloLabel'});
+var cilindrata=new LiveValidation('cilindrata',{
+   validMessage: ' ', onlyOnBlur: true,insertAfterWhatNode:'cilLabel'});
+var targa=new LiveValidation('targa',{
+   validMessage: ' ', onlyOnBlur: true,insertAfterWhatNode:'targaLabel'});
 var annoImm=new LiveValidation('annoImmatr',presenzaTesto);
 var cond =new LiveValidation('condizioni',presenzaTesto);
 

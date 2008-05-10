@@ -602,7 +602,7 @@ FRM;
       $row = mysql_fetch_array($res);
                 
       # Selezione dell'auto
-      $output=cars_ofUser(getUserId());
+      $output=$output.cars_ofUser(getUserId());
             
       # Nella pagina auto posso modificarla
       if ($_GET['p']=="auto") {

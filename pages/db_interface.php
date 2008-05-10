@@ -261,15 +261,17 @@ function users_mostActive() {
 
 function cars_ofUser($userId) {
    $o='<select id="idAuto" name="idAuto">';
-   $q = "select Auto.*
+   $query = "select Auto.*
       from Auto join AutoUtenti on Auto.ID = AutoUtenti.idAuto
       where AutoUtenti.idUtente = '".getUserId()."'";
-   $res = execQuery($query);
+      
+   $res = execQuery($query) or die("Query non valida1: " . mysql_error());
    
    while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
+   
       $auto= $row['marca']." ".$row['modello']." (".$row['targa'].")";
 
-      $output=$output.'<option value="'.$row['ID'].'"
+      $o=$o.'<option value="'.$row['ID'].'"
 	 selected="selected">'.$auto.'</option>';
    }
    $o=$o.'</select>';

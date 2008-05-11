@@ -5,7 +5,7 @@ use Carpooling;
 
 create table Auto (
    ID          int primary key auto_increment,
-   targa       char(8) not null unique,
+   targa       char(15) not null unique,
    marca       varchar(15) not null,
    modello     varchar(15) not null,
    cilindrata  int not null,

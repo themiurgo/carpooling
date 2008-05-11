@@ -75,9 +75,8 @@ function creaPercorso(partenza,arrivo) {
     
    /* Rimuove eventuali indicazioni presenti nella pagina */
    var direzioni = document.getElementById("directions");
-   if (direzioni) {
+   if (direzioni)
       direzioni.innerHTML = "";
-   }
    
    /* Rappresenta un 'rettangolo di coordinate' */
    var bounds = new GLatLngBounds();

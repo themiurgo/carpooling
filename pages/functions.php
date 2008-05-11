@@ -216,6 +216,13 @@ MNL;
    }
 }
 
+function parseDate ($timedate) {
+   list($time,$date)=explode(" ",$timedate);
+   list($hours,$minutes,$seconds)=explode(":",$time);
+   list($year,$month,$day)=explode("-",$date);
+   return "$day.$month.$year $hours:$minutes";
+}
+
 
 /*
  * Ritorna il contenuto della pagina richiesta, che va

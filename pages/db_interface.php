@@ -233,8 +233,8 @@ function users_recentSignup () {
    $query = "select userName from Utenti order by dataIscriz desc limit 5"; 
    $res = execQuery($query);
    $o="";
-   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
-      $line='<a href="">'.$row['userName'].'</a><br />';
+   while ($r=mysql_fetch_array($res,MYSQL_ASSOC)) {
+      $line="<a href=\"index.php?p=profilo&u=$r[userName]\">$r[userName]</a><br />";
       $o=$o.$line;
    }
    return $o;
@@ -250,9 +250,9 @@ function users_mostActive() {
       order by nTragitti desc limit 5"; 
    $res = execQuery($query);
    $o="";
-   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
-      $line='<a href="">'.$row['userName'].'</a>
-         (n. di tragitti: '.$row['nTragitti'].')<br />';
+   while ($r=mysql_fetch_array($res,MYSQL_ASSOC)) {
+      $line="<a href=\"index.php?p=profilo&u=$r[userName]\">$r[userName]
+	 </a>(n. di tragitti: $r[nTragitti])<br />";
       $o=$o.$line;
    }
    return $o;
@@ -310,11 +310,11 @@ function trips_lastJoined($id) {
       $out="<ol style=\"margin: 1em; list-style-position:outside\">";
             
       while ($r = mysql_fetch_array($res)) {
+	 $r[data]=parseDate($r[oraPart]." ".$r[dataPart]);
 	 $piece = <<<TR
 <li>
-   <a href="index.php?p=tragitti&idTrip=$r[ID]">
-      $r[oraPart] $r[dataPart]
-   </a><br />
+   <a href="index.php?p=tragitto&idTrip=$r[ID]">
+      $r[data]</a><br />
    Da <b>$r[partenza]</b> a <b>$r[destinaz]</b>
 </li>
 TR;
@@ -332,11 +332,11 @@ TR;
  * Ultimi tragitti di cui e' proprietario un l'utente con id specificato.
  * -Pagina profilo
  */
-function trips_lastOrganized($id) {
-   $q = "select * from Tragitto
-      where idPropr ='$id'
+function trips_lastOrganized($userName) {
+   $q = "select Tragitto.* from Tragitto
+      join Utenti on Tragitto.idPropr=Utenti.ID
+      where Utenti.userName ='$userName'
       order by `dataPart` desc,`oraPart`";
-
    $res = execQuery($q);
    
    if (mysql_num_rows($res) != 0) {
@@ -345,9 +345,8 @@ function trips_lastOrganized($id) {
       while ($r = mysql_fetch_array($res)) {
 	 $piece = <<<TR
 <li>
-   <a href="index.php?p=tragitti&idTrip=$r[ID]">
-      $r[oraPart] $r[dataPart]
-   </a><br />
+   <a href="index.php?p=tragitto&idTrip=$r[ID]">
+      $r[oraPart] $r[dataPart]</a><br />
    Da <b>$r[partenza]</b> a <b>$r[destinaz]</b>
 </li>
 TR;

@@ -234,7 +234,7 @@ function users_recentSignup () {
    $res = execQuery($query);
    $o="";
    while ($r=mysql_fetch_array($res,MYSQL_ASSOC)) {
-      $line="<a href=\"index.php?p=profilo&u=$r[userName]\">$r[userName]</a><br />";
+      $line="<a href=\"index.php?p=profilo&amp;u=$r[userName]\">$r[userName]</a><br />";
       $o=$o.$line;
    }
    return $o;
@@ -251,7 +251,7 @@ function users_mostActive() {
    $res = execQuery($query);
    $o="";
    while ($r=mysql_fetch_array($res,MYSQL_ASSOC)) {
-      $line="<a href=\"index.php?p=profilo&u=$r[userName]\">$r[userName]
+      $line="<a href=\"index.php?p=profilo&amp;u=$r[userName]\">$r[userName]
 	 </a>(n. di tragitti: $r[nTragitti])<br />";
       $o=$o.$line;
    }
@@ -313,7 +313,7 @@ function trips_lastJoined($id) {
 	 $r[data]=parseDate($r[oraPart]." ".$r[dataPart]);
 	 $piece = <<<TR
 <li>
-   <a href="index.php?p=tragitto&idTrip=$r[ID]">
+   <a href="index.php?p=tragitto&amp;idTrip=$r[ID]">
       $r[data]</a><br />
    Da <b>$r[partenza]</b> a <b>$r[destinaz]</b>
 </li>

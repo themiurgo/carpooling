@@ -76,10 +76,6 @@ function hideForm() {
          <li>
             Immatricolazione { numericDropDown(annoImmatr,1950,2008,AAAA) }
          </li>
-         <div >
-         <!-- Campo hidden per distinguere tra 'nuovo' e 'modifica' v. funzione javascript-->
-         <input id="mecha" type="hidden" name="mecha" value="new">
-         </div>
          <li>
             <label for="condizioni">Condizioni generali</label>
 	    <select name ="condizioni" id="condizioni" >
@@ -100,6 +96,8 @@ function hideForm() {
          <li class="center">
          <!-- Validazione contenuti del form -->
       <script type="text/javascript" src="script/carValidate.js"></script>
+         <!-- Campo hidden per distinguere tra 'nuovo' e 'modifica' v. funzione javascript-->
+         <input id="mecha" type="hidden" name="mecha" value="new" />
       <button id="infoAutoButton" type="button" value="inviaInfoAuto" onclick="validaAuto()">
    	 Invia
       </button>

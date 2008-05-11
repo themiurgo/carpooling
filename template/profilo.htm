@@ -5,15 +5,13 @@ function updateProfilo() {
    e.value = "updateProfilo";
    var f = document.getElementById("profiloForm");
    f.submit();
-   
-   
 }
    
 -->
 </script>
 <div id="profilo" class="left">
-<ul class="profilo bgAzure">
 <form id="profiloForm" method="post" action="index.php?p=profilo&amp;action=manageProfilo">
+<ul class="profilo bgAzure">
 <li>
    <span class="commento">userName</span>
    <span class="valori">{ $r1[userName] }</span>
@@ -66,8 +64,8 @@ function updateProfilo() {
 { $button }
 </div>
 </li>
-</form>
 </ul>
+</form>
 </div>
 <div class="right">
    <div class="bgGold little ">

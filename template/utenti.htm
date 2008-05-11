@@ -15,7 +15,7 @@ function risultati() {
    }
    var url="pages/ajax.php";
    url=url+"?q=search_username"
-   url=url+"&username="+userName.value;
+   url=url+"&amp;username="+userName.value;
    xmlHttp.open("GET",url,true);
    xmlHttp.send(null);
 }

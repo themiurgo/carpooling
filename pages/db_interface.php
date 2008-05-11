@@ -117,8 +117,8 @@ function aggiornaProfilo() {
  * Data deve essere nel formato YYYY-MM-GG.
  */
 function registerTrip() {
- if ( controllaData() ) {
-   $dataPart =$_POST['anno']."-".$_POST['mese']."-".$_POST['giorno'];
+ if ( controllaData($_POST['ora'],$_POST['minuti'],$_POST['mesePartenza'],$_POST['giornoPartenza'],$_POST['annoPartenza']) ) {
+   $dataPart =$_POST['annoPartenza']."-".$_POST['mesePartenza']."-".$_POST['giornoPartenza'];
    $oraPart = $_POST['ora'].":".$_POST['minuti'];
    $durata = $_POST['durataOre'].":".$_POST['durataMinuti'];
    $q1 = "insert into  
@@ -207,11 +207,11 @@ function controllaTrip() {
    return true;
 }
 
-function controllaData() {
+function controllaData($ora,$minuti,$mese,$giorno,$anno) {
    
    #Data Completa della partenza
    //echo $_POST['ora'].$_POST['minuti'].$_POST['mese'].$_POST['giorno'].$_POST['anno'];
-   $start = mktime($_POST['ora'],$_POST['minuti'],0,$_POST['mese'],$_POST['giorno'],$_POST['anno']);
+   $start = mktime($ora,$minuti,0,$mese,$giorno,$anno);
   
    $t = getdate(); 
    $now =mktime($t['hours'],$t['minutes'],0,$t['mon'],$t['mday'],$t['year']);
@@ -266,6 +266,15 @@ function cars_ofUser($userId) {
       where AutoUtenti.idUtente = '".getUserId()."'";
       
    $res = execQuery($query) or die("Query non valida1: " . mysql_error());
+   
+   if ((mysql_num_rows($res) == 0) && ($_GET['p'] == "nuovo"))
+	 return <<<ERR
+<div style="padding:0" class="bgGold">
+   <p>Non hai auto! Provvedi subito a 
+      <a href='index.php?p=auto'>registrarne</a> una.
+   <p>
+</div>
+ERR;
    
    while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
    

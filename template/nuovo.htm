@@ -18,11 +18,11 @@
       </li>
 	 <!-- Citta' di partenza e arrivo e relativi bottoni -->
       <li>
-	 <label for="partenza">Citt&agrave; di partenza</label>
+	 <label for="partenza" id="partenzaLabel">Citt&agrave; di partenza</label><br/>
 	 <input id="partenza" name="partenza" size="16"/><br/>
       </li>
       <li>
-	 <label for="destinaz">Citt&agrave; di arrivo</label>
+	 <label for="destinaz" id="destinazLabel" >Citt&agrave; di arrivo</label><br/>
 	 <input id="destinaz" name="destinaz" size="16"/>
       </li>
       <li class="center">
@@ -35,21 +35,21 @@
       </li>
 <!-- Altre informazioni , contenute in un unico blocco -->
    <li>
-      Data della Partenza
+      <label for="giornoPartenza" id="dataPLabel" > Data della Partenza</label><br/>
       { italianDate(2008,2020,Partenza) }
    </li>
    <li>
-      Orario di partenza
+     <label for="ora" id="oraPLabel" > Orario di partenza</label><br/>
       { timeSelect() }<br />
       <span class="notes">es. 08:00</span>
    </li>
    <li>
-      <label for="durata">Durata prevista del viaggio</label> <br/>
+      <label for="durataOra" id="durataLabel">Durata del viaggio</label> <br/>
       { durataSelect() }<br />
       <span class="notes">es. 1:30 per 1h e 30 m</span>
    </li>
    <li>
-      <label for="postiDisp">Posti Disponibili</label>
+      <label for="postiDisp" id="postiLabel">Posti Disponibili</label><br/>
       <input id="postiDisp" name="postiDisp" size="20"/><br />
       <span class="notes">Numero di persone che puoi ospitare</span>
    </li>
@@ -68,7 +68,7 @@
       <label class="radiolabel" for="musicaNo">No</label>
    </li>
    <li>
-      <label for="spese">Spese previste</label>
+      <label for="spese" id="speseLabel">Spese previste</label><br/>
       <input id="spese" name="spese"  size="20"/><br/>
       <span class="notes">(in &#8364;) Saranno divise tra i partecipanti</span>
    </li> 

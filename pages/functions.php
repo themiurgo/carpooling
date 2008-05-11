@@ -532,8 +532,8 @@ function timeSelect () {
 }
 
 function durataSelect () {
-   return numericDropDown("durataOre",0,23," ").' ore e '.
-      numericDropDown("durataMinuti",0,59," ").' minuti';
+   return numericDropDown("durataOre",0,23,"HH").' ore e '.
+      numericDropDown("durataMinuti",0,59,"MM").' minuti';
 }
 
 function numericDropDown($id,$start,$stop,$first=null,$names=null) {
@@ -542,8 +542,8 @@ function numericDropDown($id,$start,$stop,$first=null,$names=null) {
       $useDate = Time();
 
    $a="<select id=\"$id\" name=\"$id\">
-      <option value=\" \">$first</option>
-      <option value=\" \"> </option>\n";
+      <option value=\"-2\">$first</option>
+      <option value=\"-1\"> </option>\n";
 
    if ($names)
       for($i = $start; $i <= $stop; $i++)

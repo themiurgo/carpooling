@@ -578,6 +578,8 @@ function numericDropDown($id,$start,$stop,$first=null,$names=null) {
 
 //~ }
 
+
+
 function carSelect () {
    // Eventuali auto gia' registrate
    $auto_query = "select targa,marca,modello

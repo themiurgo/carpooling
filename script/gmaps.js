@@ -176,30 +176,22 @@ function fitZoom(bounds,point){
 /* 
  * Crea le indicazioni complete per raggiungere una localita'
  */
-function creaIndicazioni() {
-   mapForm = document.getElementById("mapForm"); 
-
-    /* Ottieni le citta'  di partenza ed arrivo dalle caselle di testo della pagina */
-    partenza = mapForm.partenza.value;
-    arrivo = mapForm.destinaz.value;
-
+function creaIndicazioni(partenza,arrivo) {
     if (GBrowserIsCompatible()) {
-  
-        /* Rimuove eventuali indicazioni gia'  presenti nella pagina */
+
+        /* Pulisco pagina e mappa */
         var direzioni = document.getElementById("directions");
         direzioni.innerHTML = "";
-            
-        /* Ottieni l'oggetto GDirections che costruira'  tutte le indicazioni necessarie */
-        gdir = new GDirections(map, direzioni);
-        
-        /*Azzera lo stato della mappa */
         map.clearOverlays();
-        gdir.clear();
 
-        /*  Aggiunge il caricatore delle direzioni ed il gestore degli errori.
-          *     Il primo fa riferimento alla funzione senza implementazione latestLoad.
-          *     Il secondo fa riferimento alla funzione gestioneErrori poco più in basso.
-          */
+        /* Ottengo l'oggetto GDirections che costruira' tutte le indicazioni necessarie */
+        gdir = new GDirections(map, direzioni);
+        gdir.clear();
+        
+        /*  Aggiungo il caricatore delle direzioni ed il gestore degli errori.
+         *     Il primo fa riferimento alla funzione senza implementazione latestLoad.
+         *     Il secondo fa riferimento alla funzione gestioneErrori poco più in basso.
+         */
         GEvent.addListener(gdir, "load", latestLoad);
         GEvent.addListener(gdir, "error", gestioneErrori);
 
@@ -232,4 +224,12 @@ function gestioneErrori(){
    else if (gdir.getStatus().code == G_GEO_BAD_REQUEST)
      alert("La richiesta di direzioni non e' stata sottoposta correttamente a Parsing. Controlla gli indirizzi.\n Codice Errore: " + gdir.getStatus().code);
    else alert(gdir.getStatus().code);
+}
+
+function latestLoad(){
+/**
+   Use this function to access information about the latest load() results.
+   e.g.
+   document.getElementById("getStatus").innerHTML = gdir.getStatus().code;
+   and yada yada yada... */
 }

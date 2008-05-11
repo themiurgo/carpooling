@@ -70,22 +70,25 @@ function disableText(){
     document.autoForm.aAuto.readOnly = true; 
 }	
 
-
-
-
 /* Aggiornamento AJAX dei tragitti nella pagina 'cerca'*/
 function risultatiAjax() {
-   document.getElementById("directions").style.visibility="hidden";
    e=document.getElementById("directionsCheck");
-
    var xmlHttp=GetXmlHttpObject();
    res = document.getElementById("risultati");
    mapForm = document.getElementById("mapForm"); 
-   //userName=document.getElementById("search_username");
    
    var partenza = mapForm.partenza.value;
    var arrivo = mapForm.destinaz.value;
-   creaPercorso(partenza,arrivo);
+   if (e.checked==true) {
+      document.getElementById("directions").style.visibility="visible";
+      document.getElementById("directions").style.display="block";
+      creaIndicazioni(partenza,arrivo);
+   }
+   else {
+      document.getElementById("directions").style.visibility="hidden";
+      document.getElementById("directions").style.visibility="none";
+      creaPercorso(partenza,arrivo);
+   }
    
    xmlHttp.onreadystatechange=function() {
       if(xmlHttp.readyState==4) {

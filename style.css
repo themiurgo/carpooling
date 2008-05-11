@@ -673,6 +673,7 @@ form#autoForm li {
 }
 
 
+
 form.newTrip label,
 form#autoForm label {
    display:block;
@@ -719,6 +720,11 @@ div#autoFormDiv {
    visibility: hidden;
    display: none;
 }
+
+
+
+
+
 
 ul.tragitto li {
    text-align: center;

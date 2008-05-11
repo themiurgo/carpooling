@@ -248,6 +248,12 @@ function content () {
       $content="<h1>Login errato</h1>";
       unset($_SESSION['wronglogin']);
    }
+   
+   if ( ($_GET['p']=='nuovo') && !hasAuto() ) {
+      $error = noAuto();
+      $content = $content.$error;
+      return $content;
+   }
 
    // Controllo che la pag richiesta sia consentita...
    if (in_array($_GET['p'],$allowed)) {
@@ -259,6 +265,8 @@ function content () {
       // ... ed effettuo le opportune sostituzioni.
       $content = $content.prepare_content($file_content);
    }
+   
+   
    
    else {
       $error = accessDenied();
@@ -502,6 +510,13 @@ ERR;
 }
 
 function noAuto() {
+ return <<<ERR
+<div style="padding:0" class="bgGold">
+   <p>Non hai auto! Provvedi subito a 
+      <a href='index.php?p=auto'>registrarne</a> una.
+   <p>
+</div>
+ERR;
 
 }
 

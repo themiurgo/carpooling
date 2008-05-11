@@ -258,6 +258,16 @@ function users_mostActive() {
    return $o;
 }
 
+/** Controlla se l'utente ha almeno un auto */
+function hasAuto() {
+   $query = "select idAuto as num from AutoUtenti where idUtente = '".getUserId()."'";
+   $res = execQuery($query) or die("Query non valida1: " . mysql_error());
+   if ((mysql_num_rows($res) == 0) ) {
+      return false;
+   }
+   return true;
+}
+
 
 function cars_ofUser($userId) {
    $o='<select id="idAuto" name="idAuto">';
@@ -267,16 +277,7 @@ function cars_ofUser($userId) {
       
    $res = execQuery($query) or die("Query non valida1: " . mysql_error());
    
-   if ((mysql_num_rows($res) == 0) && ($_GET['p'] == "nuovo"))
-	 return <<<ERR
-<div style="padding:0" class="bgGold">
-   <p>Non hai auto! Provvedi subito a 
-      <a href='index.php?p=auto'>registrarne</a> una.
-   <p>
-</div>
-ERR;
-   
-   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
+  while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
    
       $auto= $row['marca']." ".$row['modello']." (".$row['targa'].")";
 

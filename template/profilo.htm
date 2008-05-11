@@ -3,12 +3,12 @@
 function updateProfilo() {
       var e = document.getElementById("hiddenProfilo");
    e.value = "updateProfilo";
-   var f = document.getElementById("profiloForm");
-   f.submit();
+   validaProfilo();
 }
    
 -->
 </script>
+
 <div id="profilo" class="left">
 <form id="profiloForm" method="post" action="index.php?p=profilo&amp;action=manageProfilo">
 <ul class="profilo bgAzure">
@@ -60,6 +60,9 @@ function updateProfilo() {
 </li>
 <li>
 <div class="pulsanti">
+<!-- Validazione contenuti del form -->
+<script type="text/javascript" src="script/livevalidation_standalone.compressed.js"></script>
+<script type="text/javascript" src="script/profiloValidate.js"></script>
 <input type="hidden" id="hiddenProfilo" name="hiddenProfilo" value="modifyProfilo"/>
 { $button }
 </div>

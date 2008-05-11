@@ -6,14 +6,17 @@
 <div id="container"> 
    <p>In questa pagina potrai creare e pubblicare un tragitto.</p>
    <div id="carPoolingMap" style="width: 530px; height: 330px"></div>
+   <!-- Tabella delle indicazioni -->
+<div id="directions" class="destra" style="width: 200px"></div>
    <p>Inserisci le informazioni relative al tuo percorso completando tutti i campi sottostanti</p>
-<!--  Form per la creazione del percorso. NON cambiare il nome del Form	-->
+<!--  Form per la creazione del percorso.	-->
 <div class="bgGold">
 
 <form action="index.php?action=registerTrip" method="post" name="mapForm" id="mapForm" class="newTrip">
    <ul>
       <!-- Selezione auto-->
       <li> 
+      <label for="idAuto" id="partenzaLabel">Seleziona l'auto : </label><br/>
 	 { cars_ofUser(getUserId()) }
       </li>
 	 <!-- Citta' di partenza e arrivo e relativi bottoni -->
@@ -25,14 +28,18 @@
 	 <label for="destinaz" id="destinazLabel" >Citt&agrave; di arrivo</label><br/>
 	 <input id="destinaz" name="destinaz" size="16"/>
       </li>
-      <li class="center">
-	 <button id="searchButtonN"  type="button" value="Visualizza" onclick="creaPercorso()">
-	 Visualizza Tragitto
-	 </button>
-	 <button id="directionsButtonN"  type="button" value="Indicazioni" onclick="creaIndicazioni()">
-	 Mostra Indicazioni
-    	 </button> 
-      </li>
+       <li>
+	    <label for="directionsCheck" style="font-weight:normal">
+	       Mostra indicazioni
+	    </label>
+	    <input name="directionsCheck" id="directionsCheck" 
+	       type="checkbox" value="directions" style="width: auto"/>
+	 </li>
+	 <li>
+	    <button id="searchButton" type="button" onclick="risultatiAjax()">
+	       Ricerca
+	    </button><br />
+	 </li>
 <!-- Altre informazioni , contenute in un unico blocco -->
    <li>
       <label for="giornoPartenza" id="dataPLabel" > Data della Partenza</label><br/>
@@ -92,6 +99,5 @@
 
 </form>
 </div> <!-- Fine del contenitore colorato-->
-<!-- Tabella delle indicazioni -->
-<div id="directions" style="width: 200px"></div>
+
 </div>	<!-- Fine del contenitore generale -->    

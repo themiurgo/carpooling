@@ -15,16 +15,17 @@ function risultati() {
    }
    var url="pages/ajax.php";
    url=url+"?q=search_username"
-   url=url+"&amp;username="+userName.value;
+   url=url+"&username="+userName.value;
    xmlHttp.open("GET",url,true);
    xmlHttp.send(null);
 }
-</script>
 
+setFormFocus("searchUser")
+</script>
 
 <div class="medium left">
    In questa pagina puoi cercare gli utenti o visualizzare le classifiche.
-   <form action="">
+   <form id="searchUser" action="">
       <div style="margin: 1em">
       <input type="text" id="search_username" />
       <button type="button" onclick="risultati()">Cerca</button>

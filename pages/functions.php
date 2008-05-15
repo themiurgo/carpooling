@@ -1,136 +1,108 @@
 <?php
 
+
 /*
- * Gestisce le azioni
+ * Gestisce le azioni.
  */
 function handle_action () {
    if (isset($_GET['action'])) {
       switch ($_GET['action']) {
-	 case "login":
-	    checkUser($_POST['username'],$_POST['password']);
-	    break;
-	 
-	 case "logout":
-	    unset($_SESSION['user']);
-	    break;
+         case "login":
+            checkUser($_POST['username'],$_POST['password']);
+            break;
 
-	 case "register":
-	    registraUtente();
-	    break;
+         case "logout":
+            unset($_SESSION['user']);
+            break;
 
-	 case "manageAuto":
-	    gestioneAuto();
-	    break;
-	 
-	 case "manageProfilo":
-	    if ( $_POST['hiddenProfilo'] == "updateProfilo")
-	       aggiornaProfilo();
-	    break;
-	 
-	 case "registerTrip":
-	    registerTrip();
-	    break;
-	 
-	 case "joinTrip":
-	    partecipaTragitto();
-	    break;
-	
-	case "blockTrip":
-	    bloccaTragitto();
-	    break;
+         case "register":
+            registraUtente();
+            break;
+
+         case "manageAuto":
+            gestioneAuto();
+            break;
+         
+         case "manageProfilo":
+            if ($_POST['hiddenProfilo'] == "updateProfilo")
+               aggiornaProfilo();
+            break;
+
+         case "registerTrip":
+            registerTrip();
+            break;
+
+         case "joinTrip":
+            partecipaTragitto();
+            break;
+
+         case "leaveTrip":
+            abbandonaTragitto();
+            break;
+
+         case "blockTrip":
+            bloccaTragitto();
+            break;
+
+         case "voteTrip":
+            newFeedback (getUserId(),$_GET['idTrip'],1,$_POST['voto'],$_POST['note']);
       }
    }
 }
 
-function parseTemplate ($template) {
-   /* return preg_replace ("/\{ ([\$]?)(\w+)(..)? \}/e","$1$2$3",
-      $template); */
-//   return preg_replace("/\{\s(.*)\s\}/e","$1",$template);
 
-   return preg_replace("/\{\s(.*)\s\}/e","$1",$template);
-}
+/* --------------
+ * GESTIONE LOGIN
+ * -------------- */
 
 /*
- * Effettua il login, variando opportunamente le variabili di
- * sessione 'user' e 'userId'. Ritorna l'username dell'utente in
- * caso di successo e null in caso di insuccesso.
+ * Effettua il login. Ritorna l'username (successo) o null (insuccesso)
  */
 function checkUser ($username, $password) {
-   
-    $user_query = "select ID,psw from Utenti where `username`='".$username."'";
-    $res = execQuery($user_query);
-    $a = mysql_fetch_array($res);
-    
-    $psw = $a['psw'];
-   // print "Confronto ".$password." con ".$psw;
+    $q = "select ID,psw from Utenti where `username`='".$username."'";
+    $r = mysql_fetch_array(execQuery($q));
 
-    if ( $password == $psw ) { 
+    if ($password == $r['psw']) { 
       $_SESSION['user'] = $username;
-      $_SESSION['userId'] = $a['ID'];
+      $_SESSION['userId'] = $r['ID'];
     }
-    
-    else {
-       $_SESSION['wronglogin']=true;
-    }
-    
+    else $_SESSION['wronglogin']=true;
     return getUser();
 }
 
-
 /*
- * Ritorna l'username dell'utente (se loggato) oppure
- * null (se non loggato).
+ * Ritorna l'username (se loggato) o null (se non loggato).
  */
 function getUser () {
    if (isset($_SESSION['user']))
-        return $_SESSION['user'];
-   else
-        return null;
+      return $_SESSION['user'];
+   return null;
 }
 
 /*
- * Ritorna l'id dell'utente (se loggato) oppure
- * null (se non loggato).
+ * Ritorna l'id utente (se loggato) o null (se non loggato).
  */
 function getUserId () {
-   if (isset($_SESSION['userId'])) 
-        return $_SESSION['userId'];
-   else
-        return null;
-}
-
-/*
- * Restituisce i percorsi per cui si puo' scrivere un
- * feedback.
- */
-function feedback ($targetUserId) {
-   $feedback_query="select Tragitto.*
-      from UtentiTragitto join Tragitto
-      on UtentiTragitto.idTragitto=Tragitto.ID
-      where Tragitto.idPropr='".$targetUserId."'
-         and UtentiTragitto.idUtente='".getUserId()."'
-      limit 5";
-   $res=execQuery($feedback_query);
-   while ($row2=mysql_fetch_array($res,MYSQL_ASSOC)) {
-      $feedback=$feedback.$row2['ID'];
-   }
-   return $feedback;
+   if (isset($_SESSION['userId']))
+      return $_SESSION['userId'];
+   return null;
 }
 
 
-/* ---------------------
- * FUNZIONI DI TEMPLATE
- * --------------------- */
+/* --------
+ * TEMPLATE
+ * -------- */
 
 /* 
- * Ritorna eventuali tag da aggiungere dentro <head></head>,
- * ad esempio nelle pagine dove sono presenti mappe.
+ * Ritorna eventuali tag da aggiungere dentro <head></head>
+ * (ad es. nelle pagine dove sono presenti mappe).
  */
 function headType() {
    switch ($_GET['p']) {
       case "nuovo":
       case "cerca":
       case "tragitto":
+      break; # FIXME
         
       # Script per la gestione delle GMaps
       return <<<DH
@@ -145,34 +117,30 @@ DH;
 }
 
 /*
- * Ritorna <body> in versione "semplice" oppure arricchito di
- * operazioni da effettuare al caricamento della pagina.
+ * Ritorna <body> o aggiunge opportunamente azioni onLoad.
  */
 function bodyType() {
    switch ($_GET['p']) {
       case "nuovo":
       case "cerca":
+         break; # FIXME !!! Uncomment this.
 
          // Centro la mappa nella localita' preferita dell'utente
          if (isset($_SESSION['user'])) {
-            $location_query = "select localita from Utenti where ID='".getUserId()."' "; 
-            $res = execQuery($location_query);
-            $row = mysql_fetch_array($res);
-            return '<body onload="creaMappa(\''.$row['localita'].'\')" onunload="GUnload()">';
+            $q = "select localita from Utenti where ID='".getUserId()."' "; 
+            $r = mysql_fetch_array(execQuery($q));
          }
         
-         else {
-            # Centro di default della Mappa
-            $default = 'Catania';
-            return '<body onload="creaMappa(\''.$default.'\')" onunload="GUnload()">';
-         }
+         else $r['localita']="Catania";
+
+         return '<body onload="creaMappa(\''.$r['localita'].'\')" onunload="GUnload()">';
          break;
 
       case "tragitto":
-	 $q = "select partenza,destinaz from Tragitto where ID='$_GET[idTrip]'";
-   	 $r = mysql_fetch_array(execQuery($q));
-	 return "<body onload=\"creaMappa('$r[partenza]');
-	    creaPercorso('$r[partenza]','$r[destinaz]');\" onunload=\"GUnload()\">";
+         $q = "select partenza,destinaz from Tragitto where ID='$_GET[idTrip]'";
+         $r = mysql_fetch_array(execQuery($q));
+         return "<body onload=\"creaMappa('$r[partenza]');
+            creaPercorso('$r[partenza]','$r[destinaz]');\" onunload=\"GUnload()\">";
          break;
 
       default:
@@ -180,16 +148,20 @@ function bodyType() {
    }
 }
  
+function parseTemplate ($template) {
+   /* return preg_replace ("/\{ ([\$]?)(\w+)(..)? \}/e","$1$2$3",
+      $template); */
+//   return preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+   return preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+}
 
 /*
- * Restituisce il menu.
+ * Restituisce il menu
+ * (index.htm)
  */
 function menu () {
-
-
    # Utente NON LOGGATO
-   if (!getUser()) {
-      return <<<MNNL
+   if (!getUser()) return <<<MNNL
       <a href="#" onclick="loginScript()">Login</a>&nbsp;&middot;
       <a href="index.php?p=iscrizione">Iscriviti</a>&nbsp;&middot;
       <a href="index.php?p=tragitti">Tragitti</a>&nbsp;&middot;
@@ -197,39 +169,26 @@ function menu () {
       <a href="index.php?p=utenti">Utenti</a>&nbsp;&middot;
       <a href="index.php?p=about">About Us</a>
 MNNL;
-   }
     
    # Utente LOGGATO
-   else {
-      $Utente = getUser();
-      return <<<MNL
-      <b>$Utente</b> - 
-      <a href="index.php?p=profilo">Profilo</a>&nbsp;&middot;
-      <a href="index.php?p=tragitti">Tragitti</a>&nbsp;&middot;
-      <a href="index.php?p=cerca">Cerca Tragitto</a>&nbsp;&middot;
-      <a href="index.php?p=nuovo">Nuovo Tragitto</a>&nbsp;&middot;
-      <a href="index.php?p=auto">Auto</a>&nbsp;&middot;
-      <a href="index.php?p=utenti">Utenti</a>&nbsp;&middot;
-      <a href="index.php?p=about">About Us</a>&nbsp;&middot;
-      <a href="index.php?action=logout">Logout</a>
+   else return "
+   <b>".getUser()."</b> - ".<<<MNL
+   <a href="index.php?p=profilo">Profilo</a>&nbsp;&middot;
+   <a href="index.php?p=tragitti">Tragitti</a>&nbsp;&middot;
+   <a href="index.php?p=cerca">Cerca Tragitto</a>&nbsp;&middot;
+   <a href="index.php?p=nuovo">Nuovo Tragitto</a>&nbsp;&middot;
+   <a href="index.php?p=auto">Auto</a>&nbsp;&middot;
+   <a href="index.php?p=utenti">Utenti</a>&nbsp;&middot;
+   <a href="index.php?p=about">About Us</a>&nbsp;&middot;
+   <a href="index.php?action=logout">Logout</a>
 MNL;
-   }
 }
-
-function parseDate ($timedate) {
-   list($time,$date)=explode(" ",$timedate);
-   list($hours,$minutes,$seconds)=explode(":",$time);
-   list($year,$month,$day)=explode("-",$date);
-   return "$day.$month.$year $hours:$minutes";
-}
-
 
 /*
- * Ritorna il contenuto della pagina richiesta, che va
- * a sostituire <!-- CONTENT --> nel template index.htm
+ * Ritorna il contenuto della pagina richiesta
+ * (index.htm)
  */
 function content () {
-    
    // Pagina visualizzata di default
    if (!isset($_GET['p']))
       $_GET['p']="tragitti";
@@ -239,115 +198,116 @@ function content () {
       // ...un utente loggato
       $allowed = array("profilo","tragitti","cerca","nuovo","auto",
          "utenti","about","tragitto") :
-      # ...un utente NON loggato
-      $allowed = array("tragitti","tragitto","cerca","utenti","about","iscrizione");
+      // ...un utente NON loggato
+      $allowed = array("tragitti","tragitto","cerca","utenti","about","iscrizione","profilo");
 
    $content = "";
-   
    if (isset($_SESSION['wronglogin'])) {
       $content="<h1>Login errato</h1>";
       unset($_SESSION['wronglogin']);
    }
    
-   if ( ($_GET['p']=='nuovo') && !hasAuto() ) {
+   if (($_GET['p'] == 'nuovo') && !hasAuto()) {
       $error = noAuto();
       $content = $content.$error;
       return $content;
    }
 
-   // Controllo che la pag richiesta sia consentita...
+   // Se posso visualizzare la pagina, effettuo le sostituzioni nel template
    if (in_array($_GET['p'],$allowed)) {
-
-      // ... recupero il template ...
       $file_content = implode ("",file("template/$_GET[p].htm"))
          or die("Pagina non trovata");
-      
-      // ... ed effettuo le opportune sostituzioni.
       $content = $content.prepare_content($file_content);
    }
-   
-   
    
    else {
       $error = accessDenied();
       $content = $content.$error;
    }
 
-   
    return $content;
 }
 
-
 /* 
- * Effettua le opportuni sostituzioni di stringhe con variabili
- * PHP, a seconda della pagina richiesta.
+ * Sostituisce le stringhe con variabili, a seconda della pagina richiesta.
+ * $template -- stringa di template
  */
 function prepare_content ($template) {
-
    // Devo effettuare sostituzioni diverse per ogni pagina
    switch ($_GET['p']) {
       case 'tragitto':
-	 if (isset($_GET['idTrip'])) {
-	    $q="select *,Utenti.userName as proprietario,
-	       Utenti.userName=".getUserId()." as controllo
-	       from Tragitto join Utenti on Utenti.ID=Tragitto.idPropr
-	       where Tragitto.ID='".$_GET['idTrip']."'";
-	    
-	    $r=mysql_fetch_array(execQuery($q));
+         if (isset($_GET['idTrip'])) {
+            // Informazioni sul tragitto
+            $q="select Tragitto.*,Utenti.userName as proprietario,
+               Utenti.userName='".getUser()."' as controllo,
+               postiDisp-COUNT(*) as postiAdesso
+               from Tragitto join Utenti on Utenti.ID=Tragitto.idPropr
+               join UtentiTragitto on UtentiTragitto.idTragitto = Tragitto.ID
+               where Tragitto.ID='".$_GET['idTrip']."'
+               group by UtentiTragitto.idTragitto";
+            $r=mysql_fetch_array(execQuery($q));
               
-               $r['fumo'] ? 
-                  $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
-              
-               $r['musica'] ?
-                  $mus = "Con Musica" : $mus = "NO Musica";
+            $r['fumo'] ? 
+               $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
+            $r['musica'] ?
+               $mus = "Con Musica" : $mus = "NO Musica";
 
-	    $q2="select Utenti.*,Utenti.ID=".getUserId()." as partecipo
-	       from Tragitto join Utenti on Utenti.ID=Tragitto.idPropr
-	       where Tragitto.ID='".$_GET['idTrip']."'";
-	    
-	    $r2=mysql_fetch_array(execQuery($q2));
+            // Informazioni su tutti i partecipanti
+            $q2="select Utenti.userName
+               from Tragitto
+               join UtentiTragitto on Tragitto.ID = UtentiTragitto.idTragitto
+               join Utenti on UtentiTragitto.idUtente = Utenti.ID
+               where Tragitto.ID=$_GET[idTrip]";
+            $res2=execQuery($q2);
 
-	 }
-	 $final_content=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
+            $users="";
+            if (mysql_num_rows($res2) != 0) {
+               while ($r2=mysql_fetch_array($res2)) 
+                  $users=$users."<a href=\"index.php?p=profilo&amp;u=$r2[userName]\">$r2[userName]</a> ";
+               $users=$users."<br />";
+            }
 
-      break;
+            // Informazioni su tutti i partecipanti            
+            $q3="select UtentiTragitto.idUtente=".getUserId()." as partecipo
+               from Tragitto
+               join UtentiTragitto on Tragitto.ID=UtentiTragitto.idTragitto
+               where Tragitto.ID=".$_GET[idTrip]."
+               and UtentiTragitto.idUtente=".getUserId();
+            $r3=mysql_fetch_array(execQuery($q3));
+         }
 
-        
+         $final_content=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
+         break;
+
       case 'tragitti':
-            
          $q1 = "select Tragitto.*, userName from `Tragitto`
             join Utenti on idPropr=Utenti.ID
             order by `dataPart` desc,`oraPart` desc limit 5";
          $res = execQuery($q1);
   
-	    // Stampo i tragitti
-            while ($r1 = mysql_fetch_array($res)) {
-	       $o=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
-               $final_content = $final_content.$o;
-            }
-            
-            #Eventuali dettagli sul tragitto selezionato
-            if ( isset($_GET['idTrip'] ) ){
-               $trip_query="select * from Tragitto where ID='".$_GET['idTrip']."'";
-               $res = execQuery($trip_query);
-               $row=mysql_fetch_array($res);
-               $idT= $row['ID'];
-               $pro = $row['idPropr'];
-               $name_query="select userName from Utenti where ID=$pro";
-               $res_name = execQuery($name_query);
-               $row_name = mysql_fetch_array($res_name);
-               $ora = $row['oraPart'];
-               $durata=$row['durata'];
-               $data = $row['dataPart'];
-              
-               $row['fumo'] ? 
-                  $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
-              
-               $row['musica'] ?
-                  $mus = "Con Musica" : $mus = "NO Musica"; 
-               
-               
-               # CLAMOROSO BUG: anche se il metodo è 'post', si comporta come get ( che è quello che voglio).
+         // Stampo i tragitti
+         while ($r1 = mysql_fetch_array($res)) {
+            $o=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
+            $final_content = $final_content.$o;
+         }
+
+         #Eventuali dettagli sul tragitto selezionato
+         if (isset($_GET['idTrip'])) {
+            $q="select * from Tragitto where ID='".$_GET['idTrip']."'";
+            $r=mysql_fetch_array(execQuery($q));
+            $name_query="select userName from Utenti where ID=$r[idPropr]";
+            $res_name = execQuery($name_query);
+            $row_name = mysql_fetch_array($res_name);
+            $ora = $row['oraPart'];
+            $durata=$row['durata'];
+            $data = $row['dataPart'];
+
+            $row['fumo'] ? 
+               $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
+            $row['musica'] ?
+               $mus = "Con Musica" : $mus = "NO Musica"; 
+
+            # CLAMOROSO BUG: anche se il metodo è 'post', si comporta come get ( che è quello che voglio).
                $dettagli = <<<TRIP
                <div style='padding:0' class='bgRed'><h2>Dettagli Tragitto</h2>
                <span class="utenti">
@@ -370,8 +330,8 @@ function prepare_content ($template) {
                <br/> <br/>
 TRIP;
                # L'utente corrente e' il proprietario del tragitto, quindi di sbloccano lel unzioni avanzate.
-               if ( $pro == $_SESSION['userId'] ) {
-                  if ( canModify() ) {
+               if ($pro == $_SESSION['userId']) {
+                  if (canModify()) {
                      $mod= <<<MOD
                      <span class="tragitto">
                         <form id="joinForm" action="index.php?p=tragitti&action=modTrip&idTrip=$row[ID]" method="post">
@@ -396,7 +356,8 @@ BLOCK;
                   $dettagli=$dettagli.$block;
                   # L'utente corrente nON e' il proprietario del tragitto, gli viene data la possibilità di partecipare.
                } 
-               if ( (getUser()) ) {
+
+               if ((getUser())) {
                   $extra= <<<FORM
                   <form id=joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
                   <span class="join">
@@ -413,77 +374,75 @@ FORM;
             
             break;
 
-      case 'utenti' :
-            $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+      case 'utenti':
+         $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
          break;
 
       case 'profilo':
-	 // Se non e' specificato un utente,
-	 // visualizzo il profilo dell'utente corrente
+         // Di default visualizzo il profilo dell'utente corrente
          if (!isset($_GET['u']))
             $_GET['u']=getUser();
 
          // Estraggo le informazioni sul profilo
-	 $q1="select *,UNIX_TIMESTAMP(`dataIscriz`) as dataisc,
-	    DATE_FORMAT(NOW(), '%Y')-DATE_FORMAT(dataNascita, '%Y')-
-   	       (DATE_FORMAT(NOW(), '00-%m-%d') <
-	       DATE_FORMAT(dataNascita, '00-%m-%d')) as eta,
-	    DATE_FORMAT(NOW(), '%Y')-DATE_FORMAT(dataPatente, '%Y')-
-   	       (DATE_FORMAT(NOW(), '00-%m-%d') <
-	       DATE_FORMAT(dataPatente, '00-%m-%d')) as patente,
-	    DATE_FORMAT(dataIscriz,'%d.%m.%Y') as dataIscriz
-   	    from `Utenti`
+         $q1="select *,UNIX_TIMESTAMP(`dataIscriz`) as dataisc,
+            DATE_FORMAT(NOW(), '%Y')-DATE_FORMAT(dataNascita, '%Y')-
+               (DATE_FORMAT(NOW(), '00-%m-%d') <
+            DATE_FORMAT(dataNascita, '00-%m-%d')) as eta,
+            DATE_FORMAT(NOW(), '%Y')-DATE_FORMAT(dataPatente, '%Y')-
+               (DATE_FORMAT(NOW(), '00-%m-%d') <
+            DATE_FORMAT(dataPatente, '00-%m-%d')) as patente,
+            DATE_FORMAT(dataIscriz,'%d.%m.%Y') as dataIscriz
+            from `Utenti`
             where `userName`='".$_GET['u']."'";
 
          $r1=mysql_fetch_array(execQuery($q1));
-         
-         ($r1['fumatore'] == 0) ?
-	    $r1['fumatore']="No" : $r1['fumatore']="Si";
-        
-	 // Varia il contenuto della pagina a seconda che si è in modalita 'leggi profilo' o 'modifica profilo'
-         
-	 if ( $_POST['hiddenProfilo']=="modifyProfilo" ) {
-	    echo  $_POST['fill'];
-
-	    $r1['userName']="<input id='userName' name='userName' class='modificatori' value='$r1[userName]'/>";
-	    $r1['email']="<input id='email' name='email' class='modificatori' value='$r1[email]'/>";
-      	    $r1['fumatore']="<select name ='fumatore' id='fumatore' class='modificatori' style='width: auto'> <option value='0'>No</option><option value='1'>SI</option></select>";
-	    $r1['localita']="<input id='localita'  name='localita' class='modificatori'  value='$r1[localita]'/>";
-	    $button = "<button id='updateProfiloButton' type='button' onclick='updateProfilo()'>Aggiorna</button>";
-	 }
-	    
-	 else
-	    $button="<button type='submit' name='modifica' value='modifica'>Modifica</button>";
-
-	 $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
-     
           
+         ($r1['fumatore'] == 0) ?
+            $r1['fumatore']="No" : $r1['fumatore']="Si";
+
+         // Varia il contenuto della pagina a seconda che si è in modalita 'leggi profilo' o 'modifica profilo'
+         if (getUser() == $_GET['u']) {
+            if ( $_POST['hiddenProfilo']=="modifyProfilo" ) {
+               echo  $_POST['fill'];
+
+       $r1['userName']="<input id='userName' name='userName' class='modificatori' value='$r1[userName]'/>";
+       $r1['email']="<input id='email' name='email' class='modificatori' value='$r1[email]'/>";
+             $r1['fumatore']="<select name ='fumatore' id='fumatore' class='modificatori' style='width: auto'> <option value='0'>No</option><option value='1'>SI</option></select>";
+       $r1['localita']="<input id='localita'  name='localita' class='modificatori'  value='$r1[localita]'/>";
+       $button = "<button id='updateProfiloButton' type='button' onclick='updateProfilo()'>Aggiorna</button>";
+    }
+
+    else
+       $button="<button type='submit' name='modifica' value='modifica'>Modifica</button>";
+    }
+
+   else $button="";
+
+   $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+
          // Se visualizzo un profilo non mio, estraggo i tragitti
-	 // su cui posso fare feedback
-	 if (getUser()!=$_GET['u'])
-            $feedback=feedback($r1['ID']); 
-         
-         break;
-      
-      
+    // su cui posso fare feedback
+//    if (getUser()!=$_GET['u'])
+//            $feedback=feedback($r1['ID']); 
+
+   break;
+
       // Nuovo Tragitto e inserimento Auto
       case 'cerca':
       case 'utenti':
       case 'nuovo':
       case 'auto':   
       case 'iscrizione':
-         
-	 $final_content=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
-	 break;
+         $final_content=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
+         break;
 
       default:
-        
-	 # Nulla da sostituire
-	 $final_content = $final_content.$template;
-	 break;
+         // Nulla da sostituire
+         $final_content = $final_content.$template;
+         break;
     }
    
-    # Restituisce il contenuto
+    // Restituisco il contenuto
     return $final_content;
 }
 
@@ -491,13 +450,6 @@ FORM;
  * FUNZIONI DI SERVIZIO
  * --------------------- */
  
-/*
- * Affidabilita' dell'utente
- */
-function trust ($username) {
-   return "molto affidabile";
-}
-
 /* Messaggio di errore: non puoi accedere alla pagina*/
 function accessDenied() {
 return <<<ERR
@@ -520,18 +472,25 @@ ERR;
 
 }
 
+/*
+ * Vede se si può modificare.
+ */
 function canModify() {
+   $q = "select count(idUtente) as num
+      from UtentiTragitto
+      where idTragitto = '".$_GET['idTrip']."'";
+   $res = execQuery($q);
+   $r = mysql_fetch_array($res);
    
-   $check_query = "select count(idUtente) as num from UtentiTragitto where idTragitto = '".$_GET['idTrip']."'";
-   $res = execQuery($check_query) or die("Query non valida1: " . mysql_error());
-   $row = mysql_fetch_array($res);
-   
-   if ( $row['num']  > 1 ) {
+   if ($r['num'] > 1) 
       return false;
-   }
+
    return true;
 }
 
+/*
+ * Ritorna una select da cui selezionare la data (in italiano)
+ */
 function italianDate ($firstY,$lastY,$suffix=null) {
    $monthName = array(1=> "Gen","Feb","Mar","Apr","Mag",
      "Giu","Lug","Ago","Set","Ott","Nov","Dic");
@@ -541,71 +500,66 @@ function italianDate ($firstY,$lastY,$suffix=null) {
       numericDropDown("anno$suffix",$firstY,$lastY,"AAAA");
 }
 
+/*
+ * Ritorna una select da cui selezionare l'ora e i minuti.
+ */
 function timeSelect () {
    return numericDropDown("ora",0,23,"HH").' : '.
       numericDropDown("minuti",0,59,"MM");
 }
 
+/*
+ * Ritorna una select da cui selezionare la durata (in ora e minuti)
+ */
 function durataSelect () {
    return numericDropDown("durataOre",0,23,"HH").' ore e '.
       numericDropDown("durataMinuti",0,59,"MM").' minuti';
 }
 
+/*
+ * Ritorna una select numerica (utile per date, anni, ...)
+ *
+ * $id -- id della select
+ * $start -- numero da cui partire
+ * $stop -- numero a cui finire
+ * $first -- primo elemento (opzionale)
+ * $names -- array di nomi (opzionale)
+ * (nuovo.htm, auto.htm)
+ */
 function numericDropDown($id,$start,$stop,$first=null,$names=null) {
-   
    if ($useDate == 0)
       $useDate = Time();
-
    $a="<select id=\"$id\" name=\"$id\">
       <option value=\"-2\">$first</option>
       <option value=\"-1\"> </option>\n";
-
    if ($names)
       for($i = $start; $i <= $stop; $i++)
-	 $a=$a."<option value=\"$i\">".
-	    "$names[$i]</option>\n";
-
+         $a=$a."<option value=\"$i\">".
+            "$names[$i]</option>\n";
    else
       for($i = $start; $i <= $stop; $i++)
-	 $a=$a."<option value=\"$i\">".
-	    "$i</option>\n";
-
+         $a=$a."<option value=\"$i\">".
+            "$i</option>\n";
    $a=$a.'</select>';
 
    return $a;
 }
 
-//~ function otherOwners(){
-   //~ // Eventuali auto gia' registrate
-   //~ $auto_query = "select targa,marca,modello
-      //~ from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
-      //~ where AutoUtenti.idUtente='".getUserId()."'";
-      
-   //~ $res = execQuery($auto_query);
-
-   //~ // Nessuna auto 
-   //~ if ((mysql_num_rows($res) == 0)) {
-         //~ return "";
-   //~ }
-
-   //~ $owner_query = 
-
-
-//~ }
-
-
-
+/*
+ * Ritorna una select che permette di selezionare un'auto fra quelle che
+ * l'utente ha registrato.
+ * (nuovo.htm, auto.htm)
+ */
 function carSelect () {
-   // Eventuali auto gia' registrate
+   // Prendo informazioni su eventuali auto gia' registrate
    $auto_query = "select targa,marca,modello
       from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
       where AutoUtenti.idUtente='".getUserId()."'";
-      
    $res = execQuery($auto_query);
 
-   // Nessuna auto per nuovo tragitto
+   // Se non c'e' nessun'auto mostro un avviso...
    if ((mysql_num_rows($res) == 0) && ($_GET['p'] == "nuovo"))
-	 return <<<ERR
+      return <<<ERR
 <div style="padding:0" class="bgGold">
    <p>Non hai auto! Provvedi subito a 
       <a href='index.php?p=auto'>registrarne</a> una.
@@ -613,6 +567,7 @@ function carSelect () {
 </div>
 ERR;
 
+   // ...o consento di registrare una nuova auto
    elseif (mysql_num_rows($res)==0 && $_GET['p'] == "auto") {
       return $output.<<<FRM
    <button id="newAuto" type="button" onclick="showForm()">
@@ -621,16 +576,14 @@ ERR;
 FRM;
    }
                
-   # Almeno un'auto
+   // Se c'e' qualche auto consento di selezionarla
    else {
       $row = mysql_fetch_array($res);
-                
-      # Selezione dell'auto
       $output=$output.cars_ofUser(getUserId());
-            
-      # Nella pagina auto posso modificarla
-      if ($_GET['p']=="auto") {
-	 $output=$output.<<<MOD
+      
+      // Pulsante di modifica
+      if ($_GET['p']=="auto") 
+         $output=$output.<<<MOD
    <button id="modifyAutoButton" type="button" onclick="doFill()">
       Modifica
    </button>
@@ -638,41 +591,150 @@ FRM;
       Inserisci nuova
    </button>
 MOD;
-      }
       return $output;
    }
 }
 
 /*
  * Visualiza un pulsante che consente di partecipare al tragitto.
+ * owner (booleano) indica se e' il proprietario
+ * hasJoint (booleano) indica se partecipa al tragitto
+ * postiDisp (intero) posti disponibili (fissi) oltre al guidatore
+ * postiAdesso (intero) posti disponibili adesso (variabili)
  */
-function controltrip ($owner,$internal) {
-   if ($owner)
+function controlTrip ($owner,$hasJoint,$postiDisp,$postiAdesso) {
+   if ($postiDisp-1 == $postiAdesso && $postiAdesso == 0)
+      return "Tragitto annullato dall'organizzatore";
+
+   if ($owner && $postiDisp-1 == $postiAdesso && $postiAdesso!=0)
       return <<<BLOCK
-      <button type="button">
-	 Blocca il tragitto
+      <button type="button" onclick="location.href='index.php?p=tragitto&amp;idTrip=$_GET[idTrip]&amp;action=blockTrip'">
+      Blocca il tragitto
       </button>
 BLOCK;
 
-   elseif ($internal)
+   elseif ($hasJoint && !$owner)
       return <<<LEAVE
-      <button type="button">
-	 Abbandona il tragitto
+      <button type="button" onclick="location.href='index.php?p=tragitto&amp;idTrip=$_GET[idTrip]&amp;action=leaveTrip'">
+    Abbandona il tragitto
       </button>
 LEAVE;
 
-   else
+   elseif ($postiAdesso > 0 && !$owner)
       return <<<JOIN
-      <button type="button">
-	 Partecipa al tragitto
+      <button type="button" onclick="location.href='index.php?p=tragitto&amp;idTrip=$_GET[idTrip]&amp;action=joinTrip';">
+    Partecipa al tragitto
       </button>
 JOIN;
-	 /* Blocco tragitto */
 
-/*	 <form id="blockForm" action="index.php?p=tragitti&action=blockTrip&idTrip={ $r[ID] }" method="post">
-	    <label for="blockButton">Hai avuto un'imprevisto?</label><br/>
-	    <button id="registerAutoButton" type="submit">Blocca Tragitto</button>
-   	 </form> */
-
+   else return null;
 }
+
+/*
+ * Stampa un tragitto
+ * $r -- una riga di Tragitto + userName
+ */
+function printTrip ($r){
+    $r[data]=parseDate($r[oraPart]." ".$r[dataPart]);
+
+    return "<a href=\"index.php?p=tragitto&amp;idTrip=$r[ID]\">
+      $r[data]</a>
+      (<a href=\"index.php?p=profilo&u=$r[userName]\">$r[userName]</a>)<br />
+   Da <b>$r[partenza]</b> a <b>$r[destinaz]</b>";
+}
+
+/*
+ * Accetta un timedate (HH:MM:SS YYYY:MM:DD) e ritorna
+ * DD.MM.YYYY HH:MM
+ */
+function parseDate ($timedate) {
+   list($time,$date)=explode(" ",$timedate);
+   list($hours,$minutes,$seconds)=explode(":",$time);
+   list($year,$month,$day)=explode("-",$date);
+   return "$day.$month.$year $hours:$minutes";
+}
+
+function voteTrip ($id,$partecipo) {
+   if (!$partecipo)
+      return null;
+
+   $q="select ID,userName from UtentiTragitto
+      join Utenti on Utenti.ID = UtentiTragitto.idUtente
+      join Feedback on Feedback.tragittoAut = UtentiTragitto.idTragitto
+      where UtentiTragitto.idTragitto = $_GET[idTrip]
+      and (autore != ".getUserId()."
+      and valutato != ".$id.")";
+      $q2="select * from UtentiTragitto left join Feedback on (autore,tragittoAut) = (idUtente, idTragitto)";
+   $res=execQuery($q);
+
+   if (mysql_num_rows($res) < 2)
+      return null;
+   
+   $utenti="<select id=\"idValutato\" name=\"idValutato\">";
+   while ($r=mysql_fetch_array($res)) {
+      if ($r['ID'] != getUserId())
+         $utenti=$utenti."<option value=\"$r[ID]\">$r[userName]</option>";
+   }
+   $utenti=$utenti."</select>";
+
+   // Mettere controllo data nel passato
+   return numericDropDown("voto",1,5).
+      $utenti.
+      "Note <input type=\"text\" id=\"note\" name=\"note\" size=10></input>".
+      " <button>Vota!</button>";
+}
+
+/*
+ * 
+ */ /*
+function userSelect () {
+   // Prendo informazioni su eventuali auto gia' registrate
+   $q3="select UtentiTragitto.idUtente=".getUserId()." as partecipo
+      from Tragitto
+      join UtentiTragitto on Tragitto.ID=UtentiTragitto.idTragitto
+      where Tragitto.ID=".$_GET[idTrip]."
+      and UtentiTragitto.idUtente=".getUserId();
+   $r3=mysql_fetch_array(execQuery($q3));
+
+      from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
+      where AutoUtenti.idUtente='".getUserId()."'";
+   $res = execQuery($auto_query);
+
+   // Se non c'e' nessun'auto mostro un avviso...
+   if ((mysql_num_rows($res) == 0) && ($_GET['p'] == "nuovo"))
+      return <<<ERR
+<div style="padding:0" class="bgGold">
+   <p>Non hai auto! Provvedi subito a 
+      <a href='index.php?p=auto'>registrarne</a> una.
+   <p>
+</div>
+ERR;
+
+   // ...o consento di registrare una nuova auto
+   elseif (mysql_num_rows($res)==0 && $_GET['p'] == "auto") {
+      return $output.<<<FRM
+   <button id="newAuto" type="button" onclick="showForm()">
+      Inserisci nuova
+   </button>
+FRM;
+   }
+               
+   // Se c'e' qualche auto consento di selezionarla
+   else {
+      $row = mysql_fetch_array($res);
+      $output=$output.cars_ofUser(getUserId());
+      
+      // Pulsante di modifica
+      if ($_GET['p']=="auto") 
+         $output=$output.<<<MOD
+   <button id="modifyAutoButton" type="button" onclick="doFill()">
+      Modifica
+   </button>
+   <button id="newAuto" type="button" onclick="showForm()">
+      Inserisci nuova
+   </button>
+MOD;
+      return $output;
+   } */
+
 ?>

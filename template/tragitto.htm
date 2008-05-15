@@ -1,27 +1,37 @@
-<div style='padding:20px' class='bgRed'>
+<div style='padding:20px' class='bgGold'>
    <div style="float: right; width: 180px;">
    <ul class="tragitto">
       <li>
-      Organizzatore: <b>{ $r[proprietario] }</b>
+      Organizzatore: 
+      <b><a href="index.php?p=profilo&amp;u={ $r[proprietario] }">
+      { $r[proprietario] }</a></b>
       </li>
       <li>
       Da <b>{ $r[partenza] }</b><br />
       a <b>{ $r[destinaz] }</b>
       </li>
       <li>
-	 Partenza alle <b>{ $r[oraPart] }</b><br />
-	 del <b>{ $r[dataPart] }</b><br />
-	 (durata prevista { $r[durata] })
+         Partenza alle <b>{ $r[oraPart] }</b><br />
+         del <b>{ $r[dataPart] }</b><br />
+         (durata prevista { $r[durata] })
       </li>
       <li>
-	 <b>{ $fumo }</b><br />
-	 <b>{ $mus }</b>
+         <b>{ $fumo }</b><br />
+         <b>{ $mus }</b>
+      </li>
+      <li>
+         Partecipano<br />{ $users }
       </li>
       <li id="postiDisp" class="center">
-	 { $r[postiDisp] } posti disponibili
+         { $r[postiAdesso] } posti disponibili
       </li>
       <li>
-	 { controlTrip($r[controllo],0); }
+         { controlTrip($r[controllo],$r3[partecipo],$r[postiDisp],$r[postiAdesso]); }
+      </li>
+      <li>
+         <form action="index.php?p=tragitto&amp;action=voteTrip&amp;idTrip={ $_GET[idTrip] }" method="post">
+         { voteTrip($_GET[idTrip],$r3[partecipo]) }
+         </form>
       </li>
    </ul>
    </div>

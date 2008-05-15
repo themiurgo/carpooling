@@ -25,10 +25,10 @@ function setFormFocus(formId){
     var form = document.getElementById(formId);
     var len = form.elements.length;
 
-    for(var i = 0;i < len;i++){
+    for(var i=0; i < len; i++) {
       var curElement = form.elements[i];
 
-      if(curElement.constructor  == HTMLInputElement){
+      if (curElement.constructor  == HTMLInputElement) {
         curElement.focus();
         return;
       }

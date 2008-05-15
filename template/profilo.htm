@@ -1,7 +1,7 @@
 <script type="text/javascript">
 <!--
 function updateProfilo() {
-      var e = document.getElementById("hiddenProfilo");
+   var e = document.getElementById("hiddenProfilo");
    e.value = "updateProfilo";
    validaProfilo();
 }
@@ -19,11 +19,7 @@ function updateProfilo() {
 <li>
    <span class="commento">affidabilit&agrave;</span>
    <div class="valori"> 
-   <span>Molto affidabile</span>
-   <span class="trust">
-   <span class="green">13</span> / 
-   <span class="red">1</span>
-   </span>
+   <span>{ trust($r1[ID]) }</span>
    </div>
 </li>
 <li>
@@ -71,18 +67,13 @@ function updateProfilo() {
 </form>
 </div>
 <div class="right">
-   <div class="bgGold little ">
-      <h4>L'utente &egrave;...</h4>
-      { user_getTrusting(getUserId()) }
-      <br/>
-      { user_getFeedbacksReport(getUserId()) }
-   </div>
+   { feedback($r1[ID]) } 
    <div class="bgGreen little ">
       <h4>Ultimi tragitti organizzati</h4>
       { trips_lastOrganized($_GET[u]) }
    </div>
    <div class="bgRed little ">
-      <h4>Ultimi tragitti a cui ha partecipato</h4>
-      { trips_lastJoined(getUserId()) }
+      <h4>Tragitti a cui prender&agrave; / ha preso parte</h4>
+      { trips_lastJoined($r1[ID]) }
    </div>
 </div>

@@ -9,10 +9,14 @@ $db_psw="";
 $db_name="Carpooling";
 $db_conn=null;
 
+/* --------------------
+ * GESTIONE GENERALE DB
+ * -------------------- */
+
 /*
  * Connette al server MySQL e seleziona il DB
  */
-function connectDb (&$dbconn) {
+function connectDb(&$dbconn) {
    global $db_host,$db_usr,$db_psw,$db_name,$db_conn;
 
    $db_conn = mysql_connect($db_host, $db_usr, $db_psw)
@@ -25,14 +29,21 @@ function connectDb (&$dbconn) {
  * Esegue una query e ritorna una variabile risorsa.
  * Invocata per l'esecuzione di tutte le query.
  */
-function execQuery ($query) {
+function execQuery($query) {
    global $db_conn;
 
    if (!$db_conn)
       connectDb($db_conn);
 
-   return mysql_query($query, $db_conn);
+   $res=mysql_query($query, $db_conn)
+      or die("Query non valida".mysql_error());
+ 
+   return $res;
 }
+
+/* ------
+ * AZIONI
+ * ------ */
 
 /*
  * Effettua la registrazione di un utente.
@@ -50,66 +61,58 @@ function registraUtente() {
         values('".$_POST['user']."','".$_POST['psw']."','".$_POST['nome']."','".$_POST['cognome']."',
         '$dataNascita','".$_POST['email']."','$dataPatente',".$_POST['fumatore'].",'$dataIscriz','".$_POST['citta']."','".$_POST['sesso']."')";
       
-      execQuery($registerUser_query)  ;
-    
+      execQuery($registerUser_query);
 }
-	
 	
 # INCOMPLETA        
 function modificaAuto() {
-    
     #$targa = $datiAuto['targa'];	
     #non è logicamnete corretto: si dovrebbe usare sempre e cmq l 'ID;
     $selectAuto_query = "select * from auto where targa='$targa'";
     $res = execQuery($selectAuto_query);
-    $row = mysql_fetch_array($res);
-    
+    $row = mysql_fetch_array($res); 
 } 
 	
-    
 /*
  * Effettua la registrazione o la modifica di un auto
  */
 function gestioneAuto() {
-   
    #Il campo hidden ci comunica che l'operazione è di registrazione auto;
-   if ( $_POST['mecha'] == "new" ) {
+   if ($_POST['mecha'] == "new") {
       
       # Registrazione nella tabella Auto
-    $q1 = "insert into Auto(targa,marca,modello,cilindrata,annoImmatr,condizioni,note) 
-    values ('".$_POST['targa']."','".$_POST['marca']."','".$_POST['modello']."',
-            ".$_POST['cilindrata'].",'".$_POST['annoImmatr']."',".$_POST['condizioni'].",'".$_POST['note']."')";
+      $q1 = "insert into Auto(targa,marca,modello,cilindrata,annoImmatr,condizioni,note) 
+       values ('".$_POST['targa']."','".$_POST['marca']."','".$_POST['modello']."',
+	       ".$_POST['cilindrata'].",'".$_POST['annoImmatr']."',".$_POST['condizioni'].",'".$_POST['note']."')";
 
-    execQuery($q1) or die("Query non valida1: " . mysql_error());
-    
-    # Ottiene l'id dell'auto:Si potrebbe ottimizzare
-    $query="select ID from Auto where targa='".$_POST['targa']."'";
-    $res=execQuery($query);
-    $row=mysql_fetch_array($res); 
-    
-    # Questo flag indica il fatto che chi registra l'auto ne è anche il proprietario
-    $prop = true;
-    
-    #Registrazione nella tabella AutoUtenti
-    $registerAuto_query2 = "insert into AutoUtenti(idAuto,idUtente,valido) values('".$row['ID']."','".getUserId()."',$prop)";
-    
-    execQuery($registerAuto_query2) or die("Query non valida2: " . mysql_error());
-    } 
+      execQuery($q1);
+
+      # Ottiene l'id dell'auto:Si potrebbe ottimizzare
+      $query="select ID from Auto where targa='".$_POST['targa']."'";
+      $res=execQuery($query);
+      $row=mysql_fetch_array($res); 
+
+      # Questo flag indica il fatto che chi registra l'auto ne è anche il proprietario
+      $prop = true;
+       
+      #Registrazione nella tabella AutoUtenti
+      $registerAuto_query2 = "insert into AutoUtenti(idAuto,idUtente,valido) values('".$row['ID']."','".getUserId()."',$prop)";
+
+      execQuery($registerAuto_query2);
+   } 
+
    #Il campo hidden dichiara che è un'operazione di aggiornamento 
-    else if ( $_POST['mecha'] == "update" ) {
-     
-      $q2="update auto set note='".$_POST['note']."',condizioni= '".$_POST['condizioni']."' where ID='".$_POST['idAuto']."'";
-      execQuery($q2) or die("Query non validaU: " . mysql_error());
-    
+   else if ( $_POST['mecha'] == "update" ) {     
+      $q2="update Auto set note='".$_POST['note']."',condizioni= '".$_POST['condizioni']."' where ID='".$_POST['idAuto']."'";
+      execQuery($q2);
     }
 }
 
-
 function aggiornaProfilo() {
- 
-   $q1 = "update utenti set userName='".$_POST['userName']."',email='".$_POST['email']."',localita='".$_POST['localita']."' ,fumatore='".$_POST['fumatore']."' where ID='".getUserId()."'  ";
-   execQuery($q1) or die("Query non valida1: " . mysql_error());
-
+   $q1 = "update Utenti set userName='".$_POST['userName']."',
+      email='".$_POST['email']."',localita='".$_POST['localita']."' ,
+      fumatore='".$_POST['fumatore']."' where ID='".getUserId()."'  ";
+   execQuery($q1);
 }
 
 /*
@@ -117,7 +120,8 @@ function aggiornaProfilo() {
  * Data deve essere nel formato YYYY-MM-GG.
  */
 function registerTrip() {
- if ( controllaData($_POST['ora'],$_POST['minuti'],$_POST['mesePartenza'],$_POST['giornoPartenza'],$_POST['annoPartenza']) ) {
+   if (controllaData($_POST['ora'],$_POST['minuti'],$_POST['mesePartenza'],
+      $_POST['giornoPartenza'],$_POST['annoPartenza']) ) {
    $dataPart =$_POST['annoPartenza']."-".$_POST['mesePartenza']."-".$_POST['giornoPartenza'];
    $oraPart = $_POST['ora'].":".$_POST['minuti'];
    $durata = $_POST['durataOre'].":".$_POST['durataMinuti'];
@@ -131,14 +135,13 @@ function registerTrip() {
 	 ".$_POST['postiDisp'].",".$_POST['spese'].",
 	 '".$_POST['note']."')";
     
-    echo $q1;
-    execQuery($q1) or die("Query non valida1: " . mysql_error());
+    execQuery($q1);
     
     $registerTrip_query = "insert 
       into UtentiTragitto(idTragitto,idUtente) 
       values('".mysql_insert_id()."','".getUserId()."')";
     
-    execQuery($registerTrip_query) or die("Query non valida2: " . mysql_error());
+    execQuery($registerTrip_query);
     
     } else {
       echo "la data di partenza è nel passato";
@@ -147,40 +150,35 @@ function registerTrip() {
     
 } 
 
-
 function partecipaTragitto(){
-   
    #Controllo se l'utente si può aggiungere
-   if ( $check = controllaTrip() ) {
-      
-      #Decremento i posti disponibili
-      $postiRes =  $_GET['posti'] - 1;
-      echo $postiRes;
-      $join_query = "insert into utentitragitto(idUtente,idTragitto) values('".$_SESSION['userId']."','".$_GET['idTrip']."')";
+   if (controllaTrip()) {
+      $join_query = "insert into UtentiTragitto(idUtente,idTragitto) values('".$_SESSION['userId']."','".$_GET['idTrip']."')";
       execQuery($join_query);
-      $join_query2 = "update tragitto set postiDisp=$postiRes where ID='".$_GET['idTrip']."'";
-      execQuery($join_query2);
    }
 
 }
 
+function abbandonaTragitto() {
+   $join_query = "delete from UtentiTragitto where idUtente=".getUserId()." and idTragitto=$_GET[idTrip]";
+      execQuery($join_query);
+}
 
 function bloccaTragitto() {
    #Controllo contro i furbacchioni. 'sec' sta per security
-   $sec_query="select idPropr from tragitto where ID='".$_GET['idTrip']."'";
-    $res = execQuery($sec_query);
+   $sec_query="select idPropr from Tragitto where ID='".$_GET['idTrip']."'";
+   $res = execQuery($sec_query);
    $row = mysql_fetch_array($res);
    
-   if ( $row['idPropr']== $_SESSION['userId'] ) {
-      $block_query=" update tragitto set postiDisp=0 where ID='".$_GET['idTrip']."'";
+   if ($row['idPropr'] == $_SESSION['userId']) {
+      $block_query=" update Tragitto set postiDisp=1 where ID='".$_GET['idTrip']."'";
       execQuery($block_query);
-   } else {
+      $q2 = "delete from UtentiTragitto where idTragitto=$_GET[idTrip]
+         and idUtente != $row[idPropr] ";
+      execQuery($q2);
+   } 
+   else
       echo "Errore, furbetto!";
-   
-   }
-
-
-
 }
 
 
@@ -230,11 +228,11 @@ function controllaData($ora,$minuti,$mese,$giorno,$anno) {
  * Restituisce gli ultimi utenti iscritti
  */
 function users_recentSignup () {
-   $query = "select userName from Utenti order by dataIscriz desc limit 5"; 
+   $query = "select userName from Utenti order by dataIscriz desc limit 20"; 
    $res = execQuery($query);
    $o="";
    while ($r=mysql_fetch_array($res,MYSQL_ASSOC)) {
-      $line="<a href=\"index.php?p=profilo&amp;u=$r[userName]\">$r[userName]</a><br />";
+      $line="<a href=\"index.php?p=profilo&amp;u=$r[userName]\">$r[userName]</a> ";
       $o=$o.$line;
    }
    return $o;
@@ -252,7 +250,7 @@ function users_mostActive() {
    $o="";
    while ($r=mysql_fetch_array($res,MYSQL_ASSOC)) {
       $line="<a href=\"index.php?p=profilo&amp;u=$r[userName]\">$r[userName]
-	 </a>(n. di tragitti: $r[nTragitti])<br />";
+	 ($r[nTragitti])</a> ";
       $o=$o.$line;
    }
    return $o;
@@ -261,7 +259,7 @@ function users_mostActive() {
 /** Controlla se l'utente ha almeno un auto */
 function hasAuto() {
    $query = "select idAuto as num from AutoUtenti where idUtente = '".getUserId()."'";
-   $res = execQuery($query) or die("Query non valida1: " . mysql_error());
+   $res = execQuery($query);
    if ((mysql_num_rows($res) == 0) ) {
       return false;
    }
@@ -274,8 +272,7 @@ function cars_ofUser($userId) {
    $query = "select Auto.*
       from Auto join AutoUtenti on Auto.ID = AutoUtenti.idAuto
       where AutoUtenti.idUtente = '".getUserId()."'";
-      
-   $res = execQuery($query) or die("Query non valida1: " . mysql_error());
+   $res = execQuery($query);
    
   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
    
@@ -309,26 +306,23 @@ WLCM;
 }
 
 function trips_lastJoined($id) {
-   $q = "select * from Tragitto
+   $q = "select Tragitto.*,userName from Tragitto
       join UtentiTragitto on Tragitto.ID = UtentiTragitto.idTragitto
+      join Utenti on Tragitto.idPropr = Utenti.ID
       where idUtente ='$id'
       order by `dataPart` desc,`oraPart`";
-
    $res = execQuery($q);
-   
    if (mysql_num_rows($res) != 0) {
       $out="<ol style=\"margin: 1em; list-style-position:outside\">";
             
       while ($r = mysql_fetch_array($res)) {
-	 $r[data]=parseDate($r[oraPart]." ".$r[dataPart]);
 	 $piece = <<<TR
 <li>
-   <a href="index.php?p=tragitto&amp;idTrip=$r[ID]">
-      $r[data]</a><br />
-   Da <b>$r[partenza]</b> a <b>$r[destinaz]</b>
 </li>
 TR;
-   	 $out=$out.$piece;
+   	 $out=$out."<li>".
+         printTrip($r).
+         "</li>";
       }  
       $out=$out."</ol>";
    } 
@@ -343,7 +337,7 @@ TR;
  * -Pagina profilo
  */
 function trips_lastOrganized($userName) {
-   $q = "select Tragitto.* from Tragitto
+   $q = "select Tragitto.*,userName from Tragitto
       join Utenti on Tragitto.idPropr=Utenti.ID
       where Utenti.userName ='$userName'
       order by `dataPart` desc,`oraPart`";
@@ -353,15 +347,10 @@ function trips_lastOrganized($userName) {
       $out="<ol style=\"margin: 1em; list-style-position:outside\">";
             
       while ($r = mysql_fetch_array($res)) {
-	 $piece = <<<TR
-<li>
-   <a href="index.php?p=tragitto&idTrip=$r[ID]">
-      $r[oraPart] $r[dataPart]</a><br />
-   Da <b>$r[partenza]</b> a <b>$r[destinaz]</b>
-</li>
-TR;
-   	 $out=$out.$piece;
-      }  
+         $out=$out."<li>".
+            printTrip($r).
+            "</li>";
+      }
       $out=$out."</ol>";
    } 
 	 
@@ -372,7 +361,8 @@ TR;
 }
 
 function users_searchUsername($userName) {
-   $q = "select userName from Utenti where userName='$userName'";
+   $q = "select userName from Utenti
+      where userName like '%$userName%' limit 10";
    $res = execQuery($q);
    $o="";
    while ($r=mysql_fetch_array($res,MYSQL_ASSOC))
@@ -384,20 +374,64 @@ function users_searchUsername($userName) {
    return $o;
 }
 
-/**
- * GESTIONE TRUSTING da completare!
- */
-function newFeedback ($authorId,$objectId,$valutation,$notes) {
+
+/* -------------------
+ * TRUSTING / FEEDBACK
+ * ------------------- */
+
+function newFeedback ($authorId,$trip,$objectId,$vote,$notes) {
    $q="insert into Feedback (autore,tragittoAut,valutato,
-      tragittoVal,valutazione,data,note)";
+      tragittoVal,valutazione,data,note)
+      values ('$authorId','$trip','$objectId','$trip','$vote','$notes')";
 }
 
-function user_getTrusting ($userId) {
-   return "Molto affidabile";
+/*
+ * Restituisce i percorsi per cui si puo' scrivere un
+ * feedback.
+ */
+function feedback ($targetUserId) {
+   if ($targetUserId == getUserId())
+      return null;
+
+   $q="select Tragitto.*,Utenti.userName
+      from UtentiTragitto
+      join Tragitto on UtentiTragitto.idTragitto=Tragitto.ID
+      join Utenti on Utenti.ID = Tragitto.idPropr
+      where 
+         (UtentiTragitto.idUtente = '$targetUserId'
+         or Tragitto.idPropr = '$targetUserId') and
+         (UtentiTragitto.idUtente = '".getUserId()."'
+         or Tragitto.idPropr = '".getUserId()."')
+      limit 5";
+   $res=execQuery($q);
+   
+   if (mysql_num_rows($res) == 0)
+      return null;
+
+   $feedback="";
+   while ($r2=mysql_fetch_array($res,MYSQL_ASSOC)) {
+      $feedback=$feedback.printTrip($r2);
+   }
+
+   return "<div class=\"bgGold little\">
+      <h4>Valuta $r1[userName]</h4>".$feedback."</div>";
 }
 
-function user_getFeedbacksReport ($userId) {
-   return "Ha ricevuto 90 voti con una media del ";
+/*
+ * Affidabilita' dell'utente
+ */
+function trust ($id) {
+   $q = "select valutato,avg(valutazione) as votoMedio,count(*) as nVoti
+      from Feedback where valutato=$id group by valutato";
+
+   $res=execQuery($q);
+
+   if (mysql_num_rows($res) == 0)
+      return "Nessuna valutazione";
+
+   $r=mysql_fetch_array($res);
+
+   return $r['votoMedio']." (".$r["nVoti"]." voti)";
 }
 
 ?>

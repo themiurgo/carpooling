@@ -70,14 +70,6 @@ em {
    color: red;
 }
 
-.trust {
-   position: absolute;
-   right: 0px;
-   bottom: 0em;
-   font-size:0.8em;
-   font-weight: bold;
-}
-
 /* BORDI ARROTONDATI */
 .rounded{display:block}
 .rounded *{
@@ -721,12 +713,7 @@ div#autoFormDiv {
    display: none;
 }
 
-
-
-
-
-
 ul.tragitto li {
    text-align: center;
-   margin: 2.5em 0.2em 2.5em 0.2em;
+   margin: 1.5em 0.2em 1.5em 0.2em;
 }

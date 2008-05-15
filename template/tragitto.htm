@@ -29,9 +29,6 @@
          { controlTrip($r[controllo],$r3[partecipo],$r[postiDisp],$r[postiAdesso]); }
       </li>
       <li>
-         <form action="index.php?p=tragitto&amp;action=voteTrip&amp;idTrip={ $_GET[idTrip] }" method="post">
-         { voteTrip($_GET[idTrip],$r3[partecipo]) }
-         </form>
       </li>
    </ul>
    </div>
@@ -40,3 +37,4 @@
    </div>
 </div>
 
+{ voteTrip($_GET[idTrip],$r3[partecipo]) }

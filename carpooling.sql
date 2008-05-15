@@ -124,3 +124,14 @@ insert into Feedback(autore,tragittoAut,valutato,tragittoVal,valutazione,data) v
    (2,2,7,2,8,'2008-03-28 11:00:00'),
    (7,2,2,2,9,'2008-03-28 11:00:00'),
    (3,3,8,3,4,'2008-03-28 11:00:00');
+
+/* Feedback possibili */
+create view FeedbackPossibili as
+   select 
+      ut1.idUtente as autore,
+      ut1.idTragitto as tragittoAut,
+      ut2.idUtente as valutato,
+      ut2.idTragitto as tragittoVal
+   from UtentiTragitto ut1, UtentiTragitto ut2 
+   where ut1.idTragitto=ut2.idTragitto
+      and ut1.idUtente != ut2.idUtente;

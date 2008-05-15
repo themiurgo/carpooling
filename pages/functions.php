@@ -658,18 +658,17 @@ function voteTrip ($id,$partecipo) {
    if (!$partecipo)
       return null;
 
-   $q="select ID,userName from UtentiTragitto
-      join Utenti on Utenti.ID = UtentiTragitto.idUtente
-      join Feedback on Feedback.tragittoAut = UtentiTragitto.idTragitto
-      where UtentiTragitto.idTragitto = $_GET[idTrip]
-      and (autore != ".getUserId()."
-      and valutato != ".$id.")";
-      $q2="select * from UtentiTragitto left join Feedback on (autore,tragittoAut) = (idUtente, idTragitto)";
+   $q="select autore,valutato,tragittoAut as tragitto,Utenti.userName,
+         valutazione
+      from FeedbackPossibili
+      left join Feedback 
+         using (autore,tragittoAut,valutato,tragittoVal)
+      join Utenti
+         on valutato=Utenti.ID
+      where (autore,tragittoAut) = (".getUserId().", $_GET[idTrip])
+         and valutazione is null";
    $res=execQuery($q);
 
-   if (mysql_num_rows($res) < 2)
-      return null;
-   
    $utenti="<select id=\"idValutato\" name=\"idValutato\">";
    while ($r=mysql_fetch_array($res)) {
       if ($r['ID'] != getUserId())
@@ -678,10 +677,20 @@ function voteTrip ($id,$partecipo) {
    $utenti=$utenti."</select>";
 
    // Mettere controllo data nel passato
-   return numericDropDown("voto",1,5).
-      $utenti.
-      "Note <input type=\"text\" id=\"note\" name=\"note\" size=10></input>".
-      " <button>Vota!</button>";
+   return "
+   
+   <div class=\"bgGreen\">
+      <h4>Dai un giudizio sui tuoi compagni di viaggio</h4>
+      <form action=\"index.php?p=tragitto&amp;action=voteTrip&amp;idTrip=$_GET[idTrip]\" method=\"post\" class=\"center\">
+   <label for=\"utente\">Utente</label>$utenti
+      <label for=\"voto\">Voto</label>".
+      numericDropDown("voto",1,5).
+      "<label for=\"note\">Note</label>
+      <input type=\"text\" id=\"note\" name=\"note\" size=30></input>".
+      " <button>Vota!</button>
+      </form>".
+      viewVotes($_GET[idTrip])."
+      </div>";
 }
 
 /*

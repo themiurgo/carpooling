@@ -13,6 +13,7 @@ function handle_action () {
 
          case "logout":
             unset($_SESSION['user']);
+            unset($_SESSION['userId']);
             break;
 
          case "register":
@@ -267,12 +268,14 @@ function prepare_content ($template) {
             }
 
             // Informazioni su tutti i partecipanti            
+            if (getUserId()) {
             $q3="select UtentiTragitto.idUtente=".getUserId()." as partecipo
                from Tragitto
                join UtentiTragitto on Tragitto.ID=UtentiTragitto.idTragitto
                where Tragitto.ID=".$_GET[idTrip]."
                and UtentiTragitto.idUtente=".getUserId();
             $r3=mysql_fetch_array(execQuery($q3));
+            }
          }
 
          $final_content=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
@@ -614,7 +617,6 @@ function controlTrip ($owner,$hasJoint,$postiDisp,$postiAdesso,$inThePast) {
       Blocca il tragitto
       </button>
 BLOCK;
-
    elseif ($hasJoint && !$owner)
       return <<<LEAVE
       <button type="button" onclick="location.href='index.php?p=tragitto&amp;idTrip=$_GET[idTrip]&amp;action=leaveTrip'">
@@ -622,7 +624,7 @@ BLOCK;
       </button>
 LEAVE;
 
-   elseif ($postiAdesso > 0 && !$owner)
+   elseif ($postiAdesso > 0 && !$owner && !$hasJoint)
       return <<<JOIN
       <button type="button" onclick="location.href='index.php?p=tragitto&amp;idTrip=$_GET[idTrip]&amp;action=joinTrip';">
     Partecipa al tragitto

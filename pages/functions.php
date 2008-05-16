@@ -240,7 +240,8 @@ function prepare_content ($template) {
             // Informazioni sul tragitto
             $q="select Tragitto.*,Utenti.userName as proprietario,
                Utenti.userName='".getUser()."' as controllo,
-               postiDisp-COUNT(*) as postiAdesso
+               postiDisp-COUNT(*) as postiAdesso,
+               dataPart<now() as passed
                from Tragitto join Utenti on Utenti.ID=Tragitto.idPropr
                join UtentiTragitto on UtentiTragitto.idTragitto = Tragitto.ID
                where Tragitto.ID='".$_GET['idTrip']."'
@@ -381,7 +382,7 @@ FORM;
       case 'profilo':
          // Di default visualizzo il profilo dell'utente corrente
          if (!isset($_GET['u']))
-            $_GET['u']=getUser();
+            $_GET['u']=getUser() or die();
 
          // Estraggo le informazioni sul profilo
          $q1="select *,UNIX_TIMESTAMP(`dataIscriz`) as dataisc,
@@ -602,7 +603,10 @@ MOD;
  * postiDisp (intero) posti disponibili (fissi) oltre al guidatore
  * postiAdesso (intero) posti disponibili adesso (variabili)
  */
-function controlTrip ($owner,$hasJoint,$postiDisp,$postiAdesso) {
+function controlTrip ($owner,$hasJoint,$postiDisp,$postiAdesso,$inThePast) {
+   if ($inThePast)
+      return null;
+
    if ($postiDisp-1 == $postiAdesso && $postiAdesso == 0)
       return "Tragitto annullato dall'organizzatore";
 
@@ -658,16 +662,21 @@ function voteTrip ($id,$partecipo) {
    if (!$partecipo)
       return null;
 
-   $q="select autore,valutato,tragittoAut as tragitto,Utenti.userName,
+   $q="select autore,valutato,tragittoAut,data as tragitto,Utenti.userName,
          valutazione
       from FeedbackPossibili
       left join Feedback 
          using (autore,tragittoAut,valutato,tragittoVal)
       join Utenti
          on valutato=Utenti.ID
+      join Tragitto
+         on Tragitto.id = tragittoAut
       where (autore,tragittoAut) = (".getUserId().", $_GET[idTrip])
-         and valutazione is null";
+         and valutazione is null
+         and dataPart<now()";
    $res=execQuery($q);
+   if (mysql_num_rows($res)==0)
+      return null;
 
    $utenti="<select id=\"idValutato\" name=\"idValutato\">";
    while ($r=mysql_fetch_array($res)) {

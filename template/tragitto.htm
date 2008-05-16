@@ -20,13 +20,13 @@
          <b>{ $mus }</b>
       </li>
       <li>
-         Partecipano<br />{ $users }
+         Sono iscritti:<br />{ $users }
       </li>
       <li id="postiDisp" class="center">
          { $r[postiAdesso] } posti disponibili
       </li>
       <li>
-         { controlTrip($r[controllo],$r3[partecipo],$r[postiDisp],$r[postiAdesso]); }
+         { controlTrip($r[controllo],$r3[partecipo],$r[postiDisp],$r[postiAdesso],$r[passed]==1); }
       </li>
       <li>
       </li>

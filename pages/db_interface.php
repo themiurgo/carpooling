@@ -383,7 +383,7 @@ function newFeedback ($authorId,$trip,$objectId,$vote,$notes) {
    $q="insert into Feedback (autore,tragittoAut,valutato,
       tragittoVal,valutazione,data,note)
       values ('$authorId','$trip','$objectId','$trip','$vote',NOW(),'$notes')";
-      echo $q;
+   execQuery($q);
 }
 
 /*
@@ -403,6 +403,7 @@ function feedback ($targetUserId) {
          or Tragitto.idPropr = '$targetUserId') and
          (UtentiTragitto.idUtente = '".getUserId()."'
          or Tragitto.idPropr = '".getUserId()."')
+         and dataPart<now()
       limit 5";
    $res=execQuery($q);
    

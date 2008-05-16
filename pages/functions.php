@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * Gestisce le azioni.
  */
@@ -43,6 +42,10 @@ function handle_action () {
 
          case "blockTrip":
             bloccaTragitto();
+            break;
+
+         case "unblockTrip":
+            sbloccaTragitto();
             break;
 
          case "voteTrip":
@@ -604,14 +607,19 @@ MOD;
  * postiDisp (intero) posti disponibili (fissi) oltre al guidatore
  * postiAdesso (intero) posti disponibili adesso (variabili)
  */
-function controlTrip ($owner,$hasJoint,$postiDisp,$postiAdesso,$inThePast) {
+function controlTrip ($owner,$hasJoint,$postiDisp,$postiAdesso,$inThePast,
+      $blocked) {
    if ($inThePast)
       return null;
 
-   if ($postiDisp-1 == $postiAdesso && $postiAdesso == 0)
-      return "Tragitto annullato dall'organizzatore";
+   if ($blocked)
+      return <<<UNBLOCK
+      <button type="button" onclick="location.href='index.php?p=tragitto&amp;idTrip=$_GET[idTrip]&amp;action=unblockTrip'">
+      Sblocca il tragitto
+      </button>
+UNBLOCK;
 
-   if ($owner && $postiDisp-1 == $postiAdesso && $postiAdesso!=0)
+   if ($owner && $postiDisp-1 == $postiAdesso)
       return <<<BLOCK
       <button type="button" onclick="location.href='index.php?p=tragitto&amp;idTrip=$_GET[idTrip]&amp;action=blockTrip'">
       Blocca il tragitto

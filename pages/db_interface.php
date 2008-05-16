@@ -82,7 +82,7 @@ function gestioneAuto() {
       
       # Registrazione nella tabella Auto
       $q1 = "insert into Auto(targa,marca,modello,cilindrata,annoImmatr,condizioni,note) 
-       values ('".$_POST['targa']."','".$_POST['marca']."','".$_POST['modello']."',
+       values ('".strtoupper($_POST['targa'])."','".$_POST['marca']."','".$_POST['modello']."',
 	       ".$_POST['cilindrata'].",'".$_POST['annoImmatr']."',".$_POST['condizioni'].",'".$_POST['note']."')";
 
       execQuery($q1);
@@ -120,6 +120,8 @@ function aggiornaProfilo() {
  * Data deve essere nel formato YYYY-MM-GG.
  */
 function registerTrip() {
+   $posti=$_POST['postiDisp']+1;
+
    if (controllaData($_POST['ora'],$_POST['minuti'],$_POST['mesePartenza'],
       $_POST['giornoPartenza'],$_POST['annoPartenza']) ) {
    $dataPart =$_POST['annoPartenza']."-".$_POST['mesePartenza']."-".$_POST['giornoPartenza'];
@@ -132,7 +134,7 @@ function registerTrip() {
 	 '".$_POST['partenza']."','".$_POST['destinaz']."','$dataPart',
 	 '".$oraPart."','".$durata."',
 	 ".$_POST['fumo'].",".$_POST['musica'].",
-	 ".$_POST['postiDisp'].",".$_POST['spese'].",
+	 ".$posti.",".$_POST['spese'].",
 	 '".$_POST['note']."')";
     
     execQuery($q1);
@@ -165,22 +167,22 @@ function abbandonaTragitto() {
 }
 
 function bloccaTragitto() {
-   #Controllo contro i furbacchioni. 'sec' sta per security
-   $sec_query="select idPropr from Tragitto where ID='".$_GET['idTrip']."'";
-   $res = execQuery($sec_query);
-   $row = mysql_fetch_array($res);
-   
-   if ($row['idPropr'] == $_SESSION['userId']) {
-      $block_query=" update Tragitto set postiDisp=1 where ID='".$_GET['idTrip']."'";
-      execQuery($block_query);
-      $q2 = "delete from UtentiTragitto where idTragitto=$_GET[idTrip]
-         and idUtente != $row[idPropr] ";
-      execQuery($q2);
-   } 
-   else
-      echo "Errore, furbetto!";
+   $q=" update Tragitto set bloccato=1
+         where ID='".$_GET['idTrip']."'
+            and idPropr='".getUserId()."'";
+   execQuery($q);
+   if (mysql_affected_rows() == 0)
+      echo "Errore!";
 }
 
+function sbloccaTragitto() {
+   $q=" update Tragitto set bloccato=0
+         where ID='".$_GET['idTrip']."'
+            and idPropr='".getUserId()."'";
+   execQuery($q);
+   if (mysql_affected_rows() == 0)
+      echo "Errore!";
+}
 
 function controllaTrip() {
    

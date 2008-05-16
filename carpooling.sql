@@ -48,7 +48,8 @@ create table Tragitto (
    musica      boolean not null,
    spese       decimal(6,2) unsigned default 0,
    postiDisp   int(1) not null,
-   note        varchar(200)
+   note        varchar(200),
+   bloccato    boolean not null default 0
    #foreign key (idPropr, idAuto) references AutoUtenti(idUtente,idAuto)
 );
 

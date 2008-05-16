@@ -45,7 +45,7 @@ function handle_action () {
             break;
 
          case "voteTrip":
-            newFeedback (getUserId(),$_GET['idTrip'],1,$_POST['voto'],$_POST['note']);
+            newFeedback (getUserId(),$_GET['idTrip'],$_POST['idValutato'],$_POST['voto'],$_POST['note']);
       }
    }
 }
@@ -102,7 +102,6 @@ function headType() {
       case "nuovo":
       case "cerca":
       case "tragitto":
-      break; # FIXME
         
       # Script per la gestione delle GMaps
       return <<<DH
@@ -123,7 +122,6 @@ function bodyType() {
    switch ($_GET['p']) {
       case "nuovo":
       case "cerca":
-         break; # FIXME !!! Uncomment this.
 
          // Centro la mappa nella localita' preferita dell'utente
          if (isset($_SESSION['user'])) {
@@ -662,7 +660,7 @@ function voteTrip ($id,$partecipo) {
    if (!$partecipo)
       return null;
 
-   $q="select autore,valutato,tragittoAut,data as tragitto,Utenti.userName,
+   $q="select autore,valutato,tragittoAut,data as tragitto,Utenti.userName,Utenti.ID as idValutato,
          valutazione
       from FeedbackPossibili
       left join Feedback 
@@ -681,7 +679,7 @@ function voteTrip ($id,$partecipo) {
    $utenti="<select id=\"idValutato\" name=\"idValutato\">";
    while ($r=mysql_fetch_array($res)) {
       if ($r['ID'] != getUserId())
-         $utenti=$utenti."<option value=\"$r[ID]\">$r[userName]</option>";
+         $utenti=$utenti."<option value=\"$r[idValutato]\">$r[userName]</option>";
    }
    $utenti=$utenti."</select>";
 

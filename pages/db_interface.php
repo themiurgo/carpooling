@@ -380,6 +380,7 @@ function users_searchUsername($userName) {
  * ------------------- */
 
 function newFeedback ($authorId,$trip,$objectId,$vote,$notes) {
+   // Mettere controllo
    $q="insert into Feedback (autore,tragittoAut,valutato,
       tragittoVal,valutazione,data,note)
       values ('$authorId','$trip','$objectId','$trip','$vote',NOW(),'$notes')";
@@ -450,7 +451,8 @@ function viewVotes ($id) {
    $o="<br />Hai gi&agrave; valutato<br />
       <ul class=\"disco\">";
    while ($r=mysql_fetch_array($res)) {
-      $o=$o."<li>".$r['userName']." Voto ".$r['valutazione']."</li>";
+      $o=$o."<li>".$r['userName']." Voto ".$r['valutazione']." ".
+      $r['note']."</li>";
    }
    return $o."</ul>";
 }

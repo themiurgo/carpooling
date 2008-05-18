@@ -116,12 +116,14 @@ function gestioneAuto() {
       $registerAuto_query2 = "insert into AutoUtenti(idAuto,idUtente,valido) values('".$row['ID']."','".getUserId()."',$prop)";
 
       execQuery($registerAuto_query2);
+      success();
    } 
 
    #Il campo hidden dichiara che è un'operazione di aggiornamento 
    else if ( $_POST['mecha'] == "update" ) {     
       $q2="update Auto set note='".$_POST['note']."',condizioni= '".$_POST['condizioni']."' where ID='".$_POST['idAuto']."'";
       execQuery($q2);
+      success();
     }
 }
 

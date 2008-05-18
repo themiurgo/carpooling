@@ -225,7 +225,7 @@ function content () {
    }
    
    if (($_GET['p'] == 'error') ) {
-      $error = alreadyInUse();
+      $error = dataError();
       $content = $content.$error;
       return $content;
    }
@@ -430,9 +430,9 @@ FORM;
          // Varia il contenuto della pagina a seconda che si è in modalita 'leggi profilo' o 'modifica profilo'
          if (getUser() == $_GET['u']) {
             if ( $_POST['hiddenProfilo']=="modifyProfilo" ) {
-               echo  $_POST['fill'];
+               //echo  $_POST['fill'];
 
-       $r1['userName']="<input id='userName' name='userName' class='modificatori' value='$r1[userName]'/>";
+       //$r1['userName']="<input id='userName' name='userName' class='modificatori' value='$r1[userName]'/>";
        $r1['email']="<input id='email' name='email' class='modificatori' value='$r1[email]'/>";
              $r1['fumatore']="<select name ='fumatore' id='fumatore' class='modificatori' style='width: auto'> <option value='0'>No</option><option value='1'>SI</option></select>";
        $r1['localita']="<input id='localita'  name='localita' class='modificatori'  value='$r1[localita]'/>";
@@ -481,6 +481,13 @@ FORM;
    $_GET['p']="success";
  }
  
+ function setErrorParam($source,$page) {
+    $_GET['p']="error";
+    $_SESSION['source'] = $source;
+    $_SESSION['redirect'] = $page;
+ 
+ }
+ 
 /* Messaggio di errore: non puoi accedere alla pagina*/
 function accessDenied() {
 return <<<ERR
@@ -492,11 +499,11 @@ ERR;
 
 }
 
-function alreadyInUse() {
+function dataError() {
 return <<<ERR
 <div style="padding:0" class="bgRed">
-   <p>Username o Email gi&agrave; in uso! Impossibile effettuare la registrazione.</p>
-         <a href="./index.php?p=iscrizione">Ritenta</a>
+   <p>$_SESSION[source] gi&agrave; in uso! Impossibile effettuare la registrazione.</p>
+         <a href="./index.php?p=$_SESSION[redirect]">Ritenta</a>
 </div>
 ERR;
 
@@ -505,8 +512,8 @@ ERR;
 function showConfirm() {
 return <<<CON
 <div style="padding:0" class="bgGreen">
-         Torna alla <a href="./index.php?p=iscrizione">home</a>
-   <p>Dati inseriti con successo!</p>
+      <p>Dati inseriti con successo!</p>
+      Torna alla <a href="./index.php">home</a>
 </div>
 CON;
 

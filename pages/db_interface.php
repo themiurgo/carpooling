@@ -54,7 +54,7 @@ function registraUtente() {
       $query_check1 = "select * from Utenti where userName='".$_POST['user']."'";
       $res = execQuery($query_check1);
       if (mysql_num_rows($res) != 0) {
-         $_GET['p']="error";
+         setErrorParam('Username ' ,'iscrizione');
          return -1;
       }
       
@@ -62,7 +62,7 @@ function registraUtente() {
       $query_check2 = "select * from Utenti where email='".$_POST['email']."'";
       $res = execQuery($query_check2);
       if (mysql_num_rows($res) != 0) {
-         $_GET['p']="error";
+        setErrorParam('Email ' ,'iscrizione');
          return -1;
       }
     $dataNascita=$_POST['annoNascita']."-".$_POST['meseNascita']."-".$_POST['giornoNascita'];
@@ -126,10 +126,23 @@ function gestioneAuto() {
 }
 
 function aggiornaProfilo() {
-   $q1 = "update Utenti set userName='".$_POST['userName']."',
+   
+      /* L'email è già presente */
+      $query_check2 = "select * from Utenti where email='".$_POST['email']."' and NOT userName='".getUser()."'";
+      $res = execQuery($query_check2);
+      if (mysql_num_rows($res) != 0) {
+        $us=getUser();
+        $us2='profilo&u='.$us;
+         setErrorParam('Email ' ,$us2);
+         return -1;
+      }
+   
+
+   $q1 = "update Utenti set 
       email='".$_POST['email']."',localita='".$_POST['localita']."' ,
       fumatore='".$_POST['fumatore']."' where ID='".getUserId()."'  ";
    execQuery($q1);
+   success();
 }
 
 /*

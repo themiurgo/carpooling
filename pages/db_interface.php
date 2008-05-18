@@ -191,9 +191,14 @@ function partecipaTragitto(){
 
 }
 
+/*
+ *
+ */
 function abbandonaTragitto() {
-   $join_query = "delete from UtentiTragitto where idUtente=".getUserId()." and idTragitto=$_GET[idTrip]";
-      execQuery($join_query);
+   $join_query = "delete
+      from UtentiTragitto 
+      where idUtente=".getUserId()." and idTragitto=$_GET[idTrip]";
+   execQuery($join_query);
 }
 
 function bloccaTragitto() {
@@ -345,7 +350,7 @@ function trips_lastJoined($id) {
       order by `dataPart` desc,`oraPart`";
    $res = execQuery($q);
    if (mysql_num_rows($res) != 0) {
-      $out="<ol style=\"margin: 1em; list-style-position:outside\">";
+      $out="<ul class=\"boxTragitti\" style=\"margin: 1em; list-style-position:outside\">";
             
       while ($r = mysql_fetch_array($res)) {
 	 $piece = <<<TR
@@ -364,6 +369,7 @@ TR;
 
    return $out;
 }
+
 /*
  * Ultimi tragitti di cui e' proprietario un l'utente con id specificato.
  * -Pagina profilo
@@ -376,7 +382,7 @@ function trips_lastOrganized($userName) {
    $res = execQuery($q);
    
    if (mysql_num_rows($res) != 0) {
-      $out="<ol style=\"margin: 1em; list-style-position:outside\">";
+      $out="<ul class=\"boxTragitti\" style=\"margin: 1em; list-style-position:outside\">";
             
       while ($r = mysql_fetch_array($res)) {
          $out=$out."<li>".
@@ -411,20 +417,61 @@ function users_searchUsername($userName) {
  * TRUSTING / FEEDBACK
  * ------------------- */
 
-function newFeedback ($authorId,$trip,$objectId,$vote,$notes) {
-   // Mettere controllo
-   $q="insert into Feedback (autore,tragittoAut,valutato,
-      tragittoVal,valutazione,data,note)
-      values ('$authorId','$trip','$objectId','$trip','$vote',NOW(),'$notes')";
+/*
+ * Inserisce un nuovo feedback su un utente, solo se l'autore ha fatto un
+ * viaggio con il valutato e se non ha gia' espresso una valutazione per lui
+ * riguardo ad un determinato tragitto.
+ *
+ * $authorId (id) id dell'autore del feedback
+ * $trip (int) id del viaggio
+ * $objectId (int) id dell'utente valutato
+ * $vote (int) voto (da 1 a 5)
+ * $notes (varchar) note sull'utente
+ */
+function feedback_new ($authorId,$trip,$objectId,$vote,$notes) {
+   $q="insert into Feedback (autore,tragittoAut,valutato,tragittoVal,
+         valutazione,data,note)
+      select *,$vote,now(),'$notes'
+      from FeedbackPossibili
+      where autore=$authorId and valutato=$objectId";
    execQuery($q);
+   if (mysql_affected_rows==0)
+      echo "Errore!";
 }
 
 /*
- * Restituisce i percorsi per cui si puo' scrivere un
- * feedback.
+ * Visualizza gli ultimi feedback assegnati ad un utente.
+ *
+ * $id (int) ID dell'utente
+ * $n (int) numero di feedback che voglio vedere
  */
-function feedback ($targetUserId) {
-   if ($targetUserId == getUserId())
+function feedback_last ($id,$n) {
+   $q="select Feedback.*, userName
+      from Feedback
+      join Utenti on valutato=Utenti.ID
+      where valutato=$id
+      order by data limit $n";
+   $res=execQuery($q);
+
+   $o="<ul class=\"boxVoti\">";
+   while ($r=mysql_fetch_array($res))
+      $o=$o."
+         <li>
+         (<a href=\"index.php?p=profilo&u=$r[userName]\">$r[userName]</a>)
+         Voto $r[valutazione] $r[note]
+         (<a href=\"index.php?p=tragitto&idTrip=$r[tragittoVal]\">tragitto</a>)
+         </li>";
+   return $o."</ul>";
+}
+
+/*
+ * Restituisce i percorsi per cui si puo' scrivere un feedback.
+ *
+ * $target (int) ID dell'utente che voglio valutare
+ * $author (int) ID dell'utente che vuole valutare
+ */
+function feedback ($target,$author) {
+   if ($target == getUserId())
       return null;
 
    $q="select Tragitto.*,Utenti.userName
@@ -432,10 +479,10 @@ function feedback ($targetUserId) {
       join Tragitto on UtentiTragitto.idTragitto=Tragitto.ID
       join Utenti on Utenti.ID = Tragitto.idPropr
       where 
-         (UtentiTragitto.idUtente = '$targetUserId'
-         or Tragitto.idPropr = '$targetUserId') and
-         (UtentiTragitto.idUtente = '".getUserId()."'
-         or Tragitto.idPropr = '".getUserId()."')
+         (UtentiTragitto.idUtente = '$target'
+         or Tragitto.idPropr = '$target') and
+         (UtentiTragitto.idUtente = '$author'
+         or Tragitto.idPropr = '$author')
          and dataPart<now()
       limit 5";
    $res=execQuery($q);
@@ -444,16 +491,18 @@ function feedback ($targetUserId) {
       return null;
 
    $feedback="";
-   while ($r2=mysql_fetch_array($res,MYSQL_ASSOC)) {
+   while ($r2=mysql_fetch_array($res,MYSQL_ASSOC)) 
       $feedback=$feedback.printTrip($r2);
-   }
+   return $feedback;
 
    return "<div class=\"bgGold little\">
       <h4>Valuta $r1[userName]</h4>".$feedback."</div>";
 }
 
 /*
- * Affidabilita' dell'utente
+ * Restituisce il voto medio ed il numero di voti su di un certo utente.
+ *
+ * $id (int) ID dell'utente
  */
 function trust ($id) {
    $q = "select valutato,avg(valutazione) as votoMedio,count(*) as nVoti
@@ -480,8 +529,6 @@ function viewVotes ($id) {
    if (mysql_num_rows($res) == 0)
       return null;
    
-   $o="<br />Hai gi&agrave; valutato<br />
-      <ul class=\"disco\">";
    while ($r=mysql_fetch_array($res)) {
       $o=$o."<li>".$r['userName']." Voto ".$r['valutazione']." ".
       $r['note']."</li>";

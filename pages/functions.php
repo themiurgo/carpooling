@@ -49,7 +49,8 @@ function handle_action () {
             break;
 
          case "voteTrip":
-            newFeedback (getUserId(),$_GET['idTrip'],$_POST['idValutato'],$_POST['voto'],$_POST['note']);
+            feedback_new(getUserId(),$_GET['idTrip'],$_POST['idValutato'],
+               $_POST['voto'],$_POST['note']);
       }
    }
 }
@@ -109,6 +110,7 @@ function headType() {
       case "nuovo":
       case "cerca":
       case "tragitto":
+      break; # FIXME
         
       # Script per la gestione delle GMaps
       return <<<DH
@@ -262,9 +264,9 @@ function prepare_content ($template) {
          if (isset($_GET['idTrip'])) {
             // Informazioni sul tragitto
             $q="select Tragitto.*,Utenti.userName as proprietario,
-               Utenti.userName='".getUser()."' as controllo,
-               postiDisp-COUNT(*) as postiAdesso,
-               dataPart<now() as passed
+                  Utenti.userName='".getUser()."' as controllo,
+                  postiDisp-COUNT(*) as postiAdesso,
+                  concat(dataPart,' ',oraPart)<now() as passed
                from Tragitto join Utenti on Utenti.ID=Tragitto.idPropr
                join UtentiTragitto on UtentiTragitto.idTragitto = Tragitto.ID
                where Tragitto.ID='".$_GET['idTrip']."'
@@ -307,99 +309,20 @@ function prepare_content ($template) {
          break;
 
       case 'tragitti':
-         $q1 = "select Tragitto.*, userName from `Tragitto`
+         $q1 = "select Tragitto.*, userName,postiDisp-count(*) as postiAdesso
+            from `Tragitto`
             join Utenti on idPropr=Utenti.ID
+            join UtentiTragitto on Tragitto.ID=UtentiTragitto.idTragitto
+            group by UtentiTragitto.idTragitto
             order by `dataPart` desc,`oraPart` desc limit 5";
          $res = execQuery($q1);
   
          // Stampo i tragitti
-         while ($r1 = mysql_fetch_array($res)) {
-            $o=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
-            $final_content = $final_content.$o;
-         }
-
-         #Eventuali dettagli sul tragitto selezionato
-         if (isset($_GET['idTrip'])) {
-            $q="select * from Tragitto where ID='".$_GET['idTrip']."'";
-            $r=mysql_fetch_array(execQuery($q));
-            $name_query="select userName from Utenti where ID=$r[idPropr]";
-            $res_name = execQuery($name_query);
-            $row_name = mysql_fetch_array($res_name);
-            $ora = $row['oraPart'];
-            $durata=$row['durata'];
-            $data = $row['dataPart'];
-
-            $row['fumo'] ? 
-               $fumo = "Per Fumatori" : $fumo = "NO Fumatori";
-            $row['musica'] ?
-               $mus = "Con Musica" : $mus = "NO Musica"; 
-
-            # CLAMOROSO BUG: anche se il metodo è 'post', si comporta come get ( che è quello che voglio).
-               $dettagli = <<<TRIP
-               <div style='padding:0' class='bgRed'><h2>Dettagli Tragitto</h2>
-               <span class="utenti">
-                  Organizzatore:  <b>$row_name[userName]</b>
-               </span>
-               <span class="posti">
-                  <b>$row[postiDisp]</b> posti disponibili
-               </span>
-               <p class="listatragitti">
-               <span class="tragitto">
-               Da <b>$row[partenza]</b> a <b>$row[destinaz]</b>
-               </span>
-               <span class="altro">
-               <b>$fumo</b> - <b>$mus</b>
-               </span>
-               <span class="orario">
-                  <b>$row[dataPart]</b>
-                  <b>$row[oraPart]</b> (<b>$row[durata]</b>)
-               </span>
-               <br/> <br/>
-TRIP;
-               # L'utente corrente e' il proprietario del tragitto, quindi di sbloccano lel unzioni avanzate.
-               if ($pro == $_SESSION['userId']) {
-                  if (canModify()) {
-                     $mod= <<<MOD
-                     <span class="tragitto">
-                        <form id="joinForm" action="index.php?p=tragitti&action=modTrip&idTrip=$row[ID]" method="post">
-                           <label for="joinButton">Sei il proprietario del tragitto</label><br/>
-                           <button id="registerAutoButton" type="submit">Modifica Tragitto</button>
-                        </form>
-                     </span>
-              
-MOD;
-                     $dettagli=$dettagli.$mod;
-                  } 
-                  $block= <<<BLOCK
-                  <span class="tragitto">
-                        <form id="blockForm" action="index.php?p=tragitti&action=blockTrip&idTrip=$row[ID]" method="post">
-                        <label for="blockButton">Hai avuto un'imprevisto?</label><br/>
-                        <button id="registerAutoButton" type="submit">Blocca Tragitto</button>
-                     </form>
-                  </span>
-                  
-                  </div>
-BLOCK;
-                  $dettagli=$dettagli.$block;
-                  # L'utente corrente nON e' il proprietario del tragitto, gli viene data la possibilità di partecipare.
-               } 
-
-               if ((getUser())) {
-                  $extra= <<<FORM
-                  <form id=joinForm" action="index.php?p=tragitti&action=joinTrip&idTrip=$row[ID]&posti=$row[postiDisp]" method="post">
-                  <span class="join">
-                  <label for="joinButton">Vuoi Partecipare?</label><br/>
-                  <button id="registerAutoButton" type="submit">Conferma</button>
-                  </span>
-                  </form>
-                  </div>
-FORM;
-               $dettagli=$dettagli.$extra;
-               $final_content = $dettagli.$final_content;
-               }
-            }
-            
-            break;
+//         while ($r1 = mysql_fetch_array($res)) {
+         $o=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
+         $final_content = $final_content.$o;
+//         }
+         break;
 
       case 'utenti':
          $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
@@ -723,21 +646,20 @@ function voteTrip ($id,$partecipo) {
    if (!$partecipo)
       return null;
 
-   $q="select autore,valutato,tragittoAut,data as tragitto,Utenti.userName,Utenti.ID as idValutato,
-         valutazione
+   $q="select autore,valutato,tragittoAut,data as tragitto,Utenti.userName,Utenti.ID as idValutato,valutazione
       from FeedbackPossibili
       left join Feedback 
          using (autore,tragittoAut,valutato,tragittoVal)
       join Utenti
          on valutato=Utenti.ID
       join Tragitto
-         on Tragitto.id = tragittoAut
+         on Tragitto.ID = tragittoAut
       where (autore,tragittoAut) = (".getUserId().", $_GET[idTrip])
          and valutazione is null
          and dataPart<now()";
+         echo $q;
    $res=execQuery($q);
-   if (mysql_num_rows($res)==0)
-      return null;
+   if (mysql_num_rows($res)!=0) {
 
    $utenti="<select id=\"idValutato\" name=\"idValutato\">";
    while ($r=mysql_fetch_array($res)) {
@@ -745,6 +667,7 @@ function voteTrip ($id,$partecipo) {
          $utenti=$utenti."<option value=\"$r[idValutato]\">$r[userName]</option>";
    }
    $utenti=$utenti."</select>";
+   }
 
    // Mettere controllo data nel passato
    return "
@@ -762,58 +685,5 @@ function voteTrip ($id,$partecipo) {
       viewVotes($_GET[idTrip])."
       </div>";
 }
-
-/*
- * 
- */ /*
-function userSelect () {
-   // Prendo informazioni su eventuali auto gia' registrate
-   $q3="select UtentiTragitto.idUtente=".getUserId()." as partecipo
-      from Tragitto
-      join UtentiTragitto on Tragitto.ID=UtentiTragitto.idTragitto
-      where Tragitto.ID=".$_GET[idTrip]."
-      and UtentiTragitto.idUtente=".getUserId();
-   $r3=mysql_fetch_array(execQuery($q3));
-
-      from Auto join AutoUtenti on Auto.ID=AutoUtenti.idAuto
-      where AutoUtenti.idUtente='".getUserId()."'";
-   $res = execQuery($auto_query);
-
-   // Se non c'e' nessun'auto mostro un avviso...
-   if ((mysql_num_rows($res) == 0) && ($_GET['p'] == "nuovo"))
-      return <<<ERR
-<div style="padding:0" class="bgGold">
-   <p>Non hai auto! Provvedi subito a 
-      <a href='index.php?p=auto'>registrarne</a> una.
-   <p>
-</div>
-ERR;
-
-   // ...o consento di registrare una nuova auto
-   elseif (mysql_num_rows($res)==0 && $_GET['p'] == "auto") {
-      return $output.<<<FRM
-   <button id="newAuto" type="button" onclick="showForm()">
-      Inserisci nuova
-   </button>
-FRM;
-   }
-               
-   // Se c'e' qualche auto consento di selezionarla
-   else {
-      $row = mysql_fetch_array($res);
-      $output=$output.cars_ofUser(getUserId());
-      
-      // Pulsante di modifica
-      if ($_GET['p']=="auto") 
-         $output=$output.<<<MOD
-   <button id="modifyAutoButton" type="button" onclick="doFill()">
-      Modifica
-   </button>
-   <button id="newAuto" type="button" onclick="showForm()">
-      Inserisci nuova
-   </button>
-MOD;
-      return $output;
-   } */
 
 ?>

@@ -12,6 +12,7 @@ function updateProfilo() {
 <div id="profilo" class="left">
 <form id="profiloForm" method="post" action="index.php?p=profilo&amp;action=manageProfilo">
 <ul class="profilo bgAzure">
+<h4>Dettagli profilo</h4>
 <li>
    <span class="commento">userName</span>
    <span class="valori">{ $r1[userName] }</span>
@@ -67,13 +68,17 @@ function updateProfilo() {
 </form>
 </div>
 <div class="right">
-   { feedback($r1[ID]) } 
-   <div class="bgGreen little ">
+   <div class="bgGreen little">
       <h4>Ultimi tragitti organizzati</h4>
       { trips_lastOrganized($_GET[u]) }
    </div>
    <div class="bgRed little ">
       <h4>Tragitti a cui prender&agrave; / ha preso parte</h4>
       { trips_lastJoined($r1[ID]) }
+   </div>
+   <div class="bgGreen little">
+      <h4>Recentemente hanno detto...</h4>
+      { feedback_last($r1[ID],5) }
+      { feedback($r1[ID],getUserId()) }
    </div>
 </div>

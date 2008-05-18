@@ -17,6 +17,17 @@ ol li {
    list-style:decimal outside;
 }
 
+ul.boxTragitti li {
+   margin-top: 1em;
+   margin-bottom: 1em;
+   text-align: center;
+}
+
+ul.boxVoti li {
+   margin-top: 1em;
+   margin-bottom: 1em;
+}
+
 ul.disco li {
    list-style:disc outside;
 }
@@ -423,6 +434,7 @@ ul.profilo li.center:hover {
 }
 
 span.commento {
+   color: #4a6ca6;
    text-align: right;
    font-weight: bold;
    position: absolute;
@@ -475,7 +487,7 @@ table.directions {
  */
 
 .titoli{
-   font-family: "Calisto MT,Verdana";
+   font-family: "Verdana, Arial, Sans Serif";
    margin:0;
    padding:0;
    min-height:0;

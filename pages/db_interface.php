@@ -132,7 +132,7 @@ function aggiornaProfilo() {
       $res = execQuery($query_check2);
       if (mysql_num_rows($res) != 0) {
         $us=getUser();
-        $us2='profilo&u='.$us;
+        $us2='profilo&amp;u='.$us;
          setErrorParam('Email gi&agrave; in uso' ,$us2);
          return -1;
       }
@@ -363,13 +363,42 @@ TR;
          printTrip($r).
          "</li>";
       }  
-      $out=$out."</ol>";
+      $out=$out."</ul>";
    } 
 	 
    else
       $out="<p>L'utente non ha partecipato ad alcun tragitto.</p>";
 
    return $out;
+}
+
+/*
+ * Visualizza i tragitti che stanno per partire (i primi in ordine di tempo)
+ *
+ * $n (int) numero di tragitti da visualizzare
+ * $city (string) citta' di partenza
+ */
+function trips_leaving($n,$fromDefaultCity=false) {
+   if ($fromDefaultCity && getUserId())
+      $q="select *,userName from Tragitto
+         join Utenti on Tragitto.idPropr=Utenti.ID
+         where concat(dataPart,' ',oraPart)>now()
+         and partenza=(select localita from Utenti where ID=".getUserId().")";
+   else
+      $q="select *,userName from Tragitto
+      join Utenti on Tragitto.idPropr=Utenti.ID
+      where concat(dataPart,' ',oraPart)>now()";
+
+   $res=execQuery($q);
+
+   if (mysql_num_rows($res) == 0)
+      return "Nessun tragitto";
+
+   $o="<ul>";
+   while ($r=mysql_fetch_array($res)) {
+      $o=$o."<li>".printTrip($r)."</li>";
+   }
+   return $o."</ul>";
 }
 
 /*
@@ -391,7 +420,7 @@ function trips_lastOrganized($userName) {
             printTrip($r).
             "</li>";
       }
-      $out=$out."</ol>";
+      $out=$out."</ul>";
    } 
 	 
    else
@@ -459,9 +488,9 @@ function feedback_last ($id,$n) {
    while ($r=mysql_fetch_array($res))
       $o=$o."
          <li>
-         (<a href=\"index.php?p=profilo&u=$r[userName]\">$r[userName]</a>)
+         (<a href=\"index.php?p=profilo&amp;u=$r[userName]\">$r[userName]</a>)
          Voto $r[valutazione] $r[note]
-         (<a href=\"index.php?p=tragitto&idTrip=$r[tragittoVal]\">tragitto</a>)
+         (<a href=\"index.php?p=tragitto&amp;idTrip=$r[tragittoVal]\">tragitto</a>)
          </li>";
    return $o."</ul>";
 }

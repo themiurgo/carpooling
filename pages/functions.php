@@ -172,7 +172,6 @@ function parseTemplate ($template) {
  * (index.htm)
  */
 function menu () {
-   $us = getUser();
    # Utente NON LOGGATO
    if (!getUser()) return <<<MNNL
       <a href="#" onclick="loginScript()">Login</a>&nbsp;&middot;
@@ -186,7 +185,7 @@ MNNL;
    # Utente LOGGATO
    else return "
    <b>".getUser()."</b> - ".<<<MNL
-   <a href="index.php?p=profilo&$us">Profilo</a>&nbsp;&middot;
+   <a href="index.php?p=profilo">Profilo</a>&nbsp;&middot;
    <a href="index.php?p=tragitti">Tragitti</a>&nbsp;&middot;
    <a href="index.php?p=cerca">Cerca Tragitto</a>&nbsp;&middot;
    <a href="index.php?p=nuovo">Nuovo Tragitto</a>&nbsp;&middot;
@@ -447,7 +446,7 @@ function noAuto() {
 <div style="padding:0" class="bgGold">
    <p>Non hai auto! Provvedi subito a 
       <a href='index.php?p=auto'>registrarne</a> una.
-   <p>
+   </p>
 </div>
 ERR;
 
@@ -629,7 +628,7 @@ function printTrip ($r){
 
     return "<a href=\"index.php?p=tragitto&amp;idTrip=$r[ID]\">
       $r[data]</a>
-      (<a href=\"index.php?p=profilo&u=$r[userName]\">$r[userName]</a>)<br />
+      (<a href=\"index.php?p=profilo&amp;u=$r[userName]\">$r[userName]</a>)<br />
    Da <b>$r[partenza]</b> a <b>$r[destinaz]</b>";
 }
 

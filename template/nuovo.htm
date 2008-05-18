@@ -13,7 +13,7 @@
 <!--  Form per la creazione del percorso.	-->
 <div class="bgGold">
 
-<form action="index.php?action=registerTrip" method="post" name="mapForm" id="mapForm" class="newTrip">
+<form action="index.php?action=registerTrip" method="post" id="mapForm" class="newTrip">
    <ul>
       <!-- Selezione auto-->
       <li> 
@@ -82,7 +82,7 @@
    </li> 
    <li>
       <label class="upLabel" for="note">Note</label><br/>
-      <textarea name="note" cols="40" rows="5"></textarea>
+      <textarea id="note" name="note" cols="40" rows="5"></textarea>
    </li>
    <li class="center">
    <!-- Validazione contenuti del form -->
@@ -94,11 +94,9 @@
 	 Cancella i campi
       </button>
    </li>
-</div> <!-- Fine del contenitore con allineamento al centro-->
 </ul>
-
-
 </form>
+
 </div> <!-- Fine del contenitore colorato-->
 
 </div>	<!-- Fine del contenitore generale -->    

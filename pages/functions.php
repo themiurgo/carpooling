@@ -110,7 +110,7 @@ function headType() {
       case "nuovo":
       case "cerca":
       case "tragitto":
-      break; # FIXME
+#      break; # FIXME
         
       # Script per la gestione delle GMaps
       return <<<DH

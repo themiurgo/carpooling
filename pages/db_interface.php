@@ -49,6 +49,22 @@ function execQuery($query) {
  * Effettua la registrazione di un utente.
  */
 function registraUtente() { 
+      
+      /* Il nome utente è già presente */
+      $query_check1 = "select * from Utenti where userName='".$_POST['user']."'";
+      $res = execQuery($query_check1);
+      if (mysql_num_rows($res) != 0) {
+         $_GET['p']="error";
+         return -1;
+      }
+      
+      /* L'email è già presente */
+      $query_check2 = "select * from Utenti where email='".$_POST['email']."'";
+      $res = execQuery($query_check2);
+      if (mysql_num_rows($res) != 0) {
+         $_GET['p']="error";
+         return -1;
+      }
     $dataNascita=$_POST['annoNascita']."-".$_POST['meseNascita']."-".$_POST['giornoNascita'];
     $dataPatente=$_POST['annoPatente']."-".$_POST['mesePatente']."-".$_POST['giornoPatente'];
     

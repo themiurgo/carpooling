@@ -102,6 +102,9 @@ function getUserId () {
  * (ad es. nelle pagine dove sono presenti mappe).
  */
 function headType() {
+// Pagina visualizzata di default
+   if (!isset($_GET['p']))
+      $_GET['p']="cerca";
    switch ($_GET['p']) {
       case "nuovo":
       case "cerca":
@@ -123,6 +126,11 @@ DH;
  * Ritorna <body> o aggiunge opportunamente azioni onLoad.
  */
 function bodyType() {
+// Pagina visualizzata di default
+   if (!isset($_GET['p']))
+      $_GET['p']="cerca";
+   
+
    switch ($_GET['p']) {
       case "nuovo":
       case "cerca":
@@ -193,7 +201,7 @@ MNL;
 function content () {
    // Pagina visualizzata di default
    if (!isset($_GET['p']))
-      $_GET['p']="tragitti";
+      $_GET['p']="cerca";
 
    // Pagine consentite per...
    getUser() ?
@@ -211,6 +219,12 @@ function content () {
    
    if (($_GET['p'] == 'nuovo') && !hasAuto()) {
       $error = noAuto();
+      $content = $content.$error;
+      return $content;
+   }
+   
+   if (($_GET['p'] == 'error') ) {
+      $error = alreadyInUse();
       $content = $content.$error;
       return $content;
    }
@@ -277,6 +291,7 @@ function prepare_content ($template) {
                join UtentiTragitto on Tragitto.ID=UtentiTragitto.idTragitto
                where Tragitto.ID=".$_GET[idTrip]."
                and UtentiTragitto.idUtente=".getUserId();
+               echo $q3;
             $r3=mysql_fetch_array(execQuery($q3));
             }
          }
@@ -461,6 +476,16 @@ return <<<ERR
 <div style="padding:0" class="bgAzure">
    <p>Non hai i permessi per visitare questa pagina!</p>
          <a href="./index.php">home</a>
+</div>
+ERR;
+
+}
+
+function alreadyInUse() {
+return <<<ERR
+<div style="padding:0" class="bgRed">
+   <p>Username o Email gi&agrave; in uso! Impossibile effettuare la registrazione</p>
+         <a href="./index.php?p=iscrizione">ritenta</a>
 </div>
 ERR;
 

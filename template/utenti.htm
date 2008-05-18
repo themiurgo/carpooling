@@ -25,7 +25,8 @@ setFormFocus("searchUser")
 
 <div class="medium left">
    In questa pagina puoi cercare gli utenti o visualizzare le classifiche.
-   <form id="searchUser" action="">
+   <!-- L'ultima istruzione serve a disabilitare l'invio del fprm premendo ENTER, che avrebbe riportato alla home page -->
+   <form id="searchUser" action="" onsubmit="return false">
       <div style="margin: 1em">
       <input type="text" id="search_username" />
       <button type="button" onclick="risultati()">Cerca</button>

@@ -130,7 +130,7 @@ function creaPercorso(partenza,arrivo) {
 	 /* Crea l'ascoltatore per il click del mouse, che fara'  aprire una infoWindow */
 	 GEvent.addListener(markerP, "click", function() {
 	    markerP.openInfoWindowHtml(
-	       "<div class='gmapPopup'>Citta' di partenza : <br/><b>"
+	       "<div class='gmapPopup'>Localit&agrave; di partenza : <br/><b>"
 	        + partenza+"</b></div>");
 	 } );
 
@@ -143,7 +143,7 @@ function creaPercorso(partenza,arrivo) {
 
 	 GEvent.addListener(markerA, "click", function() {
 	    markerA.openInfoWindowHtml(
-	       "<div class='gmapPopup'>Citta' di arrivo : <br/><b>"
+	       "<div class='gmapPopup'>Localit&agrave; di arrivo : <br/><b>"
 	       + arrivo+"</b></div>");
 	 });
 

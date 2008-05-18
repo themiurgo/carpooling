@@ -62,6 +62,9 @@ function handle_action () {
 
 /*
  * Effettua il login. Ritorna l'username (successo) o null (insuccesso)
+ *
+ * $username (string) nome utente dell'utente
+ * $password (string) password da verificare
  */
 function checkUser ($username, $password) {
     $q = "select ID,psw from Utenti where `username`='".$username."'";
@@ -254,7 +257,8 @@ function content () {
 
 /* 
  * Sostituisce le stringhe con variabili, a seconda della pagina richiesta.
- * $template -- stringa di template
+ *
+ * $template (stringa) contiene il template
  */
 function prepare_content ($template) {
    // Devo effettuare sostituzioni diverse per ogni pagina
@@ -455,7 +459,7 @@ ERR;
 /*
  * Vede se si può modificare.
  */
-function canModify() {
+/*function canModify() {
    $q = "select count(idUtente) as num
       from UtentiTragitto
       where idTragitto = '".$_GET['idTrip']."'";
@@ -466,7 +470,7 @@ function canModify() {
       return false;
 
    return true;
-}
+} */
 
 /*
  * Ritorna una select da cui selezionare la data (in italiano)
@@ -577,6 +581,7 @@ MOD;
 
 /*
  * Visualiza un pulsante che consente di partecipare al tragitto.
+ *
  * owner (booleano) indica se e' il proprietario
  * hasJoint (booleano) indica se partecipa al tragitto
  * postiDisp (intero) posti disponibili (fissi) oltre al guidatore

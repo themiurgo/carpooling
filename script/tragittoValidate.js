@@ -1,6 +1,5 @@
 var presenzaTesto = {validMessage : " ",onlyOnBlur:true};
 
-
 var ora = {minimum:0,maximum:23,
    notANumberMessage: "Errore", notAnIntegerMessage: "Errore",
    tooLowMessage:"Errore",tooHighMessage:"Errore"};
@@ -46,44 +45,28 @@ var passeggeri=new LiveValidation('postiDisp',{
 var spese=new LiveValidation('spese',{
    validMessage: ' ', onlyOnBlur: true,insertAfterWhatNode:'speseLabel'});
 
+// Tutti i campi che non devono essere vuoti
+var notEmpty = [ partenza, destinaz, gPartenza, mPartenza, aPartenza, oraP,
+   minP, durataO, durataM,passeggeri,spese];
+notEmpty.invoke('add', Validate.Presence, { failureMessage:"Vuoto" } );
 
-partenza.add(Validate.Presence, {failureMessage:"Vuoto"});
-destinaz.add(Validate.Presence, {failureMessage:"Vuoto"});
-
-gPartenza.add(Validate.Presence, {failureMessage:"Vuoto"});
 gPartenza.add( Validate.Numericality, giorno);
-mPartenza.add(Validate.Presence, {failureMessage:"Vuoto"});
 mPartenza.add( Validate.Numericality, mese);
-aPartenza.add(Validate.Presence, {failureMessage:"Vuoto"});
 aPartenza.add( Validate.Numericality, anno);
 
-oraP.add(Validate.Presence, {failureMessage:"Vuoto"});
 oraP.add( Validate.Numericality, ora);
 
-minP.add(Validate.Presence, {failureMessage:"Vuoto"});
 minP.add( Validate.Numericality, minuto);
 
-durataO.add(Validate.Presence, {failureMessage:"Vuoto"});
 durataO.add( Validate.Numericality, ora);
-durataM.add(Validate.Presence, {failureMessage:"Vuoto"});
 durataM.add( Validate.Numericality, minuto);
 
-passeggeri.add(Validate.Presence, {failureMessage:"Vuoto"});
 passeggeri.add(Validate.Numericality, numPass);
-
-spese.add(Validate.Presence, {failureMessage:"Vuoto"});
 spese.add(Validate.Numericality, soldi);
-
-
-
-
 
 function validaTrip() {
    var areAllValid = LiveValidation.massValidate( [  partenza, destinaz,gPartenza,mPartenza,aPartenza,oraP,minP,durataO,durataM,spese ] );
     
-    
-   if (areAllValid) {
-      document.mapForm.submit();
-   }
-   
+   if (areAllValid)
+      document.getElementById('mapForm').submit();
 }

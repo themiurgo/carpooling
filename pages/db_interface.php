@@ -316,9 +316,7 @@ function cars_ofUser($userId) {
    $res = execQuery($query);
    
   while ($row=mysql_fetch_array($res,MYSQL_ASSOC)) {
-   
       $auto= $row['marca']." ".$row['modello']." (".$row['targa'].")";
-
       $o=$o.'<option value="'.$row['ID'].'"
 	 selected="selected">'.$auto.'</option>';
    }
@@ -381,11 +379,15 @@ TR;
  * $city (string) citta' di partenza
  */
 function trips_leaving($n,$fromDefaultCity=false) {
-   if ($fromDefaultCity && getUserId())
+   if ($fromDefaultCity) {
+      if (!getUserId())
+         return "Iscriviti al sito e qui vedrai i tragitti in partenza dalla
+            tua citta'";
       $q="select *,userName from Tragitto
          join Utenti on Tragitto.idPropr=Utenti.ID
          where concat(dataPart,' ',oraPart)>now()
          and partenza=(select localita from Utenti where ID=".getUserId().")";
+   }
    else
       $q="select *,userName from Tragitto
       join Utenti on Tragitto.idPropr=Utenti.ID

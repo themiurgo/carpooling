@@ -170,6 +170,7 @@ function parseTemplate ($template) {
  * (index.htm)
  */
 function menu () {
+   $us = getUser();
    # Utente NON LOGGATO
    if (!getUser()) return <<<MNNL
       <a href="#" onclick="loginScript()">Login</a>&nbsp;&middot;
@@ -183,7 +184,7 @@ MNNL;
    # Utente LOGGATO
    else return "
    <b>".getUser()."</b> - ".<<<MNL
-   <a href="index.php?p=profilo">Profilo</a>&nbsp;&middot;
+   <a href="index.php?p=profilo&$us">Profilo</a>&nbsp;&middot;
    <a href="index.php?p=tragitti">Tragitti</a>&nbsp;&middot;
    <a href="index.php?p=cerca">Cerca Tragitto</a>&nbsp;&middot;
    <a href="index.php?p=nuovo">Nuovo Tragitto</a>&nbsp;&middot;
@@ -226,6 +227,12 @@ function content () {
    if (($_GET['p'] == 'error') ) {
       $error = alreadyInUse();
       $content = $content.$error;
+      return $content;
+   }
+   
+   if ($_GET['p'] == 'success' ) {
+      $conf = showConfirm();
+      $content = $content.$conf;
       return $content;
    }
 
@@ -291,7 +298,7 @@ function prepare_content ($template) {
                join UtentiTragitto on Tragitto.ID=UtentiTragitto.idTragitto
                where Tragitto.ID=".$_GET[idTrip]."
                and UtentiTragitto.idUtente=".getUserId();
-               echo $q3;
+               //echo $q3;
             $r3=mysql_fetch_array(execQuery($q3));
             }
          }
@@ -470,6 +477,10 @@ FORM;
  * FUNZIONI DI SERVIZIO
  * --------------------- */
  
+ function success() {
+   $_GET['p']="success";
+ }
+ 
 /* Messaggio di errore: non puoi accedere alla pagina*/
 function accessDenied() {
 return <<<ERR
@@ -484,10 +495,20 @@ ERR;
 function alreadyInUse() {
 return <<<ERR
 <div style="padding:0" class="bgRed">
-   <p>Username o Email gi&agrave; in uso! Impossibile effettuare la registrazione</p>
-         <a href="./index.php?p=iscrizione">ritenta</a>
+   <p>Username o Email gi&agrave; in uso! Impossibile effettuare la registrazione.</p>
+         <a href="./index.php?p=iscrizione">Ritenta</a>
 </div>
 ERR;
+
+}
+
+function showConfirm() {
+return <<<CON
+<div style="padding:0" class="bgGreen">
+         Torna alla <a href="./index.php?p=iscrizione">home</a>
+   <p>Dati inseriti con successo!</p>
+</div>
+CON;
 
 }
 

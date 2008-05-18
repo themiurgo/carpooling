@@ -78,6 +78,7 @@ function registraUtente() {
         '$dataNascita','".$_POST['email']."','$dataPatente',".$_POST['fumatore'].",'$dataIscriz','".$_POST['citta']."','".$_POST['sesso']."')";
       
       execQuery($registerUser_query);
+       success();
 }
 	
 # INCOMPLETA        

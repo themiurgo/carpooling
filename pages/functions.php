@@ -425,7 +425,7 @@ ERR;
 function dataError() {
 return <<<ERR
 <div style="padding:0" class="bgRed">
-   <p>$_SESSION[source] gi&agrave; in uso! Impossibile effettuare la registrazione.</p>
+   <p>$_SESSION[source] ! Impossibile effettuare la registrazione.</p>
          <a href="./index.php?p=$_SESSION[redirect]">Ritenta</a>
 </div>
 ERR;
@@ -585,6 +585,8 @@ MOD;
  */
 function controlTrip ($owner,$hasJoint,$postiDisp,$postiAdesso,$inThePast,
       $blocked) {
+      echo $inThePast;
+      //echo now();
    if ($inThePast)
       return null;
 

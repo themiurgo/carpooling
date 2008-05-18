@@ -54,7 +54,7 @@ function registraUtente() {
       $query_check1 = "select * from Utenti where userName='".$_POST['user']."'";
       $res = execQuery($query_check1);
       if (mysql_num_rows($res) != 0) {
-         setErrorParam('Username ' ,'iscrizione');
+         setErrorParam('Username gi&agrave; in uso' ,'iscrizione');
          return -1;
       }
       
@@ -62,7 +62,7 @@ function registraUtente() {
       $query_check2 = "select * from Utenti where email='".$_POST['email']."'";
       $res = execQuery($query_check2);
       if (mysql_num_rows($res) != 0) {
-        setErrorParam('Email ' ,'iscrizione');
+        setErrorParam('Email gi&agrave; in uso' ,'iscrizione');
          return -1;
       }
     $dataNascita=$_POST['annoNascita']."-".$_POST['meseNascita']."-".$_POST['giornoNascita'];
@@ -133,7 +133,7 @@ function aggiornaProfilo() {
       if (mysql_num_rows($res) != 0) {
         $us=getUser();
         $us2='profilo&u='.$us;
-         setErrorParam('Email ' ,$us2);
+         setErrorParam('Email gi&agrave; in uso' ,$us2);
          return -1;
       }
    
@@ -174,9 +174,11 @@ function registerTrip() {
       values('".mysql_insert_id()."','".getUserId()."')";
     
     execQuery($registerTrip_query);
+    success();
     
     } else {
-      echo "la data di partenza è nel passato";
+      setErrorParam('La data di partenza inserita &egrave; nel passato' ,'nuovo');
+         return -1;
     }
     
     

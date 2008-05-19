@@ -592,7 +592,7 @@ function controlTrip ($owner,$hasJoint,$postiDisp,$postiAdesso,$inThePast,
    if ($inThePast)
       return null;
 
-   if ($blocked)
+   if ($blocked && $owner)
       return <<<UNBLOCK
       <button type="button" onclick="location.href='index.php?p=tragitto&amp;idTrip=$_GET[idTrip]&amp;action=unblockTrip'">
       Sblocca il tragitto

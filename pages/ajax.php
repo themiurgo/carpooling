@@ -31,14 +31,18 @@ TRIP;
    }
    $prev = $_GET['count']+1;
    $next = $prev-2;
-
-   $out="Pagina ".$_GET['count'].$out."</ol>
-   <button type=\"button\" onClick=\"risultatiAjax($prev)\">&lt;</button>";
-
+   echo $prev." ".$next;
    if ($next>=0) 
    $out = $out."
-      <button type=\"button\" onClick=\"risultatiAjax($next);\">&gt;</button>";
+      <button type=\"button\" onClick=\"risultatiAjax($next);\">&lt;</button>";
+
+   if (true)
+      $out = $out."
+         <button type=\"button\" onClick=\"risultatiAjax($prev)\">&gt;</button>";
+
+   $out="Pagina ".$_GET['count'].$out."</ol>";
    echo $out;
+
 }
 
 if (isset($_GET['q'])) {

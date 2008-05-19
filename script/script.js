@@ -56,20 +56,6 @@ function GetXmlHttpObject() {
    return xmlHttp;
 }
  
-/* 
- *  Funzione per rendere non editabili le caselle di testo 
- *  della pagina 'modifica auto'.
- */
-function disableText(){
-    document.autoForm.marca.readOnly = true; 
-    document.autoForm.modello.readOnly = true; 
-    document.autoForm.targa.readOnly = true; 
-    document.autoForm.cilindrata.readOnly = true; 
-    document.autoForm.gAuto.readOnly = true; 
-    document.autoForm.mAuto.readOnly = true; 
-    document.autoForm.aAuto.readOnly = true; 
-}	
-
 /* Aggiornamento AJAX dei tragitti nella pagina 'cerca'*/
 function risultatiAjax (count) {
    count = (count == null) ? 0 : count;
@@ -80,6 +66,7 @@ function risultatiAjax (count) {
    
    var partenza = mapForm.partenza.value;
    var arrivo = mapForm.destinaz.value;
+
    if (e.checked==true) {
       document.getElementById("directions").style.visibility="visible";
       document.getElementById("directions").style.display="block";
@@ -102,7 +89,6 @@ function risultatiAjax (count) {
    }
    var url="./pages/ajax.php";
    url=url+"?pa=" + partenza+"&ar="+arrivo+"&count="+count;
-   //alert (url);
    xmlHttp.open("GET",url,true);
    xmlHttp.send(null);
 }

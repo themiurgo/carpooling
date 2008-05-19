@@ -646,8 +646,16 @@ function parseDate ($timedate) {
    return "$day.$month.$year $hours:$minutes";
 }
 
-function voteTrip ($id,$partecipo) {
-   if (!$partecipo)
+/*
+ * Visualizza un form per l'invio di feedback su altri utenti.
+ * (tragitto.htm)
+ *
+ * $id (int)
+ * $partecipo (boolean)
+ * $inThePast (boolean)
+ */
+function voteTrip ($id,$partecipo,$inThePast) {
+   if (!$partecipo || !$inThePast)
       return null;
 
    $q="select autore,valutato,tragittoAut,data as tragitto,Utenti.userName,Utenti.ID as idValutato,valutazione

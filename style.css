@@ -274,6 +274,13 @@ div.horRule hr { display: none; }
 .bgGold h4 {
    font-weight: bold;
    text-align: center;
+   color:#a29b2f;
+}
+
+.bgRed h4 {
+   font-weight: bold;
+   text-align: center;
+   color:#800517;
 }
 
 .bgRed {

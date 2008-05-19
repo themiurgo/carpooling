@@ -718,11 +718,10 @@ function voteTrip ($id,$partecipo,$inThePast) {
          //echo $q;
    $res=execQuery($q);
    if (mysql_num_rows($res)!=0) {
-
-   $utenti="<select id=\"idValutato\" name=\"idValutato\">";
-   while ($r=mysql_fetch_array($res)) {
-      if ($r['ID'] != getUserId())
-         $utenti=$utenti."<option value=\"$r[idValutato]\">$r[userName]</option>";
+      $utenti="<select id=\"idValutato\" name=\"idValutato\">";
+      while ($r=mysql_fetch_array($res)) {
+         if ($r['ID'] != getUserId())
+            $utenti=$utenti."<option value=\"$r[idValutato]\">$r[userName]</option>";
    }
    $utenti=$utenti."</select>";
    }

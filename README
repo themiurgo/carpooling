@@ -1,0 +1,28 @@
+*************************************
+* Progetto di Sistemi Informativi   *
+*    (Prof. Ing. Alberto Faro)      *
+*        a.a. 2007-2008             *
+* Università degli Studi di Catania *
+*     Facoltà di Ingegneria         *
+* C.d.l. in Ingegneria Informatica  *
+*  ------------------------------   *
+*     Progetto "Carpooling"         *
+*************************************
+
+** Autori
+Antonio Lima      (matricola 616/001872)  anto87@gmail.com
+Daniele Marletta  (matricola 616/001677)  daniele_mar@hotmail.com
+
+** Linguaggi Utilizzati
+- PHP 5
+- MySQL 5
+- XHTML 1.1
+- CSS
+- GoogleMaps API
+- Javascript
+- Libreria Javascript Prototype (AJAX)
+- Libreria Javascript LiveValidation (Validazione form)
+
+** Note d'installazione
+- eseguire da mysql il file carpooling.sql
+- copiare il contenuto della cartella Carpooling in una directory del server

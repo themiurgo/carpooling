@@ -724,13 +724,8 @@ function voteTrip ($id,$partecipo,$inThePast) {
             $utenti=$utenti."<option value=\"$r[idValutato]\">$r[userName]</option>";
    }
    $utenti=$utenti."</select>";
-   }
 
-   // Mettere controllo data nel passato
-   return "
-   
-   <div class=\"bgGreen\">
-      <h4>Dai un giudizio sui tuoi compagni di viaggio</h4>
+   $form = "
       <form id='voteForm' action=\"index.php?p=tragitto&amp;action=voteTrip&amp;idTrip=$_GET[idTrip]\" method=\"post\" class=\"center\">
    <label for=\"utente\">Utente</label>$utenti
       <label for=\"voto\">Voto</label>".
@@ -738,9 +733,16 @@ function voteTrip ($id,$partecipo,$inThePast) {
       "<label for=\"note\">Note</label>
       <input type=\"text\" id=\"note\" name=\"note\" size=30></input>".
       " <button id='headT' onclick='validaVote()'>Vota!</button>
-      </form>".
+      </form>";
+   }
+
+   return "
+   
+   <div class=\"bgGreen\">
+      <h4>Dai un giudizio sui tuoi compagni di viaggio</h4>
+      $form".
       viewVotes($_GET[idTrip])."
-      </div>";
+   </div>";
 }
 
 /*

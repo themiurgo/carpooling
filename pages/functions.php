@@ -71,7 +71,7 @@ function checkUser ($username, $password) {
     $q = "select ID,psw from Utenti where `username`='".$username."'";
     $r = mysql_fetch_array(execQuery($q));
 
-    if ($password == $r['psw']) { 
+    if (md5($password) == $r['psw']) { 
       $_SESSION['user'] = $username;
       $_SESSION['userId'] = $r['ID'];
     }

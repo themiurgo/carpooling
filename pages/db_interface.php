@@ -62,6 +62,7 @@ function registraUtente() {
          return -1;
       }
       
+      
       /* L'email è già presente */
       $query_check2 = "select * from Utenti where email='".$_POST['email']."'";
       $res = execQuery($query_check2);
@@ -71,6 +72,7 @@ function registraUtente() {
       }
       $dataNascita=$_POST['annoNascita']."-".$_POST['meseNascita']."-".$_POST['giornoNascita'];
       $dataPatente=$_POST['annoPatente']."-".$_POST['mesePatente']."-".$_POST['giornoPatente'];
+      $passCript = md5($_POST['psw']);
     
     # Data corrente per l'iscrizione
     $today = getdate(); 
@@ -78,7 +80,7 @@ function registraUtente() {
     
     $registerUser_query = "insert into 
         Utenti(userName,psw,nome,cognome,dataNascita,email,dataPatente,fumatore,dataIscriz,localita,sesso) 
-        values('".$_POST['user']."','".$_POST['psw']."','".$_POST['nome']."','".$_POST['cognome']."',
+        values('".$_POST['user']."','$passCript','".$_POST['nome']."','".$_POST['cognome']."',
         '$dataNascita','".$_POST['email']."','$dataPatente',".$_POST['fumatore'].",'$dataIscriz','".$_POST['citta']."','".$_POST['sesso']."')";
       
       execQuery($registerUser_query);

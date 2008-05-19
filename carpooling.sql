@@ -17,7 +17,7 @@ create table Auto (
 create table Utenti (
    ID          int primary key auto_increment,
    userName    varchar(20) unique,
-   psw         varchar(10) not null,
+   psw         varchar(32) not null,
    nome        varchar(20) not null,
    cognome     varchar(20) not null,
    sesso       enum('f','m') not null,
@@ -75,16 +75,16 @@ create table Feedback (
 /* Dati d'esempio */
 insert into 
    Utenti(userName,psw,nome,cognome,sesso,dataNascita,email,dataPatente,fumatore,dataIscriz,localita) values 
-   ('ari','ciao1','Alfio','Rinaldi','m','1977-12-15','a.rinaldi@tin.it','1990-12-15',0,'2006-11-15','Catania'),
-   ('gica','ciao2','Giuseppa','Cantone','f','1980-10-10','g.canto@tin.it','1998-12-15',0,'2006-11-16','Catania'),
-   ('caccio','ciao3','Filippo','Cacciola','m','1975-07-02','filcacciola@libero.it','1985-12-01',1,'2006-11-17','Catania'),
-   ('frano','ciao4','Francesco','Nocita','m','1960-02-02','fr.nocita@gmail.com','1990-03-04',0,'2006-11-18','Catania'),
-   ('ape','ciao5','Angela','Perna','f','1962-05-06','aperna@hotmail.it','1990-07-12',0,'2006-11-19','Catania'),
-   ('rosi','ciao6','Rosalia','Fichera','f','1973-01-06','firosa@hotmail.com','1995-03-05',1,'2006-11-19','Messina'),
-   ('coca','ciao7','Concetto','Calabro','m','1970-05-06','cocala@tin.it','1990-11-10',1,'2006-11-19','Messina'),
-   ('seby','ciao8','Sebastiano','Accetta','m','1971-05-06','sebya@yahoo.it','1992-05-08',1,'2006-11-19','Messina'),
-   ('giuta','ciao9','Giuseppa','Taccetta','f','1972-05-06','gtaccetta@hotmail.it','1993-09-08',1,'2006-11-19','Messina'),
-   ('vica','ciao10','Vincenzo','Castorina','m','1975-05-06','castorov@gmail.com','1994-01-09',0,'2006-11-19','Messina');
+   ('ari','c7cc6a1fd6d6b5f4817025cb532b52fa','Alfio','Rinaldi','m','1977-12-15','a.rinaldi@tin.it','1990-12-15',0,'2006-11-15','Catania'),
+   ('gica','f2293aa6431ff49aa481e7acaea71116','Giuseppa','Cantone','f','1980-10-10','g.canto@tin.it','1998-12-15',0,'2006-11-16','Catania'),
+   ('caccio','3cd56ca40c0be39daad5c1398df013f9','Filippo','Cacciola','m','1975-07-02','filcacciola@libero.it','1985-12-01',1,'2006-11-17','Catania'),
+   ('frano','244fe8bdf0f58277b7b55e5b555deefe','Francesco','Nocita','m','1960-02-02','fr.nocita@gmail.com','1990-03-04',0,'2006-11-18','Catania'),
+   ('ape','efa04884995f5b73b9f64e8688ff3e42','Angela','Perna','f','1962-05-06','aperna@hotmail.it','1990-07-12',0,'2006-11-19','Catania'),
+   ('rosi','f4bf8ba00cb902edaa901b006dfec4aa','Rosalia','Fichera','f','1973-01-06','firosa@hotmail.com','1995-03-05',1,'2006-11-19','Messina'),
+   ('coca','79f84228831211f0fd89ab9101bf05bd','Concetto','Calabro','m','1970-05-06','cocala@tin.it','1990-11-10',1,'2006-11-19','Messina'),
+   ('seby','d5b6cc3c2cf280ac3b95a8b3876d1c18','Sebastiano','Accetta','m','1971-05-06','sebya@yahoo.it','1992-05-08',1,'2006-11-19','Messina'),
+   ('giuta','f1e58f2b2576943808d59acaa24eb935','Giuseppa','Taccetta','f','1972-05-06','gtaccetta@hotmail.it','1993-09-08',1,'2006-11-19','Messina'),
+   ('vica','0ed93e154eff79aee1cba0a2476284a8','Vincenzo','Castorina','m','1975-05-06','castorov@gmail.com','1994-01-09',0,'2006-11-19','Messina');
 
 insert into Auto(targa,marca,modello,cilindrata,annoImmatr,condizioni) values
    ('WF345PY','Audi','A3',1990,'2000',3),

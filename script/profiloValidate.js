@@ -1,6 +1,3 @@
-
-
-
 var citta=new LiveValidation('localita',{
    validMessage: ' ', onlyOnBlur: true});
 var email=new LiveValidation('email',{

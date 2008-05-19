@@ -5,6 +5,7 @@
  */
 function handle_action () {
    if (isset($_GET['action'])) {
+   
       switch ($_GET['action']) {
          case "login":
             checkUser($_POST['username'],$_POST['password']);
@@ -100,6 +101,14 @@ function getUserId () {
 /* --------
  * TEMPLATE
  * -------- */
+ 
+ /*
+  * Effettua le opportune sostituzioni all'interno del template.
+  */
+function parseTemplate ($template) {
+  return preg_replace("/\{\s(.*)\s\}/e","$1",$template);
+}
+
 
 /* 
  * Ritorna eventuali tag da aggiungere dentro <head></head>
@@ -109,7 +118,9 @@ function headType() {
 // Pagina visualizzata di default
    if (!isset($_GET['p']))
       $_GET['p']="cerca";
+      
    switch ($_GET['p']) {
+      /* Tutte le seguenti sono pagine che hanno bisogno della GMap */
       case "nuovo":
       case "cerca":
       case "tragitto":
@@ -127,8 +138,9 @@ DH;
    }
 }
 
+
 /*
- * Ritorna <body> o aggiunge opportunamente azioni onLoad.
+ * Ritorna <body> o aggiunge opportunamente azioni onLoad per la GMap.
  */
 function bodyType() {
 // Pagina visualizzata di default
@@ -163,19 +175,13 @@ function bodyType() {
    }
 }
  
-function parseTemplate ($template) {
-   /* return preg_replace ("/\{ ([\$]?)(\w+)(..)? \}/e","$1$2$3",
-      $template); */
-//   return preg_replace("/\{\s(.*)\s\}/e","$1",$template);
-   return preg_replace("/\{\s(.*)\s\}/e","$1",$template);
-}
-
+ 
 /*
  * Restituisce il menu
  * (index.htm)
  */
 function menu () {
-   # Utente NON LOGGATO
+   # Utente NON  loggato
    if (!getUser()) return <<<MNNL
       <a href="#" onclick="loginScript()">Login</a>&nbsp;&middot;
       <a href="index.php?p=iscrizione">Iscriviti</a>&nbsp;&middot;
@@ -185,7 +191,7 @@ function menu () {
       <a href="index.php?p=about">About Us</a>
 MNNL;
     
-   # Utente LOGGATO
+   # Utente loggato
    else return "
    <b>".getUser()."</b> - ".<<<MNL
    <a href="index.php?p=profilo">Profilo</a>&nbsp;&middot;
@@ -198,6 +204,7 @@ MNNL;
    <a href="index.php?action=logout">Logout</a>
 MNL;
 }
+
 
 /*
  * Ritorna il contenuto della pagina richiesta
@@ -217,6 +224,11 @@ function content () {
       $allowed = array("tragitti","tragitto","cerca","utenti","about","iscrizione","profilo");
 
    $content = "";
+   
+   /*
+     *  I successivi controlli di flusso indicano la visualizzazione di
+     *  messaggi particolari come condizioni di errore, messaggi di conferma, ecc
+     */
    if (isset($_SESSION['wronglogin'])) {
       $content="<h1>Login errato</h1>";
       unset($_SESSION['wronglogin']);
@@ -240,14 +252,16 @@ function content () {
       return $content;
    }
 
-   // Se posso visualizzare la pagina, effettuo le sostituzioni nel template
+   /**
+     *  La pagina da visualizzare appartiene al flusso 'regolare' del sito, e ne
+     *  viene estratto il template. 
+     */
    if (in_array($_GET['p'],$allowed)) {
       $file_content = implode ("",file("template/$_GET[p].htm"))
          or die("Pagina non trovata");
       $content = $content.prepare_content($file_content);
-   }
-   
-   else {
+   }else {
+      /* Non si hanno i permessi per visitare la pagina */
       $error = accessDenied();
       $content = $content.$error;
    }
@@ -351,36 +365,29 @@ function prepare_content ($template) {
          ($r1['fumatore'] == 0) ?
             $r1['fumatore']="No" : $r1['fumatore']="Si";
 
-         // Varia il contenuto della pagina a seconda che si è in modalita 'leggi profilo' o 'modifica profilo'
+         /*Varia il contenuto della pagina a seconda che si è in modalita 'leggi profilo' o 'modifica profilo' */
          if (getUser() == $_GET['u']) {
             if ( $_POST['hiddenProfilo']=="modifyProfilo" ) {
-               //echo  $_POST['fill'];
+               //$r1['userName']="<input id='userName' name='userName' class='modificatori' value='$r1[userName]'/>";
+               $r1['email']="<input id='email' name='email' class='modificatori' value='$r1[email]'/>";
+               $r1['fumatore']="<select name ='fumatore' id='fumatore' class='modificatori' style='width: auto'> <option value='0'>No</option><option value='1'>SI</option></select>";
+               $r1['localita']="<input id='localita'  name='localita' class='modificatori'  value='$r1[localita]'/>";
+               $button = "<button id='updateProfiloButton' type='button' onclick='updateProfilo()'>Aggiorna</button>";
+            }   else
+               $button="<button type='submit' name='modifica' value='modifica'>Modifica</button>";
+         }else 
+            $button="";
+         
+         $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
 
-       //$r1['userName']="<input id='userName' name='userName' class='modificatori' value='$r1[userName]'/>";
-       $r1['email']="<input id='email' name='email' class='modificatori' value='$r1[email]'/>";
-             $r1['fumatore']="<select name ='fumatore' id='fumatore' class='modificatori' style='width: auto'> <option value='0'>No</option><option value='1'>SI</option></select>";
-       $r1['localita']="<input id='localita'  name='localita' class='modificatori'  value='$r1[localita]'/>";
-       $button = "<button id='updateProfiloButton' type='button' onclick='updateProfilo()'>Aggiorna</button>";
-    }
+          // Se visualizzo un profilo non mio, estraggo i tragitti
+         // su cui posso fare feedback
+         //    if (getUser()!=$_GET['u'])
+         //            $feedback=feedback($r1['ID']); 
 
-    else
-       $button="<button type='submit' name='modifica' value='modifica'>Modifica</button>";
-    }
+         break;
 
-   else $button="";
-
-   $final_content=preg_replace("/\{\s(.*)\s\}/e","$1",$template);
-
-         // Se visualizzo un profilo non mio, estraggo i tragitti
-    // su cui posso fare feedback
-//    if (getUser()!=$_GET['u'])
-//            $feedback=feedback($r1['ID']); 
-
-   break;
-
-      // Nuovo Tragitto e inserimento Auto
       case 'cerca':
-      case 'utenti':
       case 'nuovo':
       case 'auto':   
       case 'iscrizione':
@@ -397,32 +404,54 @@ function prepare_content ($template) {
     return $final_content;
 }
 
+
 /* ---------------------
  * FUNZIONI DI SERVIZIO
  * --------------------- */
  
+ 
+ /*
+  * Imposta la variabile per poter visualizzare un messaggio
+  * di conferma.
+  */
  function success() {
    $_GET['p']="success";
  }
  
+ 
+ /*
+  * Imposta i parametri per il messaggio di errore.
+  *
+  * $source -- è il parametro che ha causato l'errore
+  * $page -- è la pagina verso la quale viene offerto di andare.
+  *
+  */
  function setErrorParam($source,$page) {
     $_GET['p']="error";
     $_SESSION['source'] = $source;
     $_SESSION['redirect'] = $page;
- 
  }
  
-/* Messaggio di errore: non puoi accedere alla pagina*/
-function accessDenied() {
-return <<<ERR
-<div style="padding:0" class="bgAzure">
-   <p>Non hai i permessi per visitare questa pagina!</p>
-         <a href="./index.php">home</a>
+ 
+ /* 
+ * Visualizza un messaggio di errore dovuto al fatto che
+ * l'utente non ha ancora registrato un' auto.
+ */
+function noAuto() {
+ return <<<ERR
+<div style="padding:0" class="bgGold">
+   <p>Non hai auto! Provvedi subito a 
+      <a href='index.php?p=auto'>registrarne</a> una.
+   </p>
 </div>
 ERR;
-
 }
-
+ 
+ 
+/** 
+ *  Visualizza un messaggio di errore dovuto al fatto che
+ *  l'utente ha inserito input non validi.
+ */
 function dataError() {
 return <<<ERR
 <div style="padding:0" class="bgRed">
@@ -433,6 +462,11 @@ ERR;
 
 }
 
+
+/**
+ *  Visualizza un messaggio di conferma per il corretto inserimento 
+ *  dei dati nel Database.
+ */
 function showConfirm() {
 return <<<CON
 <div style="padding:0" class="bgGreen">
@@ -443,32 +477,39 @@ CON;
 
 }
 
-function noAuto() {
- return <<<ERR
-<div style="padding:0" class="bgGold">
-   <p>Non hai auto! Provvedi subito a 
-      <a href='index.php?p=auto'>registrarne</a> una.
-   </p>
+
+/** 
+ *  Visualizza un messaggio di errore dovuto al fatto che
+ *  l'utente non ha i permessi per visualizzare la pagina indicata.
+ */
+function accessDenied() {
+return <<<ERR
+<div style="padding:0" class="bgAzure">
+   <p>Non hai i permessi per visitare questa pagina!</p>
+         <a href="./index.php">home</a>
 </div>
 ERR;
 
 }
 
 /*
- * Vede se si può modificare.
+ * Messaggio di benvenuto
+ * (Pagina cerca)
  */
-/*function canModify() {
-   $q = "select count(idUtente) as num
-      from UtentiTragitto
-      where idTragitto = '".$_GET['idTrip']."'";
-   $res = execQuery($q);
-   $r = mysql_fetch_array($res);
-   
-   if ($r['num'] > 1) 
-      return false;
+function welcome () {
+   if (getUser())
+      return <<<WLCM
+      <p>Ciao <b>$_SESSION[user]</b>! Se hai dubbi sul funzionamento
+      della ricerca puoi sempre consultare la pagina delle
+      <a href='index.php?p=about'>istruzioni</a>.</p>
+WLCM;
+   else
+      return <<<WLCM
+	 <p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!
+      Leggi <a href='index.php?p=about'>come funziona</a> e <a href='index.php?p=iscrizione'>registrati subito!</a>.</p>
+WLCM;
+}
 
-   return true;
-} */
 
 /*
  * Ritorna una select da cui selezionare la data (in italiano)
@@ -482,6 +523,7 @@ function italianDate ($firstY,$lastY,$suffix=null) {
       numericDropDown("anno$suffix",$firstY,$lastY,"AAAA");
 }
 
+
 /*
  * Ritorna una select da cui selezionare l'ora e i minuti.
  */
@@ -490,6 +532,7 @@ function timeSelect () {
       numericDropDown("minuti",0,59,"MM");
 }
 
+
 /*
  * Ritorna una select da cui selezionare la durata (in ora e minuti)
  */
@@ -497,6 +540,7 @@ function durataSelect () {
    return numericDropDown("durataOre",0,23,"HH").' ore e '.
       numericDropDown("durataMinuti",0,59,"MM").' minuti';
 }
+
 
 /*
  * Ritorna una select numerica (utile per date, anni, ...)
@@ -526,6 +570,7 @@ function numericDropDown($id,$start,$stop,$first=null,$names=null) {
 
    return $a;
 }
+
 
 /*
  * Ritorna una select che permette di selezionare un'auto fra quelle che
@@ -576,6 +621,7 @@ MOD;
       return $output;
    }
 }
+
 
 /*
  * Visualiza un pulsante che consente di partecipare al tragitto.
@@ -697,5 +743,23 @@ function voteTrip ($id,$partecipo,$inThePast) {
       viewVotes($_GET[idTrip])."
       </div>";
 }
+
+/*
+ * Vede se si può modificare.
+ */
+/*function canModify() {
+   $q = "select count(idUtente) as num
+      from UtentiTragitto
+      where idTragitto = '".$_GET['idTrip']."'";
+   $res = execQuery($q);
+   $r = mysql_fetch_array($res);
+   
+   if ($r['num'] > 1) 
+      return false;
+
+   return true;
+} */
+
+
 
 ?>

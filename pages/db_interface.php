@@ -25,6 +25,7 @@ function connectDb(&$dbconn) {
       or die ("DB Selection Error");
 }
 
+
 /*
  * Esegue una query e ritorna una variabile risorsa.
  * Invocata per l'esecuzione di tutte le query.
@@ -41,9 +42,12 @@ function execQuery($query) {
    return $res;
 }
 
+
+
 /* ------
  * AZIONI
  * ------ */
+
 
 /*
  * Effettua la registrazione di un utente.
@@ -65,8 +69,8 @@ function registraUtente() {
         setErrorParam('Email gi&agrave; in uso' ,'iscrizione');
          return -1;
       }
-    $dataNascita=$_POST['annoNascita']."-".$_POST['meseNascita']."-".$_POST['giornoNascita'];
-    $dataPatente=$_POST['annoPatente']."-".$_POST['mesePatente']."-".$_POST['giornoPatente'];
+      $dataNascita=$_POST['annoNascita']."-".$_POST['meseNascita']."-".$_POST['giornoNascita'];
+      $dataPatente=$_POST['annoPatente']."-".$_POST['mesePatente']."-".$_POST['giornoPatente'];
     
     # Data corrente per l'iscrizione
     $today = getdate(); 
@@ -78,17 +82,10 @@ function registraUtente() {
         '$dataNascita','".$_POST['email']."','$dataPatente',".$_POST['fumatore'].",'$dataIscriz','".$_POST['citta']."','".$_POST['sesso']."')";
       
       execQuery($registerUser_query);
+      /* Messaggi di conferma */
        success();
 }
 	
-# INCOMPLETA        
-function modificaAuto() {
-    #$targa = $datiAuto['targa'];	
-    #non è logicamnete corretto: si dovrebbe usare sempre e cmq l 'ID;
-    $selectAuto_query = "select * from auto where targa='$targa'";
-    $res = execQuery($selectAuto_query);
-    $row = mysql_fetch_array($res); 
-} 
 	
 /*
  * Effettua la registrazione o la modifica di un auto
@@ -104,7 +101,7 @@ function gestioneAuto() {
 
       execQuery($q1);
 
-      # Ottiene l'id dell'auto:Si potrebbe ottimizzare
+      # Ottiene l'id dell'auto.
       $query="select ID from Auto where targa='".$_POST['targa']."'";
       $res=execQuery($query);
       $row=mysql_fetch_array($res); 
@@ -139,7 +136,6 @@ function aggiornaProfilo() {
          return -1;
       }
    
-
    $q1 = "update Utenti set 
       email='".$_POST['email']."',localita='".$_POST['localita']."' ,
       fumatore='".$_POST['fumatore']."' where ID='".getUserId()."'  ";
@@ -246,6 +242,9 @@ function controllaTrip() {
    return true;
 }
 
+/*
+ *  Restituisce true se e solo se la data non è passata.
+ */
 function controllaData($ora,$minuti,$mese,$giorno,$anno) {
    
    #Data Completa della partenza
@@ -325,24 +324,7 @@ function cars_ofUser($userId) {
    return $o; 
 }
 
-/*
- * Messaggio di benvenuto
- * -Pagina cerca
- */
-function welcome () {
-   if (getUser())
-      return <<<WLCM
-	<p>Ciao <b>$_SESSION[user]</b>! Se hai dubbi sul funzionamento
-	della ricerca puoi sempre consultare la pagina delle
-	<a href='index.php?p=about'>istruzioni</a>.</p>
-WLCM;
 
-   else
-      return <<<WLCM
-	 <p>Benvenuto su CarPooling, il portale fatto per viaggiare insieme!
-      	 Leggi <a href='index.php?p=about'>come funziona</a> e <a href='index.php?p=iscrizione'>registrati subito!</a>.</p>
-WLCM;
-}
 
 function trips_lastJoined($id) {
    $q = "select Tragitto.*,userName from Tragitto
@@ -570,5 +552,14 @@ function viewVotes ($id) {
    }
    return $o."</ul>";
 }
+
+//~ # INCOMPLETA        
+//~ function modificaAuto() {
+    //~ #$targa = $datiAuto['targa'];	
+    //~ #non è logicamnete corretto: si dovrebbe usare sempre e cmq l 'ID;
+    //~ $selectAuto_query = "select * from auto where targa='$targa'";
+    //~ $res = execQuery($selectAuto_query);
+    //~ $row = mysql_fetch_array($res); 
+//~ } 
 
 ?>

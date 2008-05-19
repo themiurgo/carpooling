@@ -23,6 +23,9 @@ Daniele Marletta  (matricola 616/001677)  daniele_mar@hotmail.com
 - Libreria Javascript Prototype (AJAX)
 - Libreria Javascript LiveValidation (Validazione form)
 
+** Server Utilizzato
+- Apache 
+
 ** Note d'installazione
 - eseguire da mysql il file carpooling.sql
 - copiare il contenuto della cartella Carpooling in una directory del server

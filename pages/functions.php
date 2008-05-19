@@ -700,8 +700,8 @@ function parseDate ($timedate) {
  * $partecipo (boolean)
  * $inThePast (boolean)
  */
-function voteTrip ($id,$partecipo,$inThePast) {
-   if (!$partecipo || !$inThePast)
+function voteTrip ($id,$partecipo,$inThePast,$postiDisp,$postiAdesso) {
+   if (!$partecipo || !$inThePast || ($postiDisp-1 == $postiAdesso) )
       return null;
 
    $q="select autore,valutato,tragittoAut,data as tragitto,Utenti.userName,Utenti.ID as idValutato,valutazione

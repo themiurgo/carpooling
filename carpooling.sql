@@ -104,12 +104,12 @@ insert into Tragitto(idPropr,idAuto,partenza,destinaz,dataPart,oraPart,durata,fu
    (1,1,'Catania','Palermo','2008-05-18','08:00','1:30',0,0,3),
    (2,2,'Catania','Palermo','2008-05-18','09:00','1:30',0,0,4),
    (3,3,'Catania','Palermo','2008-05-18','07:00','2:00',0,0,5),
-   (2,2,'Catania','Messina','2008-05-19','12:00','3:00',0,0,3),
-   (3,3,'Catania','Messina','2008-05-19','15:00','3:00',0,0,3),
-   (4,4,'Catania','Messina','2008-05-19','12:00','2:00',0,0,3),
    (4,4,'Catania','Palermo','2008-05-20','08:30','1:30',0,0,4),
    (5,5,'Catania','Palermo','2008-05-20','08:00','2:00',0,0,4),
-   (1,1,'Catania','Messina','2008-05-20','20:00','2:00',0,0,4);
+   (1,1,'Catania','Messina','2008-05-20','20:00','2:00',0,0,4),
+   (2,2,'Catania','Messina','2008-05-19','12:00','3:00',0,0,3),
+   (3,3,'Catania','Messina','2008-05-19','15:00','3:00',0,0,3),
+   (4,4,'Catania','Messina','2008-05-19','12:00','2:00',0,0,3);
    
 
 insert into UtentiTragitto(idUtente,idTragitto) values
@@ -122,7 +122,11 @@ insert into UtentiTragitto(idUtente,idTragitto) values
    (7,2),
    (8,3),
    (9,3),
-   (10,3);
+   (10,3),
+   (1,6),
+   (2,7),
+   (3,8),
+   (4,9);
 
 insert into Feedback(autore,tragittoAut,valutato,tragittoVal,valutazione,data,note) values
    (1,1,6,1,2,'2008-03-28 11:00:00','Molesto'),

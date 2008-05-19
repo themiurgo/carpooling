@@ -256,7 +256,7 @@ function controllaData($ora,$minuti,$mese,$giorno,$anno) {
    $now =mktime($t['hours'],$t['minutes'],0,$t['mon'],$t['mday'],$t['year']);
 
    $diff = $start - $now ;
-   echo $diff;
+   //echo $diff;
    if  ( $diff < 0 ) {
       return false;
    }

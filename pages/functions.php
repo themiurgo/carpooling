@@ -589,7 +589,7 @@ MOD;
  */
 function controlTrip ($owner,$hasJoint,$postiDisp,$postiAdesso,$inThePast,
       $blocked) {
-      echo $inThePast;
+      //echo $inThePast;
       //echo now();
    if ($inThePast)
       return null;
@@ -663,7 +663,7 @@ function voteTrip ($id,$partecipo) {
       where (autore,tragittoAut) = (".getUserId().", $_GET[idTrip])
          and valutazione is null
          and dataPart<now()";
-         echo $q;
+         //echo $q;
    $res=execQuery($q);
    if (mysql_num_rows($res)!=0) {
 

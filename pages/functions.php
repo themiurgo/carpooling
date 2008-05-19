@@ -612,7 +612,7 @@ BLOCK;
       </button>
 LEAVE;
 
-   elseif ($postiAdesso > 0 && !$owner && !$hasJoint)
+   elseif ($postiAdesso > 0 && !$owner && !$hasJoint && !$blocked)
       return <<<JOIN
       <button type="button" onclick="location.href='index.php?p=tragitto&amp;idTrip=$_GET[idTrip]&amp;action=joinTrip';">
     Partecipa al tragitto

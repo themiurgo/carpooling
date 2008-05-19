@@ -71,7 +71,8 @@ function disableText(){
 }	
 
 /* Aggiornamento AJAX dei tragitti nella pagina 'cerca'*/
-function risultatiAjax() {
+function risultatiAjax (count) {
+   count = (count == null) ? 0 : count;
    e=document.getElementById("directionsCheck");
    var xmlHttp=GetXmlHttpObject();
    res = document.getElementById("risultati");
@@ -100,7 +101,7 @@ function risultatiAjax() {
       return;
    }
    var url="./pages/ajax.php";
-   url=url+"?pa=" + partenza+"&ar="+arrivo;
+   url=url+"?pa=" + partenza+"&ar="+arrivo+"&count="+count;
    //alert (url);
    xmlHttp.open("GET",url,true);
    xmlHttp.send(null);

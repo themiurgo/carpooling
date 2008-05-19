@@ -320,11 +320,9 @@ function prepare_content ($template) {
             order by `dataPart` desc,`oraPart` desc limit 5";
          $res = execQuery($q1);
   
-         // Stampo i tragitti
-//         while ($r1 = mysql_fetch_array($res)) {
          $o=preg_replace("/\{\s(.+?)\s\}/e","$1",$template);
          $final_content = $final_content.$o;
-//         }
+
          break;
 
       case 'utenti':

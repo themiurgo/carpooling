@@ -389,7 +389,7 @@ function trips_leaving($n,$fromDefaultCity=false) {
          and partenza=(select localita from Utenti where ID=".getUserId().")";
    }
    else
-      $q="select *,userName from Tragitto
+      $q="select Tragitto.*,userName from Tragitto
       join Utenti on Tragitto.idPropr=Utenti.ID
       where concat(dataPart,' ',oraPart)>now()";
 

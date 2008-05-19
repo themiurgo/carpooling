@@ -3,6 +3,13 @@ include("./db_interface.php");
 include("./functions.php");
 
 if (isset ($_GET['pa']) ) {
+   $q1="select count(*) as numrows from Tragitto
+      where partenza='".$_GET['pa']."'
+      and destinaz='".$_GET['ar']."'
+      and postiDisp>0";
+   $r1=mysql_fetch_array(execQuery($q1));
+   $numrows=$r1[numrows];
+   $maxPage  = ceil($numrows/5);
 
    $trip_query = "select Tragitto.*,userName from Tragitto
       join Utenti on Tragitto.idPropr=Utenti.ID
@@ -10,7 +17,7 @@ if (isset ($_GET['pa']) ) {
       and destinaz='".$_GET['ar']."'
       and postiDisp>0
       order by `dataPart` desc,`oraPart`
-      limit ".$_GET['count'].",1";
+      limit ".$_GET['count'].",5";
    $res = execQuery($trip_query);
    if (mysql_num_rows($res)==0)
       echo "Nessun tragitto trovato";
@@ -31,16 +38,15 @@ TRIP;
    }
    $prev = $_GET['count']+1;
    $next = $prev-2;
-   echo $prev." ".$next;
    if ($next>=0) 
-   $out = $out."
-      <button type=\"button\" onClick=\"risultatiAjax($next);\">&lt;</button>";
+      $out = $out."
+         <button type=\"button\" onClick=\"risultatiAjax($next);\">&lt;</button>";
 
-   if (true)
+   if ($prev<$maxPage)
       $out = $out."
          <button type=\"button\" onClick=\"risultatiAjax($prev)\">&gt;</button>";
 
-   $out="Pagina ".$_GET['count'].$out."</ol>";
+   $out="Pagina $prev di $maxPage<br />".$out."</ol>";
    echo $out;
 
 }

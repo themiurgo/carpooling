@@ -21,8 +21,10 @@ if (isset ($_GET['pa']) ) {
    $res = execQuery($trip_query);
    if (mysql_num_rows($res)==0)
       echo "Nessun tragitto trovato";
+   else
+      $out="Pagina $prev di $maxPage<br />".$out."</ol>";
 
-   $out="<ol>";
+   $out=$out."<ol>";
    while ($r = mysql_fetch_array($res)) {
       $data = parseDate($r[oraPart]." ".$r[dataPart]);
       $r[fumo] ? $r[fumo]="Si" : $r[fumo]="No";
@@ -46,7 +48,6 @@ TRIP;
       $out = $out."
          <button type=\"button\" onClick=\"risultatiAjax($prev)\">&gt;</button>";
 
-   $out="Pagina $prev di $maxPage<br />".$out."</ol>";
    echo $out;
 
 }

@@ -48,7 +48,7 @@ create table Tragitto (
    musica      boolean not null,
    spese       decimal(6,2) unsigned default 0,
    postiDisp   int(1) not null,
-   note        varchar(200),
+   note        varchar(200) default null,
    bloccato    boolean not null default 0
    #foreign key (idPropr, idAuto) references AutoUtenti(idUtente,idAuto)
 );
@@ -101,11 +101,16 @@ insert into AutoUtenti(idAuto,idUtente,valido) values
    (5,5,true);
 
 insert into Tragitto(idPropr,idAuto,partenza,destinaz,dataPart,oraPart,durata,fumo,musica,postiDisp) values
-   (1,1,'Catania','Palermo','2008-04-13','08:00','1:30',0,0,3),
-   (2,2,'Messina','Palermo','2008-04-10','09:00','1:30',0,0,4),
-   (3,3,'Catania','Palermo','2008-04-10','07:00','2:00',0,0,4),
-   (4,4,'Catania','Palermo','2008-04-10','08:30','1:30',0,0,4),
-   (5,5,'Messina','Palermo','2008-04-10','08:00','2:00',0,0,3);
+   (1,1,'Catania','Palermo','2008-05-18','08:00','1:30',0,0,3),
+   (2,2,'Catania','Palermo','2008-05-18','09:00','1:30',0,0,4),
+   (3,3,'Catania','Palermo','2008-05-18','07:00','2:00',0,0,5),
+   (2,2,'Catania','Messina','2008-05-19','12:00','3:00',0,0,3),
+   (3,3,'Catania','Messina','2008-05-19','15:00','3:00',0,0,3),
+   (4,4,'Catania','Messina','2008-05-19','12:00','2:00',0,0,3),
+   (4,4,'Catania','Palermo','2008-05-20','08:30','1:30',0,0,4),
+   (5,5,'Catania','Palermo','2008-05-20','08:00','2:00',0,0,4),
+   (1,1,'Catania','Messina','2008-05-20','20:00','2:00',0,0,4);
+   
 
 insert into UtentiTragitto(idUtente,idTragitto) values
    (1,1),
@@ -119,12 +124,12 @@ insert into UtentiTragitto(idUtente,idTragitto) values
    (9,3),
    (10,3);
 
-insert into Feedback(autore,tragittoAut,valutato,tragittoVal,valutazione,data) values
-   (1,1,6,1,5,'2008-03-28 11:00:00'),
-   (6,1,1,1,7,'2008-03-28 11:00:00'),
-   (2,2,7,2,8,'2008-03-28 11:00:00'),
-   (7,2,2,2,9,'2008-03-28 11:00:00'),
-   (3,3,8,3,4,'2008-03-28 11:00:00');
+insert into Feedback(autore,tragittoAut,valutato,tragittoVal,valutazione,data,note) values
+   (1,1,6,1,2,'2008-03-28 11:00:00','Molesto'),
+   (6,1,1,1,3,'2008-03-28 11:00:00','Simpatico personaggio'),
+   (2,2,7,2,4,'2008-03-28 11:00:00','Signorile'),
+   (7,2,2,2,5,'2008-03-28 11:00:00','Ottima e simpatica persona'),
+   (3,3,8,3,1,'2008-03-28 11:00:00','Pessimo soggetto');
 
 /* Feedback possibili */
 create view FeedbackPossibili as

@@ -454,7 +454,7 @@ function feedback_new ($authorId,$trip,$objectId,$vote,$notes) {
       from FeedbackPossibili
       where autore=$authorId and valutato=$objectId";
    execQuery($q);
-   if (mysql_affected_rows==0)
+   if (mysql_affected_rows()==0)
       echo "Errore!";
 }
 
